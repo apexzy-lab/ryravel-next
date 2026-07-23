@@ -1,0 +1,12 @@
+node_modules/
+.pnpm-store/
+.next/
+.open-next/
+dist/
+.wrangler/
+site-build.tar.gz
+work/
+outputs/
+*.log
+next-env.d.ts
+.vinext/
