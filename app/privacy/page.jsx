@@ -1,0 +1,3 @@
+import { PageHero } from "../components/Blocks";
+export const metadata = { title: "Privacy" };
+export default function PrivacyPage() { return <main><PageHero compact kicker="Legal" title="Privacy policy" copy="How Ryravel handles information shared while planning a journey." /><section className="legal paper-section"><h2>Your information</h2><p>We collect only the information needed to respond to an enquiry and design a journey. We do not sell personal information.</p><h2>Planning details</h2><p>Travel preferences, accessibility needs and identity details are used only to fulfil services you request and are shared with relevant suppliers when required.</p><h2>Contact</h2><p>Questions may be sent to hello@ryravel.com.</p></section></main>; }

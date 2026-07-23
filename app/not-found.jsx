@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function NotFound() { return <main className="not-found"><span>404</span><h1>This journey is not on the map.</h1><p>Return to the collection or begin a conversation with a curator.</p><div><Link className="button button-red" href="/journeys">Explore journeys</Link><Link className="button button-outline" href="/request">Plan my journey</Link></div></main>; }

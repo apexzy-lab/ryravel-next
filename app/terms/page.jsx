@@ -1,0 +1,3 @@
+import { PageHero } from "../components/Blocks";
+export const metadata = { title: "Terms" };
+export default function TermsPage() { return <main><PageHero compact kicker="Legal" title="Terms of service" copy="The principles governing Ryravel journey enquiries and bookings." /><section className="legal paper-section"><h2>Journey proposals</h2><p>Availability and pricing remain subject to confirmation until a booking agreement and deposit are accepted.</p><h2>Changes and cancellations</h2><p>Specific terms are provided with each proposal and reflect the conditions of the properties and partners included.</p><h2>Travel responsibility</h2><p>Travellers remain responsible for passports, visas, insurance and compliance with destination requirements.</p></section></main>; }

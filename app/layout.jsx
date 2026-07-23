@@ -1,15 +1,18 @@
 import "./globals.css";
+import SiteChrome from "./components/SiteChrome";
 
 export const metadata = {
-  title: "Ryravel — How do you want to feel?",
-  description:
-    "Luxury journeys designed around how you want to feel. Emotion-led travel, human-curated, transformation-focused.",
+  title: {
+    default: "Ryravel — How do you want to feel?",
+    template: "%s · Ryravel",
+  },
+  description: "Luxury journeys designed around how you want to feel. Emotion-led travel, human-curated, transformation-focused.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body><SiteChrome>{children}</SiteChrome></body>
     </html>
   );
 }
