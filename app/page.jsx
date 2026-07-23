@@ -9,7 +9,12 @@ export default function Home() {
   return (
     <main>
       <section className="home-hero">
-        <div className="hero-orbit one" /><div className="hero-orbit two" />
+        <div className="home-hero-media" aria-hidden="true">
+          <video autoPlay muted loop playsInline preload="metadata">
+            <source src="https://media.ryravel.com/ryravel-hero.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div className="home-hero-overlay" aria-hidden="true" />
         <div className="home-hero-copy">
           <span className="kicker">The luxury travel experts</span>
           <h1>How do you<br /><em>want to feel?</em></h1>

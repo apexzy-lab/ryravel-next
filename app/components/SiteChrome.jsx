@@ -11,14 +11,11 @@ const nav = [
   ["About", "/about"],
 ];
 
-export function Logo() {
+export function Logo({ forceLight = false }) {
   return (
-    <span className="brand">
-      <svg viewBox="0 0 36 30" aria-hidden="true">
-        <path d="M5 7h23l-4 4H8L5 7Zm3 7h19l-4 4H11l-3-4Zm3 7h13l-4 4h-6l-3-4Z" fill="currentColor" />
-        <path d="M8 3h22l-3 3H10L8 3Z" fill="currentColor" opacity=".7" />
-      </svg>
-      <b>Ryravel</b>
+    <span className={`brand${forceLight ? " force-light" : ""}`} role="img" aria-label="Ryravel">
+      <img className="brand-light" src="/brand/ryravel-logo-light.png" alt="" width="366" height="96" />
+      <img className="brand-dark" src="/brand/ryravel-logo-dark.png" alt="" width="366" height="96" />
     </span>
   );
 }
@@ -67,7 +64,7 @@ export default function SiteChrome({ children }) {
       {children}
       <footer className="site-footer">
         <div className="footer-grid">
-          <div><Logo /><p>We travel not to escape life,<br />but for life not to escape us.</p></div>
+          <div><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p></div>
           <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/journeys">By traveller</Link><Link href="/journeys">By month</Link><Link href="/private-bespoke">Private & bespoke</Link><Link href="/gifting">Gifting</Link></div>
           <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/journal">The journal</Link><Link href="/sustainability">Sustainability</Link></div>
           <div><b>Begin</b><Link href="/request">Start the conversation</Link><a href="tel:+442070000000">Speak to a curator</a><a href="mailto:hello@ryravel.com">Contact us</a><a href="tel:+442070000000">+44 20 7000 0000</a></div>
