@@ -147,10 +147,16 @@ em { color: var(--red); font-style: italic; }
 
 .stillness-feature { background: var(--bg); display: grid; grid-template-columns: 1fr 1fr; min-height: 580px; }
 .stillness-feature > div:first-child { align-items: center; background: radial-gradient(circle at 40% 50%, #263d2b, #07100a 70%); display: flex; justify-content: center; overflow: hidden; }
-.stillness-feature strong { color: rgba(240,68,62,.12); font-size: clamp(70px,11vw,170px); font-style: italic; transform: rotate(-12deg); }
+.stillness-feature .stillness-wordmark { color: rgba(240,68,62,.12); font-size: clamp(70px,11vw,170px); font-style: italic; transform: rotate(-12deg); }
 .stillness-feature > div:last-child { align-self: center; padding: 70px; }
 .stillness-feature h2 { font-size: clamp(34px,4vw,58px); line-height: 1.05; }
 .stillness-feature p { color: var(--muted); line-height: 1.8; margin: 25px 0; }
+.stillness-journeys { border-block: 1px solid var(--line); margin: 0 0 30px; }
+.stillness-journeys a { display: grid; gap: 6px; padding: 18px 0; }
+.stillness-journeys a + a { border-top: 1px solid var(--line); }
+.stillness-journeys span { color: var(--red); font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.stillness-journeys strong { color: var(--text); font-size: 22px; }
+.stillness-journeys small { color: var(--muted); line-height: 1.5; }
 .principles > div { border-top: 1px solid var(--paper-line); display: grid; grid-template-columns: repeat(3,1fr); margin-top: 48px; }
 .principles article { border-right: 1px solid var(--paper-line); padding: 35px; }
 .principles article:first-child { padding-left: 0; }.principles article:last-child { border-right: 0; }

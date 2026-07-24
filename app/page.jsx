@@ -23,7 +23,7 @@ export default function Home() {
         </div>
         <span className="scroll-cue">Scroll ↓</span>
       </section>
-      <div className="trust-strip">{["100% bespoke journeys", "15 Tanzania journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design"].map((item) => <span key={item}>◆ {item}</span>)}</div>
+      <div className="trust-strip">{["100% bespoke journeys", "21 Tanzania journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design"].map((item) => <span key={item}>◆ {item}</span>)}</div>
       <section className="manifesto-section"><span className="kicker">The Ryravel manifesto</span><p>We believe travel is <em>not a reward</em> for surviving your life.<br />It is not an escape. It is not a status symbol.<br />Travel is the most direct path from <em>who you are right now</em><br />to <em>who you are capable of becoming.</em><br />But only if it begins with the right question.<br />Not where do you want to go—but <em>how do you want to feel?</em></p><small>— Ryravel, founded on a feeling</small></section>
       <FeelingQuiz />
       <section className="split-story paper-section"><div><span className="kicker">Why every journey starts with a feeling</span><h2>The question<br />no one else<br /><em>thinks to ask</em></h2></div><div><p>The places that change us are rarely the ones we planned. They are the ones that matched something we needed and did not know how to say. We begin there—every time, for every traveller.</p><Link className="text-link" href="/about">Read our philosophy →</Link></div></section>
@@ -33,7 +33,19 @@ export default function Home() {
         ["Not just luxurious—precisely right for who we were at that exact moment.", "Ngozi & Emeka A.", "Amalfi & Puglia · 9 nights"],
       ].map(([quote, name, trip]) => <article key={name}><span>★★★★★</span><blockquote>“{quote}”</blockquote><b>{name}</b><small>{trip}</small></article>)}</div></section>
       <section className="journey-preview paper-section"><div className="section-heading"><div><span className="kicker">Selected journeys</span><h2>Crafted for the way<br /><em>you want to arrive</em></h2></div><Link className="text-link" href="/journeys">All journeys</Link></div><div className="journey-cards">{featured.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>
-      <section className="stillness-feature"><div><strong>Stillness</strong></div><div><span className="kicker">Featured collection</span><h2>The most radical thing we offer is the permission to stop</h2><p>In a world that rewards motion, choosing stillness is an act of defiance. These journeys are for the person who has achieved everything—and lost something they cannot name.</p><Link className="text-link" href="/journeys/exhausted">Explore stillness journeys →</Link></div></section>
+      <section className="stillness-feature">
+        <div><strong className="stillness-wordmark">Stillness</strong></div>
+        <div>
+          <span className="kicker">Stillness Collection · Deep Presence & Wilderness Solitude</span>
+          <h2>You did not come here to see more. You came here to need less.</h2>
+          <p>These are not safaris measured in sightings. The Return holds you in one Grumeti landscape for six uninterrupted nights. The Deepening moves across two landscapes over nine nights—the first unravels, the second holds.</p>
+          <div className="stillness-journeys">
+            <Link href="/journeys/st6"><span>6 nights · Grumeti Reserve</span><strong>The Return</strong><small>One camp. One landscape. One descent into stillness. →</small></Link>
+            <Link href="/journeys/st9"><span>9 nights · Serengeti & Tarangire</span><strong>The Deepening</strong><small>Two camps. Two landscapes. One complete progression. →</small></Link>
+          </div>
+          <Link className="text-link" href="/journeys/stillness">Explore the Stillness Collection →</Link>
+        </div>
+      </section>
       <section className="principles paper-section"><span className="kicker">What we do & why we do it</span><h2>Built differently, <em>on purpose</em></h2><div>{[
         ["01", "We begin with feeling", "Before a destination is suggested, we ask how you want to feel."],
         ["02", "We curate, not catalogue", "Every journey begins with your conversation and exists only once."],
