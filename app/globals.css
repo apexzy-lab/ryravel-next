@@ -143,7 +143,7 @@ em { color: var(--red); font-style: italic; }
 .journey-price span { color: var(--ink-muted); font-size: 10px; }
 .journey-price b { color: var(--ink); display: block; font-size: 22px; }
 .journey-price u { color: var(--red); font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-.arc-exhausted { --arc: #d7a252; }.arc-renewed { --arc: #61b985; }.arc-romantic { --arc: #cf708b; }.arc-adventurous { --arc: #2aa6ca; }.arc-social { --arc: #e27335; }
+.arc-exhausted { --arc: #d7a252; }.arc-renewed { --arc: #61b985; }.arc-romantic { --arc: #cf708b; }.arc-adventurous { --arc: #2aa6ca; }.arc-social { --arc: #e27335; }.arc-stillness { --arc: #7a9a7a; }.arc-disconnected { --arc: #4a7e2a; }
 
 .stillness-feature { background: var(--bg); display: grid; grid-template-columns: 1fr 1fr; min-height: 580px; }
 .stillness-feature > div:first-child { align-items: center; background: radial-gradient(circle at 40% 50%, #263d2b, #07100a 70%); display: flex; justify-content: center; overflow: hidden; }

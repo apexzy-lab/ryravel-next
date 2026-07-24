@@ -79,6 +79,38 @@ export const arcs = [
       ["Carry it home", "Every individual box contains the same group photograph."],
     ],
   },
+  {
+    id: "stillness",
+    label: "Stillness · Deep Presence & Wilderness Solitude",
+    title: "The Stillness Collection",
+    shortTitle: "Stillness",
+    subtitle: "You came here to need less.",
+    intro: "Two wilderness journeys for travellers who are not asking for a safari. They are asking to stop being asked for anything.",
+    story: "The Stillness Collection replaces the printed safari schedule with an emotional rhythm. The guest chooses each morning. Guides hold silence, wellness work is integrated, and every landscape is selected for what it allows the nervous system to release.",
+    color: "#7a9a7a",
+    principles: [
+      ["Less, deliberately", "One or two landscapes, chosen as emotional architecture rather than a checklist of sightings."],
+      ["Silence as method", "Game drives become moving meditation, with guides trained to speak only when invited."],
+      ["The Silent Documentary", "Nothing posed or staged. A hand-bound album arrives weeks after the traveller returns."],
+      ["The arc closes", "Founder calls, a Departure Box and a written integration bring the experience home."],
+    ],
+  },
+  {
+    id: "disconnected",
+    label: "Disconnected · The Return",
+    title: "Disconnected",
+    shortTitle: "Disconnected",
+    subtitle: "Reconnect to the earth, to life arriving and departing, to yourself.",
+    intro: "Four seasonal wilderness journeys designed to interrupt disconnection: three across the calving plains and one inside the great migration.",
+    story: "The disconnected traveller does not need another screen-free promise. They need the wild to interrupt them. These journeys move from a soft landing into genuine isolation, then close through the crater and a deliberate human return.",
+    color: "#4a7e2a",
+    principles: [
+      ["Land & strip back", "Step off the aircraft and onto the plains. No lobby, no unnecessary transition."],
+      ["Enter the ecosystem", "Mobile camps and fly camps place the traveller inside the movement rather than beside it."],
+      ["Receive the unexpected", "A walk into the herd or migration is held back until the emotional moment is right."],
+      ["Reconnect & carry", "The crater, a field note and the Departure Box close the return."],
+    ],
+  },
 ];
 
 export const journeys = [
@@ -97,6 +129,12 @@ export const journeys = [
   { slug: "so6", arc: "social", nights: 6, title: "The Island Belongs to You", destination: "Zanzibar", tagline: "Stone Town, spice and twelve musicians on a rooftop.", description: "Pure Zanzibar for four to eight friends, ending with music no one expected.", tags: ["Stone Town", "Spice farm", "Taarab"], price: "$4,939", unit: "person · group of 6", phases: ["Observe", "Participate", "Celebrate"] },
   { slug: "so8", arc: "social", nights: 8, title: "Island First, Then the Continent", destination: "Zanzibar · Ngorongoro · Bagamoyo", tagline: "Two destinations. One shared story.", description: "Coast, Maasai compound, Bagamoyo, crater and ceremony by firelight.", tags: ["Zanzibar", "Maasai", "Ngorongoro"], price: "$13,020", unit: "person · group of 6", phases: ["The Island", "The Continent", "The Ceremony"] },
   { slug: "so11", arc: "social", nights: 11, title: "The Full Social Arc", destination: "Zanzibar · Serengeti · Ngorongoro", tagline: "Five on the island. Six on the mainland.", description: "A dhow overnight, Serengeti and fire on the crater rim for four to eight friends.", tags: ["Dhow overnight", "Serengeti", "Ngorongoro"], price: "$18,090", unit: "person · group of 6", phases: ["Enter & Observe", "Make Together", "The Wild", "Celebrate"] },
+  { slug: "st6", arc: "stillness", nights: 6, title: "The Return", destination: "Grumeti Reserve", tagline: "Six nights. One camp. One landscape. One uninterrupted descent into stillness.", description: "A singular, guest-paced stay in Grumeti where nothing competes with your own unraveling.", tags: ["Both seasons", "Single camp", "Silent documentary"], price: "$40,000", priceNote: "Green season from $40,000 · Dry season from $50,500", phases: ["Surrender & Unraveling", "Silence & Encounter", "Depth & Integration"] },
+  { slug: "st9", arc: "stillness", nights: 9, title: "The Deepening", destination: "Eastern Serengeti · Tarangire", tagline: "Nine nights. Two camps. Two landscapes. A progression from surrender to integration.", description: "The first landscape unravels. The second holds. A deliberate transition turns geography into emotional architecture.", tags: ["Both seasons", "Two camps", "Two landscapes"], price: "$45,800", priceNote: "Green season from $45,800 · Dry season from $58,500", phases: ["The Unraveling", "The Transition", "Grounding & Integration"] },
+  { slug: "dc6", arc: "disconnected", nights: 6, title: "The Calving Season", destination: "Southern Serengeti · Ndutu · Ngorongoro", tagline: "Six nights. 500,000 wildebeest calves born in six weeks. The whole truth of the ecosystem.", description: "A lodge landing, three nights at a mobile camp on the calving grounds, then the crater rim to close.", tags: ["Jan–Mar", "Calving plains", "Mobile camp"], price: "$11,075", phases: ["Land & Open", "Ndutu — The Heart of the Calving", "Close & Carry"] },
+  { slug: "dc7", arc: "disconnected", nights: 7, title: "Calving Maximum Isolation", destination: "Southern Serengeti · Ndutu · Ngorongoro", tagline: "Seven nights. Two nights at a Ndutu fly camp. No Wi-Fi. No generator.", description: "The deeper calving-season arc: lodge, off-grid fly camp, mobile-camp recovery and the crater.", tags: ["Jan–Mar", "Fly camp", "Maximum isolation"], price: "$11,814", phases: ["Land & Strip Back", "The Fly Camp", "Recovery", "Close & Carry"] },
+  { slug: "dc9", arc: "disconnected", nights: 9, title: "The Full Calving Arc", destination: "Southern Serengeti · Ndutu · Ngorongoro", tagline: "Nine nights. Lodge anchor to fly camp to crater. The complete isolation spectrum.", description: "The complete calving-season progression from soft landing through peak isolation to human reconnection.", tags: ["Jan–Mar", "Mobile + fly camp", "Full calving arc"], price: "$15,377", phases: ["Land & Open", "Ndutu Immersion", "Off the Grid", "Descend & Reconnect"] },
+  { slug: "dr6", arc: "disconnected", nights: 6, title: "Safari Isolation", destination: "Central Serengeti · Northern Serengeti · Ngorongoro", tagline: "Six nights. No Wi-Fi. No fixed walls. Two million wildebeest within earshot.", description: "Migration first: central plains, a northern mobile camp beside the movement, then the crater's contained stillness.", tags: ["Jul–Oct", "Mara crossings", "Mobile camp"], price: "$35,140", phases: ["Land & Strip Back", "Move North — The Migration", "Reconnect & Close"] },
 ];
 
 export const journalEntries = [
