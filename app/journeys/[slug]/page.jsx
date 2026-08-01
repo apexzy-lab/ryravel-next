@@ -8,6 +8,7 @@ export function generateStaticParams() {
 }
 
 const aliases = {
+  "renewed": "exhausted",
   "yakushima-silence": "ex6",
   "saharan-stars": "ro6",
   "patagonia-edge": "adv9",
