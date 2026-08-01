@@ -11,10 +11,10 @@ const steps = [
 ];
 
 const directions = {
-  "Deep stillness": ["exhausted", "The Exhausted Traveller’s Return"],
-  "Raw aliveness": ["adventurous", "Adventurous"],
-  "Real connection": ["social", "Social"],
-  "A clearer sense of self": ["renewed", "Renewed"],
+  "Deep stillness": ["exhausted", "Exhausted - The Restoration"],
+  "Raw aliveness": ["adventurous", "Restless - The Unleashing"],
+  "Real connection": ["social", "Isolated - The Gathering"],
+  "A clearer sense of self": ["exhausted", "Exhausted - The Restoration"],
 };
 
 export default function FeelingQuiz() {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import FeelingQuiz from "./components/FeelingQuiz";
+import HeroVideo from "./components/HeroVideo";
 import { CTA, JourneyCard } from "./components/Blocks";
 import { journeys, journalEntries } from "./data";
 
@@ -9,14 +10,10 @@ export default function Home() {
   return (
     <main>
       <section className="home-hero">
-        <div className="home-hero-media" aria-hidden="true">
-          <video autoPlay muted loop playsInline preload="metadata">
-            <source src="https://media.ryravel.com/ryravel-hero.mp4" type="video/mp4" />
-          </video>
-        </div>
+        <HeroVideo />
         <div className="home-hero-overlay" aria-hidden="true" />
         <div className="home-hero-copy">
-          <span className="kicker">The luxury travel experts</span>
+          <span className="kicker">Bespoke Travel designed around HOW YOU FEEL</span>
           <h1>How do you<br /><em>want to feel?</em></h1>
           <p>Every journey we design begins with a single honest question. The answer shapes everything that follows.</p>
           <div><a className="button button-red" href="#feeling-quiz">Take the feeling quiz</a><Link className="button button-quiet" href="/journeys">Explore journeys</Link></div>

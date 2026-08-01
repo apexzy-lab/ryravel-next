@@ -46,7 +46,7 @@ export default function SiteChrome({ children }) {
           {nav.map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}
         </nav>
         <div className="header-actions">
-          <a className="phone" href="tel:+442070000000">+44 20 7000 0000</a>
+          <a className="phone" href="tel:+17605140361">+1 760 514 0361</a>
           <div className="theme-switch">
             <span>{light ? "Light" : "Dark"}</span>
             <button type="button" className={light ? "is-light" : ""} onClick={toggleTheme} aria-label={`Switch to ${light ? "dark" : "light"} mode`} aria-pressed={light}>
@@ -67,7 +67,7 @@ export default function SiteChrome({ children }) {
           <div><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p></div>
           <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/journeys">By traveller</Link><Link href="/journeys">By month</Link><Link href="/private-bespoke">Private & bespoke</Link><Link href="/gifting">Gifting</Link></div>
           <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/journal">The journal</Link><Link href="/sustainability">Sustainability</Link></div>
-          <div><b>Begin</b><Link href="/request">Start the conversation</Link><a href="tel:+442070000000">Speak to a curator</a><a href="mailto:hello@ryravel.com">Contact us</a><a href="tel:+442070000000">+44 20 7000 0000</a></div>
+          <div><b>Begin</b><Link href="/request">Start the conversation</Link><a href="tel:+17605140361">Speak to a curator</a><a href="mailto:hello@ryravel.com">Contact us</a><a href="tel:+17605140361">+1 760 514 0361</a></div>
         </div>
         <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · Cookie policy</span></div>
       </footer>
