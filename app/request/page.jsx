@@ -37,11 +37,40 @@ export default function RequestPage() {
   const [feeling, setFeeling] = useState("");
   const [budget, setBudget] = useState("");
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
+  const [reference, setReference] = useState("");
 
-  function submit(event) {
+  async function submit(event) {
     event.preventDefault();
-    setSent(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setError("");
+    if (!feeling || !budget) {
+      setError("Please choose the feeling and investment range that fit this journey.");
+      return;
+    }
+    setSending(true);
+    const form = new FormData(event.currentTarget);
+    const payload = Object.fromEntries(form.entries());
+    payload.emailConfirmation = form.get("email-confirmation");
+    payload.countryCode = form.get("country-code");
+    payload.newsletter = form.has("newsletter");
+    payload.sourceUrl = window.location.href;
+    try {
+      const response = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Your enquiry could not be sent.");
+      setReference(result.reference || "");
+      setSent(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (submissionError) {
+      setError(submissionError.message || "Your enquiry could not be sent. Please try again.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -75,11 +104,12 @@ export default function RequestPage() {
           <span>✓</span>
           <p className="kicker">Enquiry received</p>
           <h1>Thank you.<br /><em>The conversation has begun.</em></h1>
-          <p>Your answers are ready for a Ryravel curator. This demonstration does not transmit personal data, so please email <a href="mailto:hello@ryravel.com">hello@ryravel.com</a> to begin the live conversation.</p>
-          <button className="button button-red" type="button" onClick={() => setSent(false)}>Return to the form</button>
+          <p>Your enquiry is safely with our curators. We will respond within one business day.{reference ? <> Your reference is <strong>{reference}</strong>.</> : null}</p>
+          <button className="button button-red" type="button" onClick={() => { setSent(false); setReference(""); }}>Return to the form</button>
         </section>
       ) : (
         <form className="journey-request-form" onSubmit={submit}>
+          <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
           <section className="feeling-fieldset">
             <div className="request-section-heading"><span>Your feeling</span><small>Select the feeling closest to where you are right now.</small></div>
             <p className="feeling-intro">Before we ask where, we ask how. Choose the feeling that is truest to you right now. This shapes everything we build for you.</p>
@@ -123,7 +153,7 @@ export default function RequestPage() {
             <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>Sign up to our newsletter for weekly inspiration curated by our Travel Experts—stories, destinations, and the questions worth asking before you go anywhere.</span></label>
             <div className="request-submit">
               <p>Your enquiry is handled personally by a Ryravel curator. We do not use automated responses. You will hear from a real person within one business day.</p>
-              <button className="button button-red" type="submit">Submit enquiry →</button>
+              <div>{error ? <p className="request-error" role="alert">{error}</p> : null}<button className="button button-red" type="submit" disabled={sending}>{sending ? "Sending…" : "Submit enquiry →"}</button></div>
             </div>
           </section>
         </form>

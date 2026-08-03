@@ -1,0 +1,52 @@
+import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+export const journeyEnquiries = sqliteTable("journey_enquiries", {
+  id: text("id").primaryKey(),
+  reference: text("reference").notNull().unique(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at"),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  countryCode: text("country_code").notNull(),
+  feeling: text("feeling").notNull(),
+  travelMonth: text("travel_month").notNull(),
+  travelYear: text("travel_year").notNull(),
+  duration: text("duration").notNull(),
+  people: text("people").notNull(),
+  budget: text("budget").notNull(),
+  message: text("message"),
+  referral: text("referral"),
+  newsletter: integer("newsletter").notNull().default(0),
+  sourceUrl: text("source_url"),
+  userAgent: text("user_agent"),
+  ipHash: text("ip_hash").notNull(),
+  status: text("status").notNull().default("new"),
+  priority: text("priority").notNull().default("normal"),
+  assignedTo: text("assigned_to"),
+  nextAction: text("next_action"),
+  nextActionDueAt: text("next_action_due_at"),
+  tags: text("tags").notNull().default("[]"),
+  fitScore: integer("fit_score"),
+  dispositionReason: text("disposition_reason"),
+  adminNote: text("admin_note"),
+  reviewedBy: text("reviewed_by"),
+  archivedAt: text("archived_at"),
+  isSpam: integer("is_spam").notNull().default(0),
+}, (table) => [
+  index("journey_enquiries_status_created_idx").on(table.status, table.createdAt),
+  index("journey_enquiries_due_idx").on(table.nextActionDueAt),
+  index("journey_enquiries_ip_created_idx").on(table.ipHash, table.createdAt),
+]);
+
+export const enquiryEvents = sqliteTable("journey_enquiry_events", {
+  id: text("id").primaryKey(),
+  enquiryId: text("enquiry_id").notNull().references(() => journeyEnquiries.id, { onDelete: "cascade" }),
+  createdAt: text("created_at").notNull(),
+  actorEmail: text("actor_email").notNull(),
+  eventType: text("event_type").notNull(),
+  previousValue: text("previous_value"),
+  nextValue: text("next_value"),
+}, (table) => [
+  index("journey_enquiry_events_enquiry_created_idx").on(table.enquiryId, table.createdAt),
+]);

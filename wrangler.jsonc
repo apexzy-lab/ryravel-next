@@ -13,5 +13,13 @@
   },
   "cache": {
     "enabled": true
-  }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ryravel-enquiries",
+      "database_id": "795e7329-4e55-4a2c-b4a1-718a27a9146f",
+      "migrations_dir": "drizzle"
+    }
+  ]
 }

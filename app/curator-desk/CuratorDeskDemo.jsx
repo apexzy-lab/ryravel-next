@@ -1,0 +1,209 @@
+"use client";
+
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+const stages = ["new", "qualified", "discovery", "shaping", "proposal", "won", "declined", "closed"];
+
+function title(value) {
+  return String(value || "").replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function initials(name) {
+  return String(name || "?").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase();
+}
+
+function relativeTime(value) {
+  const seconds = Math.max(0, Math.round((Date.now() - new Date(value).getTime()) / 1000));
+  if (seconds < 60) return "Just now";
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  return `${Math.floor(seconds / 86400)}d ago`;
+}
+
+function StagePill({ stage }) {
+  return <span className={`desk-stage stage-${stage}`}>{title(stage)}</span>;
+}
+
+export default function CuratorDeskDemo() {
+  const [overview, setOverview] = useState({ actor: "", counts: {}, enquiries: [] });
+  const [selectedId, setSelectedId] = useState("");
+  const [detail, setDetail] = useState(null);
+  const [filter, setFilter] = useState("all");
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [accessKey, setAccessKey] = useState("");
+  const [curatorEmail, setCuratorEmail] = useState("");
+  const [accessKeyDraft, setAccessKeyDraft] = useState("");
+  const [emailDraft, setEmailDraft] = useState("");
+  const [authReady, setAuthReady] = useState(false);
+  const [needsAccess, setNeedsAccess] = useState(false);
+
+  useEffect(() => {
+    setAccessKey(window.sessionStorage.getItem("ryravel-curator-key") || "");
+    setCuratorEmail(window.sessionStorage.getItem("ryravel-curator-email") || "");
+    setAuthReady(true);
+  }, []);
+
+  const authHeaders = useCallback((json = false) => ({
+    ...(json ? { "Content-Type": "application/json" } : {}),
+    ...(accessKey ? { Authorization: `Bearer ${accessKey}` } : {}),
+    ...(curatorEmail ? { "X-Curator-Email": curatorEmail } : {}),
+  }), [accessKey, curatorEmail]);
+
+  const loadOverview = useCallback(async () => {
+    setError("");
+    const response = await fetch("/api/admin/enquiries", { cache: "no-store", headers: authHeaders() });
+    const result = await response.json();
+    if (response.status === 401) setNeedsAccess(true);
+    if (!response.ok) throw new Error(result.error || "The curator desk could not be loaded.");
+    setNeedsAccess(false);
+    setOverview(result);
+    setSelectedId((current) => current || result.enquiries?.[0]?.id || "");
+  }, [authHeaders]);
+
+  const loadDetail = useCallback(async (id) => {
+    if (!id) { setDetail(null); return; }
+    const response = await fetch(`/api/admin/enquiries/${encodeURIComponent(id)}`, { cache: "no-store", headers: authHeaders() });
+    const result = await response.json();
+    if (response.status === 401) setNeedsAccess(true);
+    if (!response.ok) throw new Error(result.error || "This enquiry could not be loaded.");
+    setDetail(result);
+  }, [authHeaders]);
+
+  useEffect(() => {
+    if (authReady) loadOverview().catch((loadError) => setError(loadError.message)).finally(() => setLoading(false));
+  }, [authReady, loadOverview]);
+
+  useEffect(() => {
+    loadDetail(selectedId).catch((loadError) => setError(loadError.message));
+  }, [selectedId, loadDetail]);
+
+  const visible = useMemo(() => overview.enquiries.filter((record) => {
+    const matchesFilter = filter === "all" || record.status === filter;
+    const haystack = `${record.reference} ${record.name} ${record.email} ${record.feeling}`.toLowerCase();
+    return matchesFilter && haystack.includes(query.toLowerCase());
+  }), [overview.enquiries, filter, query]);
+
+  async function update(fields, successMessage = "Enquiry updated.") {
+    if (!selectedId) return;
+    setSaving(true);
+    setError("");
+    setNotice("");
+    try {
+      const response = await fetch(`/api/admin/enquiries/${encodeURIComponent(selectedId)}`, {
+        method: "PATCH",
+        headers: authHeaders(true),
+        body: JSON.stringify(fields),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "The update could not be saved.");
+      setDetail(result);
+      await loadOverview();
+      setNotice(successMessage);
+    } catch (updateError) {
+      setError(updateError.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function signIn(event) {
+    event.preventDefault();
+    const key = accessKeyDraft.trim();
+    const email = emailDraft.trim().toLowerCase();
+    if (!key) return;
+    window.sessionStorage.setItem("ryravel-curator-key", key);
+    window.sessionStorage.setItem("ryravel-curator-email", email);
+    setAccessKey(key);
+    setCuratorEmail(email);
+    setNeedsAccess(false);
+    setError("");
+    setLoading(true);
+  }
+
+  function signOut() {
+    window.sessionStorage.removeItem("ryravel-curator-key");
+    window.sessionStorage.removeItem("ryravel-curator-email");
+    setAccessKey("");
+    setCuratorEmail("");
+    setOverview({ actor: "", counts: {}, enquiries: [] });
+    setDetail(null);
+    setNeedsAccess(true);
+  }
+
+  async function exportCsv() {
+    try {
+      const response = await fetch("/api/admin/enquiries.csv", { headers: authHeaders() });
+      if (!response.ok) throw new Error("The export could not be created.");
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `ryravel-enquiries-${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (exportError) {
+      setError(exportError.message);
+    }
+  }
+
+  const request = detail?.enquiry;
+  const counts = overview.counts || {};
+
+  if (needsAccess) {
+    return <main className="curator-desk-demo desk-login-page"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Your email<input type="email" value={emailDraft} onChange={(event) => setEmailDraft(event.target.value)} placeholder="you@ryravel.com" autoComplete="email" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit">Open curator desk →</button><a href="/">Return to Ryravel</a></form></main>;
+  }
+
+  return (
+    <main className="curator-desk-demo">
+      <div className="command-desk live-command-desk">
+        <aside className="command-sidebar">
+          <div className="desk-brand"><img src="/brand/ryravel-mark.png" alt="" /><div><strong>Ryravel</strong><span>Curator desk</span></div></div>
+          <nav><button className="active" type="button"><span>◆</span> Enquiries <b>{counts.active_count || 0}</b></button><button type="button" onClick={exportCsv}><span>↧</span> Export CSV</button><a href="/journeys"><span>◫</span> Journeys</a><a href="/"><span>↗</span> View website</a></nav>
+          <div className="desk-user"><span>{initials(overview.actor)}</span><div><b>{overview.actor || "Ryravel curator"}</b><small>Authorised workspace</small></div><button type="button" onClick={signOut} aria-label="Sign out">×</button></div>
+        </aside>
+
+        <section className="command-main">
+          <header><div><span>{new Intl.DateTimeFormat("en", { weekday: "long", day: "numeric", month: "long" }).format(new Date())}</span><h1>Journey enquiries</h1><p>Every conversation, held with intention.</p></div><button className="desk-refresh" type="button" onClick={() => loadOverview().catch((loadError) => setError(loadError.message))}>Refresh</button></header>
+          {error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}
+          {notice ? <div className="desk-alert" role="status">{notice}</div> : null}
+          <section className="desk-metrics">
+            <article><span>Need a response</span><strong>{counts.new_count || 0}</strong><small>New enquiries</small></article>
+            <article><span>Open conversations</span><strong>{counts.active_count || 0}</strong><small>Across every stage</small></article>
+            <article><span>Overdue actions</span><strong>{counts.overdue_count || 0}</strong><small>Follow up today</small></article>
+            <article><span>All enquiries</span><strong>{counts.total || 0}</strong><small>Active records</small></article>
+          </section>
+
+          <section className="command-workspace">
+            <div className="command-list">
+              <div className="desk-tools"><label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search enquiries" /></label><select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All stages</option>{stages.map((stage) => <option value={stage} key={stage}>{title(stage)}</option>)}</select></div>
+              <div className="desk-list-heading"><span>{visible.length} conversations</span><button type="button">Newest first ↓</button></div>
+              <div className="desk-request-list">
+                {loading ? <p className="desk-empty">Loading enquiries…</p> : null}
+                {!loading && visible.length === 0 ? <p className="desk-empty">No enquiries match this view.</p> : null}
+                {visible.map((record) => <button className={selectedId === record.id ? "selected" : ""} type="button" key={record.id} onClick={() => setSelectedId(record.id)}><span className="desk-avatar">{initials(record.name)}</span><div><div><b>{record.name}</b><small>{relativeTime(record.created_at)}</small></div><p>{record.feeling} · {record.travel_month} {record.travel_year}</p><footer><StagePill stage={record.status} /><span className={`priority-${record.priority}`}>{title(record.priority)}</span><em>{record.assigned_to || "Unassigned"}</em></footer></div></button>)}
+              </div>
+            </div>
+
+            <aside className="desk-detail">
+              {!request ? <div className="desk-empty desk-empty-detail"><h2>No conversation selected</h2><p>Choose an enquiry from the queue to review it.</p></div> : <>
+                <div className="desk-detail-top"><div><span>{request.reference}</span><h2>{request.name}</h2><p>{request.feeling}</p></div><StagePill stage={request.status} /></div>
+                <div className="desk-score"><div><span>Fit score</span><strong>{request.fit_score ?? "—"}</strong><small>/ 100</small></div><label>Priority<select value={request.priority} onChange={(event) => update({ priority: event.target.value })} disabled={saving}><option value="normal">Normal</option><option value="high">High</option><option value="urgent">Urgent</option></select></label></div>
+                <section><span className="desk-label">What they told us</span><blockquote>{request.message ? `“${request.message}”` : "No additional message was provided."}</blockquote></section>
+                <section className="desk-facts">{[["Feeling", request.feeling], ["Travel window", `${request.travel_month} ${request.travel_year}`], ["Duration", request.duration], ["Travellers", request.people], ["Investment", request.budget], ["Found us through", request.referral || "Not provided"]].map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</section>
+                <section><span className="desk-label">Contact</span><div className="desk-contact"><a href={`mailto:${request.email}`}>{request.email}</a><a href={`tel:${request.country_code}${request.phone}`}>{request.country_code} {request.phone}</a></div></section>
+                <section className="desk-operations"><span className="desk-label">Curator operations</span><div className="desk-operation-grid"><label>Stage<select value={request.status} onChange={(event) => update({ status: event.target.value }, `Moved to ${title(event.target.value)}.`)} disabled={saving}>{stages.map((stage) => <option value={stage} key={stage}>{title(stage)}</option>)}</select></label><label>Fit score<input type="number" min="0" max="100" value={request.fit_score ?? ""} onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, fit_score: event.target.value } }))} onBlur={(event) => update({ fitScore: event.target.value })} /></label><label>Owner<input value={request.assigned_to || ""} placeholder="curator@ryravel.com" onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, assigned_to: event.target.value } }))} /></label><label>Due<input type="datetime-local" value={request.next_action_due_at?.slice(0, 16) || ""} onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, next_action_due_at: event.target.value } }))} /></label></div><label>Next action<input value={request.next_action || ""} placeholder="Book discovery call" onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, next_action: event.target.value } }))} /></label><button className="desk-note-button" type="button" disabled={saving} onClick={() => update({ assignedTo: request.assigned_to, nextAction: request.next_action, nextActionDueAt: request.next_action_due_at }, "Operations saved.")}>Save operations</button></section>
+                <section><label className="desk-label" htmlFor="curator-note">Private curator note</label><textarea id="curator-note" value={request.admin_note || ""} onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, admin_note: event.target.value } }))} placeholder="Add context for the next curator…" /><button className="desk-note-button" type="button" disabled={saving} onClick={() => update({ note: request.admin_note }, "Private note saved.")}>Save note</button></section>
+                <section className="desk-history"><span className="desk-label">Activity</span>{detail.events?.length ? detail.events.map((event) => <p key={event.id}><b>{title(event.event_type)}</b><span>{event.actor_email} · {relativeTime(event.created_at)}</span></p>) : <p><b>Enquiry received</b><span>{relativeTime(request.created_at)}</span></p>}</section>
+                <div className="desk-danger-actions"><button type="button" disabled={saving} onClick={() => update({ archived: true }, "Enquiry archived.")}>Archive</button><button type="button" disabled={saving} onClick={() => update({ spam: true }, "Enquiry marked as spam.")}>Mark as spam</button></div>
+              </>}
+            </aside>
+          </section>
+        </section>
+      </div>
+    </main>
+  );
+}

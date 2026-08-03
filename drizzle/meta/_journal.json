@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1785771570431,
+      "tag": "0000_famous_blockbuster",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1785772258092,
+      "tag": "0001_cleanup_deployment_test",
+      "breakpoints": true
+    }
+  ]
+}
