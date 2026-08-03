@@ -1,8 +1,8 @@
 import CuratorDeskDemo from "./CuratorDeskDemo";
 
 export const metadata = {
-  title: "Curator Desk Concepts",
-  description: "Two interactive concepts for managing Ryravel journey enquiries.",
+  title: "Ryravel Curator Desk",
+  description: "Private workspace for managing Ryravel journey enquiries.",
 };
 
 export default function CuratorDeskPage() {
