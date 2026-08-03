@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 const stages = ["new", "qualified", "discovery", "shaping", "proposal", "won", "declined", "closed"];
 const curatorEmail = "curator@ryravel.com";
@@ -39,13 +39,62 @@ export default function CuratorDeskDemo() {
   const [accessKey, setAccessKey] = useState("");
   const [accessKeyDraft, setAccessKeyDraft] = useState("");
   const [authReady, setAuthReady] = useState(false);
-  const [needsAccess, setNeedsAccess] = useState(false);
+  const [needsAccess, setNeedsAccess] = useState(true);
   const [pendingDelete, setPendingDelete] = useState(false);
+  const [loginTurnstile, setLoginTurnstile] = useState({ enabled: false, siteKey: "" });
+  const [loginTurnstileToken, setLoginTurnstileToken] = useState("");
+  const loginTurnstileMount = useRef(null);
+  const loginTurnstileWidget = useRef(null);
 
   useEffect(() => {
-    setAccessKey(window.sessionStorage.getItem("ryravel-curator-key") || "");
+    const storedKey = window.sessionStorage.getItem("ryravel-curator-key") || "";
+    setAccessKey(storedKey);
+    setNeedsAccess(!storedKey);
+    setLoading(Boolean(storedKey));
     setAuthReady(true);
   }, []);
+
+  useEffect(() => {
+    fetch("/api/turnstile", { cache: "no-store" })
+      .then((response) => response.json())
+      .then((config) => setLoginTurnstile({ enabled: Boolean(config.enabled), siteKey: config.siteKey || "" }))
+      .catch(() => setError("The security check could not be loaded. Please refresh and try again."));
+  }, []);
+
+  useEffect(() => {
+    if (!needsAccess || !loginTurnstile.enabled || !loginTurnstile.siteKey) return undefined;
+    let cancelled = false;
+    const render = () => {
+      if (cancelled || !loginTurnstileMount.current || !window.turnstile || loginTurnstileWidget.current !== null) return;
+      loginTurnstileWidget.current = window.turnstile.render(loginTurnstileMount.current, {
+        sitekey: loginTurnstile.siteKey,
+        theme: "light",
+        action: "curator_login",
+        callback: setLoginTurnstileToken,
+        "expired-callback": () => setLoginTurnstileToken(""),
+        "error-callback": () => setLoginTurnstileToken(""),
+      });
+    };
+    if (window.turnstile) render();
+    else {
+      let script = document.getElementById("ryravel-turnstile-script");
+      if (!script) {
+        script = document.createElement("script");
+        script.id = "ryravel-turnstile-script";
+        script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+      script.addEventListener("load", render, { once: true });
+    }
+    return () => {
+      cancelled = true;
+      if (window.turnstile && loginTurnstileWidget.current !== null) window.turnstile.remove(loginTurnstileWidget.current);
+      loginTurnstileWidget.current = null;
+      setLoginTurnstileToken("");
+    };
+  }, [needsAccess, loginTurnstile]);
 
   const authHeaders = useCallback((json = false) => ({
     ...(json ? { "Content-Type": "application/json" } : {}),
@@ -73,8 +122,8 @@ export default function CuratorDeskDemo() {
   }, [authHeaders]);
 
   useEffect(() => {
-    if (authReady) loadOverview().catch((loadError) => setError(loadError.message)).finally(() => setLoading(false));
-  }, [authReady, loadOverview]);
+    if (authReady && accessKey) loadOverview().catch((loadError) => setError(loadError.message)).finally(() => setLoading(false));
+  }, [authReady, accessKey, loadOverview]);
 
   useEffect(() => {
     loadDetail(selectedId).catch((loadError) => setError(loadError.message));
@@ -113,15 +162,33 @@ export default function CuratorDeskDemo() {
     }
   }
 
-  function signIn(event) {
+  async function signIn(event) {
     event.preventDefault();
+    setError("");
     const key = accessKeyDraft.trim();
     if (!key) return;
-    window.sessionStorage.setItem("ryravel-curator-key", key);
-    setAccessKey(key);
-    setNeedsAccess(false);
-    setError("");
+    if (loginTurnstile.enabled && !loginTurnstileToken) {
+      setError("Please complete the security check before signing in.");
+      return;
+    }
     setLoading(true);
+    try {
+      const response = await fetch("/api/admin/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accessKey: key, turnstileToken: loginTurnstileToken }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "The curator workspace could not be opened.");
+      window.sessionStorage.setItem("ryravel-curator-key", key);
+      setAccessKey(key);
+      setNeedsAccess(false);
+    } catch (signInError) {
+      setError(signInError.message);
+      if (window.turnstile && loginTurnstileWidget.current !== null) window.turnstile.reset(loginTurnstileWidget.current);
+      setLoginTurnstileToken("");
+      setLoading(false);
+    }
   }
 
   function signOut() {
@@ -170,7 +237,7 @@ export default function CuratorDeskDemo() {
   const counts = overview.counts || {};
 
   if (needsAccess) {
-    return <main className="curator-desk-demo desk-login-page"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit">Open curator desk →</button><a href="/">Return to Ryravel</a></form></main>;
+    return <main className="curator-desk-demo desk-login-page"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{loginTurnstile.enabled ? <div className="desk-login-turnstile"><div ref={loginTurnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit" disabled={loading}>{loading ? "Verifying…" : "Open curator desk →"}</button><a href="/">Return to Ryravel</a></form></main>;
   }
 
   return (

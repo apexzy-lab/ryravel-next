@@ -9,7 +9,7 @@ export function turnstileConfig() {
   return { enabled: Boolean(siteKey && secretKey), siteKey, secretKey };
 }
 
-export async function verifyTurnstile(request, token) {
+export async function verifyTurnstile(request, token, expectedAction = "journey_request") {
   const config = turnstileConfig();
   if (!config.enabled) return { success: true, configured: false };
   if (!clean(token, 2048)) return { success: false, configured: true, error: "Please complete the security check." };
@@ -25,7 +25,7 @@ export async function verifyTurnstile(request, token) {
     const response = await fetch(VERIFY_URL, { method: "POST", body });
     const result = await response.json();
     const expectedHostname = new URL(request.url).hostname;
-    if (!response.ok || result.success !== true || result.action !== "journey_request" || result.hostname !== expectedHostname) {
+    if (!response.ok || result.success !== true || result.action !== expectedAction || result.hostname !== expectedHostname) {
       return { success: false, configured: true, error: "The security check expired or could not be verified. Please try again." };
     }
     return { success: true, configured: true };
