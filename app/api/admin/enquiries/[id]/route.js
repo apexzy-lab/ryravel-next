@@ -34,10 +34,12 @@ export async function PATCH(request, { params }) {
   const disposition = Object.hasOwn(payload, "dispositionReason") ? clean(payload.dispositionReason, 500) : existing.disposition_reason;
   const archivedAt = payload.archived === true ? new Date().toISOString() : existing.archived_at;
   const isSpam = payload.spam === true ? 1 : existing.is_spam;
+  const deletedAt = payload.deleted === true ? new Date().toISOString() : payload.restored === true ? null : existing.deleted_at;
   const now = new Date().toISOString();
-  const statements = [db.prepare(`UPDATE journey_enquiries SET status = ?, priority = ?, assigned_to = ?, next_action = ?, next_action_due_at = ?, tags = ?, fit_score = ?, disposition_reason = ?, admin_note = ?, reviewed_by = ?, updated_at = ?, archived_at = ?, is_spam = ? WHERE id = ?`).bind(status, priority, assignedTo || null, nextAction || null, nextActionDueAt || null, JSON.stringify(tags), Number.isFinite(score) ? score : null, disposition || null, note || null, actor.email, now, archivedAt, isSpam, id)];
+  const statements = [db.prepare(`UPDATE journey_enquiries SET status = ?, priority = ?, assigned_to = ?, next_action = ?, next_action_due_at = ?, tags = ?, fit_score = ?, disposition_reason = ?, admin_note = ?, reviewed_by = ?, updated_at = ?, archived_at = ?, deleted_at = ?, is_spam = ? WHERE id = ?`).bind(status, priority, assignedTo || null, nextAction || null, nextActionDueAt || null, JSON.stringify(tags), Number.isFinite(score) ? score : null, disposition || null, note || null, actor.email, now, archivedAt, deletedAt, isSpam, id)];
   if (status !== existing.status) statements.push(db.prepare("INSERT INTO journey_enquiry_events (id, enquiry_id, created_at, actor_email, event_type, previous_value, next_value) VALUES (?, ?, ?, ?, 'status_changed', ?, ?)").bind(crypto.randomUUID(), id, now, actor.email, existing.status, status));
   if (note !== existing.admin_note) statements.push(db.prepare("INSERT INTO journey_enquiry_events (id, enquiry_id, created_at, actor_email, event_type, previous_value, next_value) VALUES (?, ?, ?, ?, 'note_updated', NULL, NULL)").bind(crypto.randomUUID(), id, now, actor.email));
+  if (deletedAt !== existing.deleted_at) statements.push(db.prepare("INSERT INTO journey_enquiry_events (id, enquiry_id, created_at, actor_email, event_type, previous_value, next_value) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(crypto.randomUUID(), id, now, actor.email, deletedAt ? "moved_to_trash" : "restored_from_trash", existing.deleted_at, deletedAt));
   await db.batch(statements);
   return Response.json(await getEnquiryDetail(id), { headers: { "Cache-Control": "no-store" } });
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const feelings = [
   ["Exhausted", "I need to stop", "Running on empty. I need silence more than scenery and permission to be completely still."],
@@ -40,12 +40,64 @@ export default function RequestPage() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
   const [reference, setReference] = useState("");
+  const [turnstileEnabled, setTurnstileEnabled] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileMount = useRef(null);
+  const turnstileWidget = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function prepareTurnstile() {
+      try {
+        const response = await fetch("/api/turnstile", { cache: "no-store" });
+        const config = await response.json();
+        if (cancelled || !config.enabled || !config.siteKey) return;
+        setTurnstileEnabled(true);
+        const render = () => {
+          if (cancelled || !turnstileMount.current || !window.turnstile || turnstileWidget.current !== null) return;
+          turnstileWidget.current = window.turnstile.render(turnstileMount.current, {
+            sitekey: config.siteKey,
+            theme: "auto",
+            action: "journey_request",
+            callback: setTurnstileToken,
+            "expired-callback": () => setTurnstileToken(""),
+            "error-callback": () => setTurnstileToken(""),
+          });
+        };
+        if (window.turnstile) render();
+        else {
+          let script = document.getElementById("ryravel-turnstile-script");
+          if (!script) {
+            script = document.createElement("script");
+            script.id = "ryravel-turnstile-script";
+            script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+          }
+          script.addEventListener("load", render, { once: true });
+        }
+      } catch {
+        setError("The security check could not be loaded. Please refresh and try again.");
+      }
+    }
+    prepareTurnstile();
+    return () => {
+      cancelled = true;
+      if (window.turnstile && turnstileWidget.current !== null) window.turnstile.remove(turnstileWidget.current);
+      turnstileWidget.current = null;
+    };
+  }, []);
 
   async function submit(event) {
     event.preventDefault();
     setError("");
     if (!feeling || !budget) {
       setError("Please choose the feeling and investment range that fit this journey.");
+      return;
+    }
+    if (turnstileEnabled && !turnstileToken) {
+      setError("Please complete the security check before submitting.");
       return;
     }
     setSending(true);
@@ -55,6 +107,7 @@ export default function RequestPage() {
     payload.countryCode = form.get("country-code");
     payload.newsletter = form.has("newsletter");
     payload.sourceUrl = window.location.href;
+    payload.turnstileToken = turnstileToken;
     try {
       const response = await fetch("/api/enquiries", {
         method: "POST",
@@ -68,6 +121,10 @@ export default function RequestPage() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (submissionError) {
       setError(submissionError.message || "Your enquiry could not be sent. Please try again.");
+      if (window.turnstile && turnstileWidget.current !== null) {
+        window.turnstile.reset(turnstileWidget.current);
+        setTurnstileToken("");
+      }
     } finally {
       setSending(false);
     }
@@ -151,6 +208,7 @@ export default function RequestPage() {
               <label className="wide">Telephone <b>*</b><span className="phone-field"><select name="country-code" defaultValue="+234"><option>+234</option><option>+44</option><option>+1</option><option>+27</option><option>+255</option></select><input name="phone" type="tel" placeholder="Phone number" required /></span></label>
             </div>
             <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>Sign up to our newsletter for weekly inspiration curated by our Travel Experts—stories, destinations, and the questions worth asking before you go anywhere.</span></label>
+            {turnstileEnabled ? <div className="request-turnstile"><div ref={turnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}
             <div className="request-submit">
               <p>Your enquiry is handled personally by a Ryravel curator. We do not use automated responses. You will hear from a real person within one business day.</p>
               <div>{error ? <p className="request-error" role="alert">{error}</p> : null}<button className="button button-red" type="submit" disabled={sending}>{sending ? "Sending…" : "Submit enquiry →"}</button></div>

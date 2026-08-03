@@ -32,10 +32,12 @@ export const journeyEnquiries = sqliteTable("journey_enquiries", {
   adminNote: text("admin_note"),
   reviewedBy: text("reviewed_by"),
   archivedAt: text("archived_at"),
+  deletedAt: text("deleted_at"),
   isSpam: integer("is_spam").notNull().default(0),
 }, (table) => [
   index("journey_enquiries_status_created_idx").on(table.status, table.createdAt),
   index("journey_enquiries_due_idx").on(table.nextActionDueAt),
+  index("journey_enquiries_deleted_idx").on(table.deletedAt),
   index("journey_enquiries_ip_created_idx").on(table.ipHash, table.createdAt),
 ]);
 

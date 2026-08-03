@@ -1,5 +1,6 @@
 import { getD1, runtimeEnv } from "../../../db/index";
 import { clean, jsonError } from "../../lib/enquiries";
+import { verifyTurnstile } from "../../lib/turnstile";
 
 const feelings = new Set(["Exhausted", "Restless", "Disconnected", "Romantic", "Curious", "Celebratory", "Purposeful", "Open"]);
 const months = new Set(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]);
@@ -20,6 +21,9 @@ export async function POST(request) {
   let payload;
   try { payload = await request.json(); } catch { return jsonError("The enquiry could not be read."); }
   if (clean(payload.website, 100)) return Response.json({ received: true }, { status: 201 });
+
+  const challenge = await verifyTurnstile(request, payload.turnstileToken);
+  if (!challenge.success) return jsonError(challenge.error, 422);
 
   const name = clean(payload.name, 120);
   const email = clean(payload.email, 254).toLowerCase();
