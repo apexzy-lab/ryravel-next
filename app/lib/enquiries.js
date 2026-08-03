@@ -35,7 +35,7 @@ export function adminIdentity(request) {
   const authorization = headers.get("authorization") || "";
   const suppliedToken = authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
   if (configuredToken && secureEqual(suppliedToken, configuredToken)) {
-    return { email: clean(headers.get("x-curator-email"), 254).toLowerCase() || "ryravel-curator" };
+    return { email: "curator@ryravel.com" };
   }
 
   const oaiEmail = clean(headers.get("oai-authenticated-user-email"), 254).toLowerCase();

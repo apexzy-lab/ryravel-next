@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 const stages = ["new", "qualified", "discovery", "shaping", "proposal", "won", "declined", "closed"];
+const curatorEmail = "curator@ryravel.com";
 
 function title(value) {
   return String(value || "").replace(/_/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
@@ -35,23 +36,19 @@ export default function CuratorDeskDemo() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [accessKey, setAccessKey] = useState("");
-  const [curatorEmail, setCuratorEmail] = useState("");
   const [accessKeyDraft, setAccessKeyDraft] = useState("");
-  const [emailDraft, setEmailDraft] = useState("");
   const [authReady, setAuthReady] = useState(false);
   const [needsAccess, setNeedsAccess] = useState(false);
 
   useEffect(() => {
     setAccessKey(window.sessionStorage.getItem("ryravel-curator-key") || "");
-    setCuratorEmail(window.sessionStorage.getItem("ryravel-curator-email") || "");
     setAuthReady(true);
   }, []);
 
   const authHeaders = useCallback((json = false) => ({
     ...(json ? { "Content-Type": "application/json" } : {}),
     ...(accessKey ? { Authorization: `Bearer ${accessKey}` } : {}),
-    ...(curatorEmail ? { "X-Curator-Email": curatorEmail } : {}),
-  }), [accessKey, curatorEmail]);
+  }), [accessKey]);
 
   const loadOverview = useCallback(async () => {
     setError("");
@@ -113,12 +110,9 @@ export default function CuratorDeskDemo() {
   function signIn(event) {
     event.preventDefault();
     const key = accessKeyDraft.trim();
-    const email = emailDraft.trim().toLowerCase();
     if (!key) return;
     window.sessionStorage.setItem("ryravel-curator-key", key);
-    window.sessionStorage.setItem("ryravel-curator-email", email);
     setAccessKey(key);
-    setCuratorEmail(email);
     setNeedsAccess(false);
     setError("");
     setLoading(true);
@@ -126,9 +120,7 @@ export default function CuratorDeskDemo() {
 
   function signOut() {
     window.sessionStorage.removeItem("ryravel-curator-key");
-    window.sessionStorage.removeItem("ryravel-curator-email");
     setAccessKey("");
-    setCuratorEmail("");
     setOverview({ actor: "", counts: {}, enquiries: [] });
     setDetail(null);
     setNeedsAccess(true);
@@ -154,7 +146,7 @@ export default function CuratorDeskDemo() {
   const counts = overview.counts || {};
 
   if (needsAccess) {
-    return <main className="curator-desk-demo desk-login-page"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Your email<input type="email" value={emailDraft} onChange={(event) => setEmailDraft(event.target.value)} placeholder="you@ryravel.com" autoComplete="email" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit">Open curator desk →</button><a href="/">Return to Ryravel</a></form></main>;
+    return <main className="curator-desk-demo desk-login-page"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit">Open curator desk →</button><a href="/">Return to Ryravel</a></form></main>;
   }
 
   return (
