@@ -39,6 +39,7 @@ export default function CuratorDeskDemo() {
   const [accessKey, setAccessKey] = useState("");
   const [accessKeyDraft, setAccessKeyDraft] = useState("");
   const [authReady, setAuthReady] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(true);
   const [needsAccess, setNeedsAccess] = useState(true);
   const [pendingDelete, setPendingDelete] = useState(false);
   const [loginTurnstile, setLoginTurnstile] = useState({ enabled: false, siteKey: "" });
@@ -51,6 +52,7 @@ export default function CuratorDeskDemo() {
     setAccessKey(storedKey);
     setNeedsAccess(!storedKey);
     setLoading(Boolean(storedKey));
+    setCheckingAccess(Boolean(storedKey));
     setAuthReady(true);
   }, []);
 
@@ -105,7 +107,11 @@ export default function CuratorDeskDemo() {
     setError("");
     const response = await fetch(`/api/admin/enquiries?view=${view}`, { cache: "no-store", headers: authHeaders() });
     const result = await response.json();
-    if (response.status === 401) setNeedsAccess(true);
+    if (response.status === 401) {
+      window.sessionStorage.removeItem("ryravel-curator-key");
+      setAccessKey("");
+      setNeedsAccess(true);
+    }
     if (!response.ok) throw new Error(result.error || "The curator desk could not be loaded.");
     setNeedsAccess(false);
     setOverview(result);
@@ -122,7 +128,7 @@ export default function CuratorDeskDemo() {
   }, [authHeaders]);
 
   useEffect(() => {
-    if (authReady && accessKey) loadOverview().catch((loadError) => setError(loadError.message)).finally(() => setLoading(false));
+    if (authReady && accessKey) loadOverview().catch((loadError) => setError(loadError.message)).finally(() => { setLoading(false); setCheckingAccess(false); });
   }, [authReady, accessKey, loadOverview]);
 
   useEffect(() => {
@@ -181,6 +187,7 @@ export default function CuratorDeskDemo() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "The curator workspace could not be opened.");
       window.sessionStorage.setItem("ryravel-curator-key", key);
+      setCheckingAccess(true);
       setAccessKey(key);
       setNeedsAccess(false);
     } catch (signInError) {
@@ -198,6 +205,7 @@ export default function CuratorDeskDemo() {
     setOverview({ actor: "", counts: {}, enquiries: [] });
     setDetail(null);
     setNeedsAccess(true);
+    setCheckingAccess(false);
     setNotice("");
     setError("");
   }
@@ -235,6 +243,10 @@ export default function CuratorDeskDemo() {
 
   const request = detail?.enquiry;
   const counts = overview.counts || {};
+
+  if (checkingAccess) {
+    return <main className="curator-desk-demo desk-login-page"><div className="desk-login desk-session-check" role="status"><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Checking secure access.</h1><p>Confirming your curator session before opening the workspace.</p><div className="desk-check-pulse" aria-hidden="true" /></div></main>;
+  }
 
   if (needsAccess) {
     return <main className="curator-desk-demo desk-login-page"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{loginTurnstile.enabled ? <div className="desk-login-turnstile"><div ref={loginTurnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit" disabled={loading}>{loading ? "Verifying…" : "Open curator desk →"}</button><a href="/">Return to Ryravel</a></form></main>;
