@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./homepage.css";
 import SiteChrome from "./components/SiteChrome";
 
 export const metadata = {
