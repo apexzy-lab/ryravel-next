@@ -1,8 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap");
 
-html:has(.new-home) .site-header,
-html:has(.new-home) .mobile-nav,
-html:has(.new-home) body > .site-footer { display: none; }
 html:has(.new-home) body { background: #faf8f5; }
 
 .new-home {
@@ -38,7 +35,7 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .nav.scrolled .nav-cta { border-color: var(--home-ink); color: var(--home-ink); }
 .new-home .nav.scrolled .nav-cta:hover { background: var(--home-ink); color: #fff; }
 
-.new-home .hero { align-items: flex-end; background: #0a0906; display: flex; height: 100vh; min-height: 700px; overflow: hidden; position: relative; width: 100%; }
+.new-home .hero { align-items: flex-end; background: #0a0906 url("/journeys/ex6/exhausted-ngorongoro-sunset.webp") center/cover no-repeat; display: flex; height: calc(100svh - 76px); min-height: 620px; overflow: hidden; position: relative; width: 100%; }
 .new-home .hero video { height: 100%; inset: 0; object-fit: cover; opacity: .52; position: absolute; width: 100%; }
 .new-home .hero-overlay { background: linear-gradient(to top,rgba(6,5,3,.92) 0%,rgba(6,5,3,.38) 50%,rgba(6,5,3,.12) 100%); inset: 0; position: absolute; }
 .new-home .hero-body { max-width: 860px; padding: 0 3.5rem 6rem; position: relative; z-index: 2; }
@@ -136,11 +133,11 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .stillness-sub { color: rgba(255,255,255,.28); font-size: 12px; line-height: 1.6; margin-bottom: 1.25rem; }
 .new-home .stillness-exp,.new-home .stillness-all { border-bottom: .5px solid rgba(255,255,255,.1); color: rgba(255,255,255,.28); font-size: 9px; letter-spacing: .16em; padding-bottom: 1px; text-transform: uppercase; }
 
-.new-home .quiz-section { background: var(--home-warm); color: var(--home-ink); padding: 7rem 3.5rem; }
-.new-home .quiz-intro { display: block; margin: 0 0 4rem; max-width: 520px; }
+.new-home .quiz-section { background: var(--home-warm); color: var(--home-ink); padding: 6rem 3.5rem; }
+.new-home .quiz-intro { display: block; margin: 0 auto 3rem; max-width: 620px; text-align: center; }
 .new-home .quiz-intro h2 { font-size: clamp(32px,4vw,46px); margin-bottom: 1rem; }
 .new-home .quiz-intro p { color: var(--home-soft); font-size: 14px; line-height: 1.8; }
-.new-home .quiz-panel { background: #fff; border: .5px solid var(--home-border); color: var(--home-ink); margin: 0; max-width: 720px; padding: 0; }
+.new-home .quiz-panel { background: #fff; border: .5px solid var(--home-border); box-shadow: 0 24px 65px rgba(33,26,19,.06); color: var(--home-ink); margin: 0 auto; max-width: 760px; padding: 0; width: 100%; }
 .new-home .quiz-bar { background: var(--home-border-light); height: 2px; }
 .new-home .quiz-bar-fill { background: var(--home-red); height: 100%; transition: width .4s ease; }
 .new-home .quiz-inner,.new-home .quiz-result { padding: 3rem; }
@@ -163,6 +160,7 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .quiz-res-desc { color: var(--home-soft); font-size: 14px; line-height: 1.8; margin-bottom: 2rem; }
 .new-home .quiz-res-btns { display: flex; flex-wrap: wrap; gap: 1rem; }
 .new-home .quiz-restart { background: none; border: .5px solid var(--home-border); color: var(--home-muted); font-size: 10px; letter-spacing: .14em; padding: 11px 22px; text-transform: uppercase; }
+.new-home a:focus-visible,.new-home button:focus-visible { outline: 2px solid var(--home-red); outline-offset: 4px; }
 
 .new-home .global-cta { background: var(--home-ink); padding: 9rem 3.5rem; text-align: center; }
 .new-home .global-cta .kicker { color: rgba(255,255,255,.22); }
@@ -186,8 +184,6 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .footer-legal { display: flex; gap: 1.5rem; }
 
 @media (max-width:960px) {
-  .new-home .nav { padding: 1.2rem 1.75rem; }
-  .new-home .nav-links { display: none; }
   .new-home .hero-body { padding: 0 1.75rem 4rem; }
   .new-home .manifesto,.new-home .stillness { gap: 3rem; grid-template-columns: 1fr; }
   .new-home .return-grid,.new-home .principles-grid,.new-home .journey-grid { grid-template-columns: 1fr; }
@@ -196,21 +192,21 @@ html:has(.new-home) body { background: #faf8f5; }
   .new-home .principle + .principle { border-left: 0; border-top: .5px solid var(--home-border); padding-left: 0; }
   .new-home .stillness-cards { grid-template-columns: 1fr; }
   .new-home .manifesto,.new-home .return-section,.new-home .principles,.new-home .journeys,.new-home .stillness,.new-home .quiz-section,.new-home .global-cta { padding-left: 1.75rem; padding-right: 1.75rem; }
-  .new-home .footer { padding-left: 1.75rem; padding-right: 1.75rem; }
-  .new-home .footer-top { gap: 2.5rem; grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width:600px) {
-  .new-home .nav-cta { padding-inline: 12px; }
-  .new-home .hero { min-height: 640px; }
+  .new-home .hero { height: calc(100svh - 68px); min-height: 570px; }
   .new-home .hero-h1 { font-size: 48px; }
   .new-home .scroll-cue { display: none; }
   .new-home .return-header,.new-home .journeys-header { align-items: flex-start; flex-direction: column; gap: 2rem; }
   .new-home .jh-right { align-items: flex-start; }
   .new-home .includes-note { text-align: left; }
   .new-home .quiz-inner,.new-home .quiz-result { padding: 2rem 1.25rem; }
-  .new-home .footer-top { grid-template-columns: 1fr; }
-  .new-home .footer-bottom { align-items: flex-start; flex-direction: column; gap: 1rem; }
+  .new-home .quiz-section { padding-block: 4.5rem; }
+  .new-home .quiz-intro { margin-bottom: 2rem; }
+  .new-home .quiz-q { font-size: 21px; }
+  .new-home .quiz-opt { font-size: 14px; padding: .9rem 1rem; }
+  .new-home .quiz-nav { gap: 1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

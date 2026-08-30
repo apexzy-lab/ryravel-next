@@ -56,7 +56,7 @@ export default function SiteChrome({ children }) {
       <header className="site-header">
         <Link href="/" aria-label="Ryravel home"><Logo /></Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
-          {nav.map(([label, href]) => <Link href={href} key={href}>{label}</Link>)}
+          {nav.map(([label, href]) => <Link href={href} key={`${label}-${href}`}>{label}</Link>)}
         </nav>
         <div className="header-actions">
           <a className="phone" href="tel:+17605140361">+1 760 514 0361</a>
@@ -71,7 +71,7 @@ export default function SiteChrome({ children }) {
         </div>
       </header>
       <div className={`mobile-nav ${menuOpen ? "open" : ""}`}>
-        {nav.map(([label, href]) => <Link href={href} key={href} onClick={() => setMenuOpen(false)}>{label}</Link>)}
+        {nav.map(([label, href]) => <Link href={href} key={`${label}-${href}`} onClick={() => setMenuOpen(false)}>{label}</Link>)}
         <Link className="button button-red" href="/request" onClick={() => setMenuOpen(false)}>Plan my journey</Link>
       </div>
       {children}

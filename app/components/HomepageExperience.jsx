@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const arcs = {
   exhausted: { label: "Exhausted, The Restoration", name: <>The <em>Restoration</em></>, desc: "Your arc begins with permission to stop. Six, nine, or eleven nights of coast, stillness, and the kind of sleep that actual rest produces. We take care of everything so you do not have to think.", url: "/journeys/ex6" },
@@ -47,28 +47,23 @@ function FeelingQuiz() {
 
   function back() {
     if (!step) return;
-    setStep(step - 1); setAnswers(answers.slice(0, -1)); setSelected(null);
+    setStep(step - 1); setAnswers(answers.slice(0, -1)); setSelected(answers[answers.length - 1]);
   }
 
   function restart() { setStep(0); setAnswers([]); setSelected(null); setComplete(false); }
 
   return <section className="quiz-section" id="feeling-quiz">
     <div className="quiz-intro"><span className="kicker">Begin with a feeling</span><h2 className="serif-h2">Find your <em>arc</em></h2><p>Answer a few questions. We will show you where your journey begins.</p></div>
-    <div className="quiz-panel"><div className="quiz-bar"><div className="quiz-bar-fill" style={{ width: complete ? "100%" : `${(step / questions.length) * 100}%` }} /></div>
-      {!complete ? <div className="quiz-inner"><p className="quiz-step">Step {step + 1} of {questions.length}</p><h3 className="quiz-q">{questions[step].q}</h3><div className="quiz-opts">{questions[step].opts.map(([text, answer]) => <button type="button" className={`quiz-opt${selected === answer ? " sel" : ""}`} key={text} onClick={() => setSelected(answer)}>{text}</button>)}</div><div className="quiz-nav"><button type="button" className="quiz-back" onClick={back} disabled={step === 0}>← Back</button><button type="button" className="quiz-fwd" onClick={next} disabled={!selected}>{step === questions.length - 1 ? "See my arc →" : "Next →"}</button></div></div> :
-        <div className="quiz-result show"><p className="quiz-res-arc">{winner.label}</p><h3 className="quiz-res-name">{winner.name}</h3><p className="quiz-res-desc">{winner.desc}</p><div className="quiz-res-btns"><Link className="btn-primary" href={winner.url}>Explore this journey</Link><button type="button" className="quiz-restart" onClick={restart}>Start again</button></div></div>}
+    <div className="quiz-panel"><div className="quiz-bar"><div className="quiz-bar-fill" style={{ width: complete ? "100%" : `${((step + 1) / questions.length) * 100}%` }} /></div>
+      {!complete ? <div className="quiz-inner"><p className="quiz-step">Step {step + 1} of {questions.length}</p><h3 className="quiz-q">{questions[step].q}</h3><div className="quiz-opts">{questions[step].opts.map(([text, answer]) => <button type="button" aria-pressed={selected === answer} className={`quiz-opt${selected === answer ? " sel" : ""}`} key={text} onClick={() => setSelected(answer)}>{text}</button>)}</div><div className="quiz-nav"><button type="button" className="quiz-back" onClick={back} disabled={step === 0}>← Back</button><button type="button" className="quiz-fwd" onClick={next} disabled={!selected}>{step === questions.length - 1 ? "See my arc →" : "Next →"}</button></div></div> :
+        <div className="quiz-result show" aria-live="polite"><p className="quiz-res-arc">{winner.label}</p><h3 className="quiz-res-name">{winner.name}</h3><p className="quiz-res-desc">{winner.desc}</p><div className="quiz-res-btns"><Link className="btn-primary" href={winner.url}>Explore this journey</Link><button type="button" className="quiz-restart" onClick={restart}>Start again</button></div></div>}
     </div>
   </section>;
 }
 
 export default function HomepageExperience() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => { const update = () => setScrolled(window.scrollY > 60); update(); window.addEventListener("scroll", update, { passive: true }); return () => window.removeEventListener("scroll", update); }, []);
-
   return <main className="new-home">
-    <nav className={`nav${scrolled ? " scrolled" : ""}`}><Link className="nav-logo" href="/">Ryravel</Link><div className="nav-links"><Link className="nav-link" href="/journeys">Journeys</Link><Link className="nav-link" href="/about">Our approach</Link><Link className="nav-link" href="/the-return">The Return</Link><Link className="nav-link" href="/about">About</Link><a className="nav-phone" href="tel:+17605140361">+1 760 514 0361</a></div><Link className="nav-cta" href="/request">Plan my journey</Link></nav>
-
-    <section className="hero"><video autoPlay playsInline muted loop preload="metadata"><source src="https://media.ryravel.com/ryravel-hero.mp4" type="video/mp4" /></video><div className="hero-overlay" /><div className="hero-body"><span className="hero-eye">Bespoke travel designed for who you become</span><h1 className="hero-h1">The journey ends.<br /><em>The change does not.</em></h1><p className="hero-sub">Every journey we design begins not with a destination, but with a feeling. The answer shapes everything that follows.</p><div className="hero-btns"><a className="btn-primary" href="#feeling-quiz">Begin with a feeling</a><Link className="btn-quiet" href="/journeys">Explore journeys</Link></div></div><span className="scroll-cue">Scroll ↓</span></section>
+    <section className="hero"><video autoPlay playsInline muted loop preload="metadata" poster="/journeys/ex6/exhausted-ngorongoro-sunset.webp"><source src="https://media.ryravel.com/ryravel-hero.mp4" type="video/mp4" /></video><div className="hero-overlay" /><div className="hero-body"><span className="hero-eye">Bespoke travel designed for who you become</span><h1 className="hero-h1">The journey ends.<br /><em>The change does not.</em></h1><p className="hero-sub">Every journey we design begins not with a destination, but with a feeling. The answer shapes everything that follows.</p><div className="hero-btns"><a className="btn-primary" href="#feeling-quiz">Begin with a feeling</a><Link className="btn-quiet" href="/journeys">Explore journeys</Link></div></div><span className="scroll-cue">Scroll ↓</span></section>
 
     <div className="ticker" aria-hidden="true"><div className="ticker-inner">{["100% bespoke journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design", "Every journey designed by the founder", "100% bespoke journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design", "Every journey designed by the founder"].map((item, index) => <span className="ticker-item" key={`${item}-${index}`}>{item}</span>)}</div></div>
 
@@ -86,6 +81,5 @@ export default function HomepageExperience() {
 
     <section className="global-cta"><span className="kicker">Begin your return</span><h2>How do you want<br />to <em>feel?</em></h2><p>One honest conversation is all it takes. Tell us where you are, and we will design the rest.</p><div className="cta-btns"><Link className="btn-cta" href="/request">Begin your return</Link><Link className="btn-cta-ol" href="/journeys">Explore journeys</Link></div></section>
 
-    <footer className="footer"><div className="footer-top"><div className="footer-brand"><span className="footer-logo">Ryravel</span><p>We travel not to escape life,<br />but for life not to escape us.</p><p className="footer-founder">Every journey is designed directly by the founder.</p></div><div className="footer-col"><h4>Journeys</h4><Link href="/journeys">By feeling</Link><Link href="/journeys">By traveller</Link><Link href="/journeys">By month</Link><Link href="/private-bespoke">Private and bespoke</Link><Link href="/gifting">Gifting</Link></div><div className="footer-col"><h4>Company</h4><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><a href="https://journal.ryravel.com">The journal</a><Link href="/sustainability">Sustainability</Link></div><div className="footer-col"><h4>Begin</h4><Link href="/request">Start the conversation</Link><a href="tel:+17605140361">Speak to a curator</a><a href="mailto:hello@ryravel.com">hello@ryravel.com</a><a href="tel:+17605140361">+1 760 514 0361</a></div></div><div className="footer-bottom"><span className="footer-copy">© 2026 Ryravel. All rights reserved.</span><div className="footer-legal"><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/cookies">Cookie policy</Link></div></div></footer>
   </main>;
 }
