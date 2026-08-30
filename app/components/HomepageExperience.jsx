@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import HeroVideo from "./HeroVideo";
 
 const arcs = {
   exhausted: { label: "Exhausted, The Restoration", name: <>The <em>Restoration</em></>, desc: "Your arc begins with permission to stop. Six, nine, or eleven nights of coast, stillness, and the kind of sleep that actual rest produces. We take care of everything so you do not have to think.", url: "/journeys/ex6" },
@@ -63,7 +64,7 @@ function FeelingQuiz() {
 
 export default function HomepageExperience() {
   return <main className="new-home">
-    <section className="hero"><video autoPlay playsInline muted loop preload="metadata" poster="/journeys/ex6/exhausted-ngorongoro-sunset.webp"><source src="https://media.ryravel.com/ryravel-hero.mp4" type="video/mp4" /></video><div className="hero-overlay" /><div className="hero-body"><span className="hero-eye">Bespoke travel designed for who you become</span><h1 className="hero-h1">The journey ends.<br /><em>The change does not.</em></h1><p className="hero-sub">Every journey we design begins not with a destination, but with a feeling. The answer shapes everything that follows.</p><div className="hero-btns"><a className="btn-primary" href="#feeling-quiz">Begin with a feeling</a><Link className="btn-quiet" href="/journeys">Explore journeys</Link></div></div><span className="scroll-cue">Scroll ↓</span></section>
+    <section className="hero"><HeroVideo /><div className="hero-overlay" /><div className="hero-body"><span className="hero-eye">Bespoke travel designed for who you become</span><h1 className="hero-h1">The journey ends.<br /><em>The change does not.</em></h1><p className="hero-sub">Every journey we design begins not with a destination, but with a feeling. The answer shapes everything that follows.</p><div className="hero-btns"><a className="btn-primary" href="#feeling-quiz">Begin with a feeling</a><Link className="btn-quiet" href="/journeys">Explore journeys</Link></div></div><span className="scroll-cue">Scroll ↓</span></section>
 
     <div className="ticker" aria-hidden="true"><div className="ticker-inner">{["100% bespoke journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design", "Every journey designed by the founder", "100% bespoke journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design", "Every journey designed by the founder"].map((item, index) => <span className="ticker-item" key={`${item}-${index}`}>{item}</span>)}</div></div>
 

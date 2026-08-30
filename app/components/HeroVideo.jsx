@@ -11,6 +11,11 @@ export default function HeroVideo() {
     const video = videoRef.current;
     if (!video) return undefined;
 
+    function startVideo() {
+      video.muted = true;
+      video.play().catch(() => {});
+    }
+
     function skipBrandedOutro() {
       if (
         Number.isFinite(video.duration) &&
@@ -22,13 +27,20 @@ export default function HeroVideo() {
       }
     }
 
+    startVideo();
+    video.addEventListener("canplay", startVideo);
     video.addEventListener("timeupdate", skipBrandedOutro);
-    return () => video.removeEventListener("timeupdate", skipBrandedOutro);
+    document.addEventListener("visibilitychange", startVideo);
+    return () => {
+      video.removeEventListener("canplay", startVideo);
+      video.removeEventListener("timeupdate", skipBrandedOutro);
+      document.removeEventListener("visibilitychange", startVideo);
+    };
   }, []);
 
   return (
     <div className="home-hero-media" aria-hidden="true">
-      <video ref={videoRef} autoPlay muted playsInline preload="metadata">
+      <video ref={videoRef} autoPlay muted playsInline preload="auto">
         <source src="https://media.ryravel.com/ryravel-hero.mp4" type="video/mp4" />
       </video>
     </div>

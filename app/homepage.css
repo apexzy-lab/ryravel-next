@@ -35,8 +35,9 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .nav.scrolled .nav-cta { border-color: var(--home-ink); color: var(--home-ink); }
 .new-home .nav.scrolled .nav-cta:hover { background: var(--home-ink); color: #fff; }
 
-.new-home .hero { align-items: flex-end; background: #0a0906 url("/journeys/ex6/exhausted-ngorongoro-sunset.webp") center/cover no-repeat; display: flex; height: calc(100svh - 76px); min-height: 620px; overflow: hidden; position: relative; width: 100%; }
-.new-home .hero video { height: 100%; inset: 0; object-fit: cover; opacity: .52; position: absolute; width: 100%; }
+.new-home .hero { align-items: flex-end; background: #0a0906; display: flex; height: calc(100svh - 76px); min-height: 620px; overflow: hidden; position: relative; width: 100%; }
+.new-home .hero .home-hero-media { inset: 0; position: absolute; }
+.new-home .hero video { height: 100%; inset: 0; object-fit: cover; opacity: .7; position: absolute; width: 100%; }
 .new-home .hero-overlay { background: linear-gradient(to top,rgba(6,5,3,.92) 0%,rgba(6,5,3,.38) 50%,rgba(6,5,3,.12) 100%); inset: 0; position: absolute; }
 .new-home .hero-body { max-width: 860px; padding: 0 3.5rem 6rem; position: relative; z-index: 2; }
 .new-home .hero-eye { color: var(--home-gold); display: block; font-size: 10px; font-weight: 400; letter-spacing: .3em; margin-bottom: 1.75rem; text-transform: uppercase; }
