@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { CTA, JourneyCard } from "../../components/Blocks";
 import { arcs, journeys, arcFor, journeyFor } from "../../data";
 import ExhaustedRestoration from "./ExhaustedRestoration";
+import ExhaustedRestorationSix from "./ExhaustedRestorationSix";
 
 export function generateStaticParams() {
   return [...arcs.map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
@@ -32,6 +33,23 @@ export async function generateMetadata({ params }) {
         title: "The Full Tanzania Restoration · 11 Nights",
         description: "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.",
         images: ["https://ryravel.com/journeys/ex6/exhausted-ngorongoro-sunset.webp"],
+      },
+    };
+  }
+  if (slug === "ex9") {
+    return {
+      title: "Exhausted, The Restoration · 6 Nights",
+      description: "Six nights in Zanzibar designed around pure decompression, stillness and a gentler return.",
+      openGraph: {
+        title: "Exhausted, The Restoration · 6 Nights",
+        description: "Six nights in Zanzibar designed around pure decompression, stillness and a gentler return.",
+        images: ["https://ryravel.com/journeys/ex9/exhausted-zanzibar-coast.webp"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Exhausted, The Restoration · 6 Nights",
+        description: "Six nights in Zanzibar designed around pure decompression, stillness and a gentler return.",
+        images: ["https://ryravel.com/journeys/ex9/exhausted-zanzibar-coast.webp"],
       },
     };
   }
@@ -80,6 +98,7 @@ export default async function JourneyRoute({ params }) {
   const { slug } = await params;
   if (aliases[slug]) redirect(`/journeys/${aliases[slug]}`);
   if (slug === "ex6") return <ExhaustedRestoration />;
+  if (slug === "ex9") return <ExhaustedRestorationSix />;
   const journey = journeyFor(slug);
   if (journey) return <JourneyPage journey={journey} />;
   const arc = arcFor(slug);
