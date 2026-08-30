@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { CTA, JourneyCard } from "../../components/Blocks";
 import { arcs, journeys, arcFor, journeyFor } from "../../data";
+import ExhaustedRestoration from "./ExhaustedRestoration";
 
 export function generateStaticParams() {
   return [...arcs.map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
@@ -17,6 +18,23 @@ const aliases = {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
+  if (slug === "ex6") {
+    return {
+      title: "The Full Tanzania Restoration · 11 Nights",
+      description: "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.",
+      openGraph: {
+        title: "The Full Tanzania Restoration · 11 Nights",
+        description: "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.",
+        images: ["https://ryravel.com/journeys/ex6/exhausted-ngorongoro-sunset.webp"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "The Full Tanzania Restoration · 11 Nights",
+        description: "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.",
+        images: ["https://ryravel.com/journeys/ex6/exhausted-ngorongoro-sunset.webp"],
+      },
+    };
+  }
   const item = journeyFor(slug) || arcFor(slug);
   return item ? { title: item.title } : {};
 }
@@ -61,6 +79,7 @@ function JourneyPage({ journey }) {
 export default async function JourneyRoute({ params }) {
   const { slug } = await params;
   if (aliases[slug]) redirect(`/journeys/${aliases[slug]}`);
+  if (slug === "ex6") return <ExhaustedRestoration />;
   const journey = journeyFor(slug);
   if (journey) return <JourneyPage journey={journey} />;
   const arc = arcFor(slug);
