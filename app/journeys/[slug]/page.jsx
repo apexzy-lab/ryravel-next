@@ -4,6 +4,7 @@ import { CTA, JourneyCard } from "../../components/Blocks";
 import { arcs, journeys, arcFor, journeyFor } from "../../data";
 import ExhaustedRestoration from "./ExhaustedRestoration";
 import ExhaustedRestorationSix from "./ExhaustedRestorationSix";
+import ExhaustedRestorationNine from "./ExhaustedRestorationNine";
 
 export function generateStaticParams() {
   return [...arcs.map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
@@ -53,6 +54,23 @@ export async function generateMetadata({ params }) {
       },
     };
   }
+  if (slug === "rn9") {
+    return {
+      title: "Exhausted, The Restoration · 9 Nights",
+      description: "Nine nights through Zanzibar and the Serengeti, designed around deep rest, wilderness and a quieter return.",
+      openGraph: {
+        title: "Exhausted, The Restoration · 9 Nights",
+        description: "Nine nights through Zanzibar and the Serengeti, designed around deep rest, wilderness and a quieter return.",
+        images: ["https://ryravel.com/journeys/rn9/exhausted-serengeti-camp.webp"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: "Exhausted, The Restoration · 9 Nights",
+        description: "Nine nights through Zanzibar and the Serengeti, designed around deep rest, wilderness and a quieter return.",
+        images: ["https://ryravel.com/journeys/rn9/exhausted-serengeti-camp.webp"],
+      },
+    };
+  }
   const item = journeyFor(slug) || arcFor(slug);
   return item ? { title: item.title } : {};
 }
@@ -99,6 +117,7 @@ export default async function JourneyRoute({ params }) {
   if (aliases[slug]) redirect(`/journeys/${aliases[slug]}`);
   if (slug === "ex6") return <ExhaustedRestoration />;
   if (slug === "ex9") return <ExhaustedRestorationSix />;
+  if (slug === "rn9") return <ExhaustedRestorationNine />;
   const journey = journeyFor(slug);
   if (journey) return <JourneyPage journey={journey} />;
   const arc = arcFor(slug);

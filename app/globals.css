@@ -429,6 +429,7 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
 .restoration-hotels, .restoration-price { background: #f8f5f2; border-block: 1px solid #e0dbd4; padding: 4rem 2rem; }
 .restoration-hotels h2, .restoration-dates h2, .restoration-price h2, .restoration-months h2 { font-size: 30px; letter-spacing: -.025em; line-height: 1.2; margin: .6rem 0 2rem; }
 .restoration-hotel-grid { display: grid; gap: 1rem; grid-template-columns: repeat(2,1fr); }
+.restoration-hotel-grid-three { grid-template-columns: repeat(3,1fr); }
 .restoration-hotel-grid article { background: #fff; border: 1px solid #e0dbd4; display: flex; flex-direction: column; min-height: 175px; padding: 1.5rem; }
 .restoration-hotel-grid article > span { color: #aaa39d; font-size: 9px; letter-spacing: .14em; text-transform: uppercase; }
 .restoration-hotel-grid h3 { font-size: 20px; line-height: 1.25; margin: .6rem 0 .45rem; }
@@ -476,7 +477,7 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
   .restoration-day, .restoration-signature, .restoration-surprise { padding: 1.4rem; }
   .restoration-image { height: 300px; margin: 3rem 0; }
   .restoration-hotels, .restoration-dates, .restoration-price, .restoration-months { padding: 3.2rem 20px; }
-  .restoration-hotel-grid, .restoration-price > div { gap: 1rem; grid-template-columns: 1fr; }
+  .restoration-hotel-grid, .restoration-hotel-grid-three, .restoration-price > div { gap: 1rem; grid-template-columns: 1fr; }
   .restoration-price > div { gap: 2.5rem; }
   .restoration-month-grid { grid-template-columns: repeat(2,1fr); }
   .restoration-dates form, .restoration-dates label, .restoration-dates input, .restoration-dates select, .restoration-dates button { width: 100%; }
