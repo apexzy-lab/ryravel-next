@@ -131,6 +131,12 @@ em { color: var(--red); font-style: italic; }
 .journey-preview .journey-cards { grid-template-columns: repeat(2,1fr); }
 .journey-card { border: 1px solid var(--paper-line); display: block; min-width: 0; }
 .journey-card-art { background: radial-gradient(circle at 70% 20%, color-mix(in srgb, var(--arc) 35%, #111), #080706 75%); color: #fff; display: flex; flex-direction: column; height: 280px; justify-content: space-between; padding: 20px; }
+.journey-card-art.has-image { overflow: hidden; position: relative; }
+.journey-card-art.has-image > img { height: 100%; inset: 0; object-fit: cover; position: absolute; transition: transform .45s ease; width: 100%; }
+.journey-card:hover .journey-card-art.has-image > img { transform: scale(1.035); }
+.journey-card-image-overlay { background: linear-gradient(to top,rgba(5,5,4,.88),rgba(5,5,4,.08) 72%); inset: 0; position: absolute; }
+.journey-card-art.has-image > span, .journey-card-art.has-image > div { position: relative; z-index: 1; }
+.journey-card-art.has-image small { color: #f1c983; }
 .journey-card-art > span { align-self: end; background: var(--red); font-size: 9px; font-weight: 800; letter-spacing: .12em; padding: 7px 10px; text-transform: uppercase; }
 .journey-card-art small { color: var(--arc); font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
 .journey-card h3 { font-size: 21px; line-height: 1.12; margin-top: 6px; }

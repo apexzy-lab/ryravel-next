@@ -17,7 +17,9 @@ export function JourneyCard({ journey }) {
   const arc = arcFor(journey.arc);
   return (
     <Link href={`/journeys/${journey.slug}`} className={`journey-card arc-${journey.arc}`}>
-      <div className="journey-card-art">
+      <div className={`journey-card-art ${journey.image ? "has-image" : ""}`}>
+        {journey.image && <img src={journey.image} alt={journey.imageAlt || ""} />}
+        {journey.image && <i className="journey-card-image-overlay" aria-hidden="true" />}
         <span>{journey.nights} nights</span>
         <div><small>{arc.shortTitle}</small><h3>{journey.title}</h3></div>
       </div>
