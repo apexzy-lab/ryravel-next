@@ -26,8 +26,11 @@ export default function HeroVideo() {
 
   return (
     <div className="home-hero-media" aria-hidden="true">
-      <video ref={videoRef} autoPlay muted playsInline loop preload="auto">
-        <source src="/ryravel-hero-loop.mp4" type="video/mp4" />
+      <video ref={videoRef} autoPlay muted playsInline loop preload="metadata">
+        <source
+          src="https://media.ryravel.com/ryravel-hero.mp4?v=20260831"
+          type="video/mp4"
+        />
       </video>
     </div>
   );
