@@ -1,3 +1,4 @@
+import { waitUntil } from "cloudflare:workers";
 import { getD1, runtimeEnv } from "../../../db/index";
 import { clean, jsonError } from "../../lib/enquiries";
 import { verifyTurnstile } from "../../lib/turnstile";
@@ -19,6 +20,7 @@ function reference() {
 
 async function sendGtmcrSignal({
   id,
+  name,
   email,
   occurredAt,
   reference: enquiryReference,
@@ -32,8 +34,9 @@ async function sendGtmcrSignal({
 }) {
   const token = String(runtimeEnv().GTMCR_SIGNAL_TOKEN || "").trim();
   if (!token) return;
+  const endpoint = String(runtimeEnv().GTMCR_SIGNALS_API_URL || "https://gtmcr.pro/api/v1/events").trim();
 
-  const response = await fetch("https://gtmcr.pro/api/v1/events", {
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -47,6 +50,7 @@ async function sendGtmcrSignal({
       occurredAt,
       properties: {
         form: "trip-inquiry",
+        name,
         reference: enquiryReference,
         feeling,
         travelMonth,
@@ -54,12 +58,19 @@ async function sendGtmcrSignal({
         duration,
         people,
         budget,
-        sourceUrl,
+        source_page: sourceUrl,
       },
     }),
   });
 
   if (!response.ok) throw new Error(`GTMCR returned ${response.status}`);
+}
+
+function queueGtmcrSignal(signal) {
+  // GTMCR powers CRM and marketing automation; it is separate from site analytics.
+  waitUntil(sendGtmcrSignal(signal).catch((error) => {
+    console.error("GTMCR enquiry signal failed", error instanceof Error ? error.message : "Unknown error");
+  }));
 }
 
 export async function POST(request) {
@@ -106,23 +117,20 @@ export async function POST(request) {
     .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, clean(payload.message, 4000) || null, clean(payload.referral, 80) || null, payload.newsletter === true ? 1 : 0, sourceUrl || null, clean(request.headers.get("user-agent"), 500) || null, ipHash)
     .run();
 
-  try {
-    await sendGtmcrSignal({
-      id,
-      email,
-      occurredAt: now,
-      reference: enquiryReference,
-      feeling,
-      travelMonth,
-      travelYear,
-      duration,
-      people,
-      budget,
-      sourceUrl: sourceUrl || null,
-    });
-  } catch (error) {
-    console.error("GTMCR enquiry signal failed", error instanceof Error ? error.message : "Unknown error");
-  }
+  queueGtmcrSignal({
+    id,
+    name,
+    email,
+    occurredAt: now,
+    reference: enquiryReference,
+    feeling,
+    travelMonth,
+    travelYear,
+    duration,
+    people,
+    budget,
+    sourceUrl: sourceUrl || null,
+  });
 
   return Response.json({ received: true, reference: enquiryReference }, { status: 201, headers: { "Cache-Control": "no-store" } });
 }
