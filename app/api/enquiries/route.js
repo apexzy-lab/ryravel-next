@@ -17,6 +17,51 @@ function reference() {
   return `RY-${year}${token}`;
 }
 
+async function sendGtmcrSignal({
+  id,
+  email,
+  occurredAt,
+  reference: enquiryReference,
+  feeling,
+  travelMonth,
+  travelYear,
+  duration,
+  people,
+  budget,
+  sourceUrl,
+}) {
+  const token = String(runtimeEnv().GTMCR_SIGNAL_TOKEN || "").trim();
+  if (!token) return;
+
+  const response = await fetch("https://gtmcr.pro/api/v1/events", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    signal: AbortSignal.timeout(4000),
+    body: JSON.stringify({
+      eventId: `ryravel-enquiry-${id}`,
+      event: "form_submitted",
+      email,
+      occurredAt,
+      properties: {
+        form: "trip-inquiry",
+        reference: enquiryReference,
+        feeling,
+        travelMonth,
+        travelYear,
+        duration,
+        people,
+        budget,
+        sourceUrl,
+      },
+    }),
+  });
+
+  if (!response.ok) throw new Error(`GTMCR returned ${response.status}`);
+}
+
 export async function POST(request) {
   let payload;
   try { payload = await request.json(); } catch { return jsonError("The enquiry could not be read."); }
@@ -36,6 +81,7 @@ export async function POST(request) {
   const budget = clean(payload.budget, 40);
   const countryCode = clean(payload.countryCode, 8);
   const phone = clean(payload.phone, 40);
+  const sourceUrl = clean(payload.sourceUrl, 500);
 
   if (!name || !email || !phone || !duration || !people || !budget || !travelYear) return jsonError("Complete every required field.", 422);
   if (!/^\S+@\S+\.\S+$/.test(email) || email !== emailConfirmation) return jsonError("Enter matching email addresses.", 422);
@@ -57,8 +103,26 @@ export async function POST(request) {
     travel_month, travel_year, duration, people, budget, message, referral,
     newsletter, source_url, user_agent, ip_hash
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-    .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, clean(payload.message, 4000) || null, clean(payload.referral, 80) || null, payload.newsletter === true ? 1 : 0, clean(payload.sourceUrl, 500) || null, clean(request.headers.get("user-agent"), 500) || null, ipHash)
+    .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, clean(payload.message, 4000) || null, clean(payload.referral, 80) || null, payload.newsletter === true ? 1 : 0, sourceUrl || null, clean(request.headers.get("user-agent"), 500) || null, ipHash)
     .run();
+
+  try {
+    await sendGtmcrSignal({
+      id,
+      email,
+      occurredAt: now,
+      reference: enquiryReference,
+      feeling,
+      travelMonth,
+      travelYear,
+      duration,
+      people,
+      budget,
+      sourceUrl: sourceUrl || null,
+    });
+  } catch (error) {
+    console.error("GTMCR enquiry signal failed", error instanceof Error ? error.message : "Unknown error");
+  }
 
   return Response.json({ received: true, reference: enquiryReference }, { status: 201, headers: { "Cache-Control": "no-store" } });
 }
