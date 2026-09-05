@@ -30,16 +30,10 @@ export default function JournalIndex() {
     </section>
 
     <section className="ji-feature">
-      <div className="ji-feature-cover">
-        <div className="ji-cover-glow" />
-        <div className="ji-book-cover">
-          <span>Ryravel Journal, Volume One</span>
-          <h2>Stillness</h2>
-          <i />
-          <p>Four accounts of what happens when the motion stops and nothing rushes in to replace it.</p>
-          <small>2:47 PM</small>
-        </div>
-      </div>
+      <Link className="ji-feature-cover" href="/journal/volume-one-stillness" aria-label="Read Ryravel Journal, Volume One: Stillness">
+        <img src="/journal/empty-felt-anchored.png" alt="Dew on a green leaf with the words Empty. felt. Anchored" />
+        <span className="ji-feature-cover-label">Ryravel Journal · Volume One</span>
+      </Link>
       <div className="ji-feature-copy">
         <div className="ji-current"><i />Current issue</div>
         <p className="ji-volume">Volume One, 2026</p>
