@@ -16,15 +16,17 @@
 }
 
 .journal-index .ji-hero {
-  align-items: flex-end;
   background: var(--ji-charcoal);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(460px, .85fr);
   min-height: calc(88svh - 76px);
   overflow: hidden;
-  padding: 8rem 3.5rem 5rem;
   position: relative;
 }
 
+.ji-hero-art { align-items: center; background: #080b07; display: flex; justify-content: center; min-width: 0; position: relative; }
+.ji-hero-art img { display: block; height: auto; max-height: 100%; object-fit: contain; width: 100%; }
+.ji-hero-panel { align-items: flex-end; display: flex; overflow: hidden; padding: 7rem 3.5rem 4.5rem; position: relative; }
 .ji-hero-noise { background: radial-gradient(ellipse at 20% 60%, rgba(201,168,76,.08), transparent 55%), radial-gradient(ellipse at 80% 20%, rgba(192,57,43,.06), transparent 50%); inset: 0; position: absolute; }
 .ji-hero-word { color: rgba(255,255,255,.03); font-family: "Playfair Display", Georgia, serif; font-size: clamp(110px,20vw,260px); font-style: italic; left: 50%; letter-spacing: -.02em; pointer-events: none; position: absolute; top: 50%; transform: translate(-50%,-50%); white-space: nowrap; }
 .ji-hero-body { max-width: 700px; position: relative; z-index: 1; }
@@ -40,12 +42,14 @@
 .ji-scroll { bottom: 2.5rem; color: rgba(255,255,255,.22); font-size: 10px; letter-spacing: .2em; position: absolute; right: 3.5rem; text-transform: uppercase; writing-mode: vertical-rl; }
 
 .ji-feature { border-bottom: 1px solid var(--ji-border); display: grid; grid-template-columns: 1fr 1fr; }
-.ji-feature-cover { background: var(--ji-charcoal); display: block; min-height: 640px; overflow: hidden; position: relative; }
-.ji-feature-cover::after { background: linear-gradient(to top,rgba(15,13,10,.62),transparent 28%); content: ""; inset: 0; pointer-events: none; position: absolute; }
-.ji-feature-cover img { height: 100%; inset: 0; object-fit: cover; position: absolute; transition: transform .8s cubic-bezier(.2,.7,.2,1); width: 100%; }
-.ji-feature-cover:hover img { transform: scale(1.02); }
-.ji-feature-cover:focus-visible { outline: 2px solid var(--ji-gold); outline-offset: -4px; }
-.ji-feature-cover-label { bottom: 2rem; color: rgba(255,255,255,.72); font-size: 9px; font-weight: 400; left: 2.5rem; letter-spacing: .24em; position: absolute; text-transform: uppercase; z-index: 1; }
+.ji-feature-cover { align-items: center; background: var(--ji-charcoal); display: flex; justify-content: center; min-height: 640px; overflow: hidden; padding: 5rem; position: relative; }
+.ji-cover-glow { background: radial-gradient(ellipse at 35% 30%, rgba(201,168,76,.13), transparent 60%); inset: 0; position: absolute; }
+.ji-book-cover { background: var(--ji-charcoal); border: 1px solid rgba(255,255,255,.08); box-shadow: 0 32px 64px rgba(0,0,0,.55), 12px 0 40px rgba(0,0,0,.3); padding: 3rem 2.5rem; position: relative; text-align: center; width: 240px; z-index: 1; }
+.ji-book-cover > span { color: var(--ji-gold); display: block; font-size: 9px; font-weight: 400; letter-spacing: .28em; margin-bottom: 1.5rem; text-transform: uppercase; }
+.ji-book-cover h2 { color: #e8d5b5; font-family: "Playfair Display", Georgia, serif; font-size: 40px; font-style: italic; font-weight: 400; }
+.ji-book-cover i { background: rgba(201,168,76,.45); display: block; height: 1px; margin: 1.75rem auto; width: 28px; }
+.ji-book-cover p { color: rgba(255,255,255,.28); font-size: 11px; line-height: 1.65; }
+.ji-book-cover small { color: rgba(255,255,255,.2); display: block; font-family: "Playfair Display", Georgia, serif; font-size: 12px; font-style: italic; margin-top: 1.5rem; }
 .ji-feature-copy { align-items: flex-start; background: var(--ji-paper-warm); display: flex; flex-direction: column; justify-content: center; padding: 4.5rem; }
 .ji-current { align-items: center; color: var(--ji-red); display: flex; font-size: 9px; font-weight: 400; gap: .6rem; letter-spacing: .22em; margin-bottom: 2rem; text-transform: uppercase; }
 .ji-current i { background: var(--ji-red); border-radius: 50%; height: 5px; width: 5px; }
@@ -115,13 +119,15 @@
 .jv-controls span { color: rgba(245,240,230,.5); font: 12px "Playfair Display",Georgia,serif; letter-spacing: .08em; min-width: 60px; text-align: center; }
 
 @media (max-width: 760px) {
-  .journal-index .ji-hero { min-height: calc(92svh - 68px); padding: 6rem 1.5rem 3.5rem; }
+  .journal-index .ji-hero { display: block; min-height: 0; }
+  .ji-hero-art { aspect-ratio: 3 / 2; min-height: 0; }
+  .ji-hero-art img { height: 100%; object-fit: cover; }
+  .ji-hero-panel { min-height: calc(78svh - 68px); padding: 4.5rem 1.5rem 3.5rem; }
   .ji-hero h1 { font-size: clamp(48px,15vw,68px); }
   .ji-hero-meta { display: grid; gap: 1.5rem; grid-template-columns: 1fr 1fr; }
   .ji-scroll { display: none; }
   .ji-feature, .ji-coming, .ji-subscribe { grid-template-columns: 1fr; }
-  .ji-feature-cover { aspect-ratio: 3 / 2; min-height: 0; }
-  .ji-feature-cover-label { bottom: 1.25rem; left: 1.5rem; }
+  .ji-feature-cover { min-height: 500px; padding: 3rem 1.5rem; }
   .ji-feature-copy, .ji-coming, .ji-subscribe { padding: 4rem 1.5rem; }
   .ji-coming, .ji-subscribe { gap: 3rem; }
   .ji-contents li { align-items: flex-start; flex-direction: column; gap: .25rem; }
@@ -136,4 +142,4 @@
   .jv-back-link { left: 1rem; top: 1.15rem; }
 }
 
-@media (prefers-reduced-motion: reduce) { .ji-feature-cover img, .jv-page { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .jv-page { transition: none; } }

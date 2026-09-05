@@ -13,27 +13,38 @@ export default function JournalIndex() {
 
   return <main className="journal-index">
     <section className="ji-hero">
-      <div className="ji-hero-noise" />
-      <div className="ji-hero-word" aria-hidden="true">Journal</div>
-      <div className="ji-hero-body">
-        <span className="ji-eyebrow ji-gold">journal.ryravel.com</span>
-        <h1>The Ryravel<br /><em>Journal</em></h1>
-        <p className="ji-hero-desc">Long-form writing on stillness, transformation, and the question no one else thinks to ask. Published when we have something worth saying.</p>
-        <div className="ji-hero-meta">
-          <div><small>Year</small><strong>2026</strong></div>
-          <div><small>Issues published</small><strong>1 of 2</strong></div>
-          <div><small>Next issue</small><strong><em>Vol. 2, Wonder</em></strong></div>
-          <div><small>Cadence</small><strong>Twice yearly</strong></div>
-        </div>
+      <div className="ji-hero-art">
+        <img src="/journal/empty-felt-anchored.png" alt="Dew on a green leaf with the words Empty. felt. Anchored" />
       </div>
-      <span className="ji-scroll">Scroll ↓</span>
+      <div className="ji-hero-panel">
+        <div className="ji-hero-noise" />
+        <div className="ji-hero-word" aria-hidden="true">Journal</div>
+        <div className="ji-hero-body">
+          <span className="ji-eyebrow ji-gold">journal.ryravel.com</span>
+          <h1>The Ryravel<br /><em>Journal</em></h1>
+          <p className="ji-hero-desc">Long-form writing on stillness, transformation, and the question no one else thinks to ask. Published when we have something worth saying.</p>
+          <div className="ji-hero-meta">
+            <div><small>Year</small><strong>2026</strong></div>
+            <div><small>Issues published</small><strong>1 of 2</strong></div>
+            <div><small>Next issue</small><strong><em>Vol. 2, Wonder</em></strong></div>
+            <div><small>Cadence</small><strong>Twice yearly</strong></div>
+          </div>
+        </div>
+        <span className="ji-scroll">Scroll ↓</span>
+      </div>
     </section>
 
     <section className="ji-feature">
-      <Link className="ji-feature-cover" href="/journal/volume-one-stillness" aria-label="Read Ryravel Journal, Volume One: Stillness">
-        <img src="/journal/empty-felt-anchored.png" alt="Dew on a green leaf with the words Empty. felt. Anchored" />
-        <span className="ji-feature-cover-label">Ryravel Journal · Volume One</span>
-      </Link>
+      <div className="ji-feature-cover">
+        <div className="ji-cover-glow" />
+        <div className="ji-book-cover">
+          <span>Ryravel Journal, Volume One</span>
+          <h2>Stillness</h2>
+          <i />
+          <p>Four accounts of what happens when the motion stops and nothing rushes in to replace it.</p>
+          <small>2:47 PM</small>
+        </div>
+      </div>
       <div className="ji-feature-copy">
         <div className="ji-current"><i />Current issue</div>
         <p className="ji-volume">Volume One, 2026</p>
