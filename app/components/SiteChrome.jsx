@@ -8,7 +8,7 @@ const nav = [
   ["Our approach", "/about"],
   ["The Return", "/the-return"],
   ["Journal", "/journal"],
-  ["About", "/about"],
+  ["Stories", "/case-studies"],
 ];
 
 const linkedInPartnerScript = `_linkedin_partner_id = "10765993";
@@ -79,7 +79,7 @@ export default function SiteChrome({ children }) {
         <div className="footer-grid">
           <div><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p></div>
           <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/journeys">By traveller</Link><Link href="/journeys">By month</Link><Link href="/private-bespoke">Private & bespoke</Link><Link href="/gifting">Gifting</Link></div>
-          <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/journal">The journal</Link><Link href="/sustainability">Sustainability</Link></div>
+          <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/case-studies">Traveller stories</Link><Link href="/journal">The journal</Link><Link href="/sustainability">Sustainability</Link></div>
           <div><b>Begin</b><Link href="/request">Start the conversation</Link><a href="tel:+17605140361">Speak to a curator</a><a href="mailto:hello@ryravel.com">Contact us</a><a href="tel:+17605140361">+1 760 514 0361</a></div>
         </div>
         <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · Cookie policy</span></div>
