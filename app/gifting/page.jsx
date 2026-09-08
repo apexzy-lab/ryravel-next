@@ -1,6 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
+import { buildMetadata } from "../seo";
 
-export const metadata = { title: "Gifting" };
+export const metadata = buildMetadata({ title: "Gift a Bespoke Journey", description: "Give a private Ryravel journey designed around the person, the moment and how you want them to return.", path: "/gifting" });
 
 export default function GiftingPage() {
   return <main>

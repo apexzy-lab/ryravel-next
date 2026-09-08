@@ -1,6 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
+import { buildMetadata } from "../seo";
 
-export const metadata = { title: "Sustainability" };
+export const metadata = buildMetadata({ title: "Sustainability", description: "How Ryravel approaches thoughtful travel, local partnerships and journeys that respect Tanzania's places and people.", path: "/sustainability" });
 
 export default function SustainabilityPage() {
   return <main>

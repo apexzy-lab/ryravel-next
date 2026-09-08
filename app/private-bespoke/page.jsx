@@ -1,6 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
+import { buildMetadata } from "../seo";
 
-export const metadata = { title: "Private & bespoke" };
+export const metadata = buildMetadata({ title: "Private & Bespoke Travel", description: "A completely private journey through Tanzania or Zanzibar, shaped around your dates, pace and emotional intent.", path: "/private-bespoke" });
 
 export default function PrivatePage() {
   return <main>

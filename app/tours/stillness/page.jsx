@@ -1,2 +1,2 @@
-import { redirect } from "next/navigation";
-export default function StillnessPage() { redirect("/journeys/stillness"); }
+import { permanentRedirect } from "next/navigation";
+export default function StillnessPage() { permanentRedirect("/journeys/stillness"); }

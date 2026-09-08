@@ -1,6 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
+import { buildMetadata } from "../seo";
 
-export const metadata = { title: "About Ryravel" };
+export const metadata = buildMetadata({ title: "About Ryravel", description: "The story behind Ryravel and our emotion-led approach to bespoke travel in Tanzania and Zanzibar.", path: "/about" });
 
 export default function AboutPage() {
   return (

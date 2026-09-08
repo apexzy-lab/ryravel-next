@@ -121,15 +121,6 @@ export const journeys = [
   { slug: "dr6", arc: "disconnected", nights: 6, title: "Safari Isolation", destination: "Central Serengeti · Northern Serengeti · Ngorongoro", tagline: "Six nights. No Wi-Fi. No fixed walls. Two million wildebeest within earshot.", description: "Migration first: central plains, a northern mobile camp beside the movement, then the crater's contained stillness.", tags: ["Jul–Oct", "Mara crossings", "Mobile camp"], price: "$35,140", phases: ["Land & Strip Back", "Move North — The Migration", "Reconnect & Close"] },
 ];
 
-export const journalEntries = [
-  { slug: "why-we-ask-how-not-where", type: "Essay", title: "Why we ask how, not where", summary: "The travel industry has optimised for the wrong question. Emotion is a better compass than geography.", read: "8 min" },
-  { slug: "how-to-find-stillness-zanzibar", type: "Field guide", title: "How to find stillness in Zanzibar", summary: "Beyond the beaches: a quieter island rhythm built around dawn, tide and human-scale encounters.", read: "7 min" },
-  { slug: "field-guide-going-nowhere-slowly", type: "Guide", title: "A field guide to going nowhere slowly", summary: "What we have learned about designing journeys for people who need to stop.", read: "10 min" },
-  { slug: "journey-that-understands-how-you-feel", type: "Notes", title: "A journey that understands how you feel", summary: "Why attentive design begins long before a destination enters the conversation.", read: "6 min" },
-  { slug: "journey-toward-a-feeling", type: "Essay", title: "The journey toward a feeling", summary: "Designing backwards from the person you want to be when you return.", read: "9 min" },
-  { slug: "what-travellers-bring-home", type: "Field notes", title: "What travellers bring home", summary: "Five years of asking what remained. The answers were never souvenirs.", read: "5 min" },
-];
-
 export function arcFor(id) {
   return arcs.find((arc) => arc.id === id);
 }

@@ -124,7 +124,7 @@ export default function AmaraCaseStudyPage() {
       <section className="cs-story-conversion">
         <div>
           <span className="cs-kicker">If rest has stopped reaching you</span>
-          <h2>You may not need a better vacation.<br /><em>You may need a journey built differently.</em></h2>
+          <h2><em>You may need a journey built differently.</em></h2>
           <p>Start with how you feel. A Ryravel curator will listen first, then design the place and pace around what you actually need.</p>
         </div>
         <div className="cs-story-actions">

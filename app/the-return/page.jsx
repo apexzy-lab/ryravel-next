@@ -1,6 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
+import { buildMetadata } from "../seo";
 
-export const metadata = { title: "The Return" };
+export const metadata = buildMetadata({ title: "The Return", description: "Ryravel journeys are designed for what remains after you come home: a meaningful return, not just a beautiful trip.", path: "/the-return" });
 
 const stories = [
   ["Running on empty. Could not remember the last time I felt present.", "I slept. Really slept. For the first time in two years.", "Sarah K. · Yakushima Forest"],

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { CTA, JourneyCard, PageHero } from "../components/Blocks";
 import { arcs, journeys } from "../data";
+import { buildMetadata } from "../seo";
 
-export const metadata = { title: "Journeys" };
+export const metadata = buildMetadata({ title: "Bespoke Tanzania & Zanzibar Journeys", description: "Explore private journeys across Tanzania and Zanzibar, each designed around the way you want to feel when you return.", path: "/journeys" });
 
 export default function JourneysPage() {
   const arcCount = arcs.length;

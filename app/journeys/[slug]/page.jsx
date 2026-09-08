@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { CTA, JourneyCard } from "../../components/Blocks";
 import { arcs, journeys, arcFor, journeyFor } from "../../data";
 import ExhaustedRestoration from "./ExhaustedRestoration";
 import ExhaustedRestorationSix from "./ExhaustedRestorationSix";
 import ExhaustedRestorationNine from "./ExhaustedRestorationNine";
+import { buildMetadata } from "../../seo";
 
 export function generateStaticParams() {
   return [...arcs.map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
@@ -20,59 +21,20 @@ const aliases = {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  if (slug === "ex6") {
-    return {
-      title: "The Full Tanzania Restoration · 11 Nights",
-      description: "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.",
-      openGraph: {
-        title: "The Full Tanzania Restoration · 11 Nights",
-        description: "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.",
-        images: ["https://ryravel.com/journeys/ex6/exhausted-ngorongoro-sunset.webp"],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: "The Full Tanzania Restoration · 11 Nights",
-        description: "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.",
-        images: ["https://ryravel.com/journeys/ex6/exhausted-ngorongoro-sunset.webp"],
-      },
-    };
-  }
-  if (slug === "ex9") {
-    return {
-      title: "Exhausted, The Restoration · 6 Nights",
-      description: "Six nights in Zanzibar designed around pure decompression, stillness and a gentler return.",
-      openGraph: {
-        title: "Exhausted, The Restoration · 6 Nights",
-        description: "Six nights in Zanzibar designed around pure decompression, stillness and a gentler return.",
-        images: ["https://ryravel.com/journeys/ex9/exhausted-zanzibar-coast.webp"],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: "Exhausted, The Restoration · 6 Nights",
-        description: "Six nights in Zanzibar designed around pure decompression, stillness and a gentler return.",
-        images: ["https://ryravel.com/journeys/ex9/exhausted-zanzibar-coast.webp"],
-      },
-    };
-  }
-  if (slug === "rn9") {
-    return {
-      title: "Exhausted, The Restoration · 9 Nights",
-      description: "Nine nights through Zanzibar and the Serengeti, designed around deep rest, wilderness and a quieter return.",
-      openGraph: {
-        title: "Exhausted, The Restoration · 9 Nights",
-        description: "Nine nights through Zanzibar and the Serengeti, designed around deep rest, wilderness and a quieter return.",
-        images: ["https://ryravel.com/journeys/rn9/exhausted-serengeti-camp.webp"],
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: "Exhausted, The Restoration · 9 Nights",
-        description: "Nine nights through Zanzibar and the Serengeti, designed around deep rest, wilderness and a quieter return.",
-        images: ["https://ryravel.com/journeys/rn9/exhausted-serengeti-camp.webp"],
-      },
-    };
-  }
+  const featured = {
+    ex6: ["The Full Tanzania Restoration · 11 Nights", "Exhausted, The Restoration — an eleven-night journey through Zanzibar, the Serengeti and Ngorongoro.", "/journeys/ex6/exhausted-ngorongoro-sunset.webp"],
+    ex9: ["Exhausted, The Restoration · 6 Nights", "Six nights in Zanzibar designed around pure decompression, stillness and a gentler return.", "/journeys/ex9/exhausted-zanzibar-coast.webp"],
+    rn9: ["Exhausted, The Restoration · 9 Nights", "Nine nights through Zanzibar and the Serengeti, designed around deep rest, wilderness and a quieter return.", "/journeys/rn9/exhausted-serengeti-camp.webp"],
+  }[slug];
+  if (featured) return buildMetadata({ title: featured[0], description: featured[1], path: `/journeys/${slug}`, image: featured[2] });
   const item = journeyFor(slug) || arcFor(slug);
-  return item ? { title: item.title } : {};
+  if (!item) return { robots: { index: false, follow: false } };
+  return buildMetadata({
+    title: item.title,
+    description: item.description || item.intro || `Explore ${item.title}, a private Ryravel journey designed around how you want to feel.`,
+    path: `/journeys/${slug}`,
+    image: item.image,
+  });
 }
 
 function ArcPage({ arc }) {
@@ -114,7 +76,7 @@ function JourneyPage({ journey }) {
 
 export default async function JourneyRoute({ params }) {
   const { slug } = await params;
-  if (aliases[slug]) redirect(`/journeys/${aliases[slug]}`);
+  if (aliases[slug]) permanentRedirect(`/journeys/${aliases[slug]}`);
   if (slug === "ex6") return <ExhaustedRestoration />;
   if (slug === "ex9") return <ExhaustedRestorationSix />;
   if (slug === "rn9") return <ExhaustedRestorationNine />;

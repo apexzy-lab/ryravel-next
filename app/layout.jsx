@@ -1,13 +1,24 @@
 import "./globals.css";
 import "./homepage.css";
 import SiteChrome from "./components/SiteChrome";
+import { DEFAULT_DESCRIPTION, organizationJsonLd, SITE_NAME, SITE_URL, websiteJsonLd } from "./seo";
 
 export const metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Ryravel — How do you want to feel?",
     template: "%s · Ryravel",
   },
-  description: "Luxury journeys designed around how you want to feel. Emotion-led travel, human-curated, transformation-focused.",
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  keywords: ["bespoke luxury travel", "Tanzania luxury travel", "private Zanzibar journeys", "Serengeti journeys", "emotion-led travel"],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+  },
   icons: {
     icon: "/icon.png",
     apple: "/apple-icon.png",
@@ -17,7 +28,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body><SiteChrome>{children}</SiteChrome></body>
+      <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+        <SiteChrome>{children}</SiteChrome>
+      </body>
     </html>
   );
 }

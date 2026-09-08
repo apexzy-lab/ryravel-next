@@ -1,6 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
+import { buildMetadata } from "../seo";
 
-export const metadata = { title: "Traveller reviews" };
+export const metadata = buildMetadata({ title: "Traveller Reviews", description: "Read what Ryravel travellers say about journeys designed around how they wanted to feel and return.", path: "/reviews" });
 
 const reviews = [
   ["They asked how I had been. That changed everything about the journey.", "Amara O.", "Kyoto & Yakushima"],
