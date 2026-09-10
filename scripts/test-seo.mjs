@@ -18,6 +18,8 @@ for (const file of ["app/components/SiteChrome.jsx", "app/data.js", "app/sitemap
 check(existsSync(join(root, "app", "robots.js")), "robots.txt route exists");
 check(existsSync(join(root, "app", "sitemap.js")), "sitemap.xml route exists");
 check(read("app/robots.js").includes("/curator-desk"), "Curator workspace is excluded from crawling");
+check(read("app/robots.js").includes('userAgent: "OAI-SearchBot"'), "OpenAI search crawler is explicitly allowed");
+check(read("app/robots.js").includes('userAgent: "Bingbot"'), "Bing and Copilot crawler is explicitly allowed");
 check(read("app/layout.jsx").includes("organizationJsonLd"), "Organization structured data is present");
 check(read("app/layout.jsx").includes("metadataBase"), "Absolute metadata base is configured");
 check(read("app/page.jsx").includes("websiteJsonLd"), "WebSite structured data is present on the homepage");
@@ -33,6 +35,10 @@ check(!read("app/case-studies/caseStudies.js").includes("You may not need a bett
 check(read("app/case-studies/[slug]/page.jsx").includes('"@type": "Article"'), "Case study pages publish Article structured data");
 check(read("app/case-studies/[slug]/page.jsx").includes('"@type": "BreadcrumbList"'), "Case study pages publish breadcrumb structured data");
 check(read("app/case-studies/page.jsx").includes('"@type": "ItemList"'), "Case study index publishes the complete ItemList");
+check(read("app/journeys/page.jsx").includes('"@type": "ItemList"'), "Journey index publishes a machine-readable ItemList");
+check(read("app/journeys/[slug]/page.jsx").includes('"@type": "TouristTrip"'), "Journey pages publish TouristTrip structured data");
+check(read("app/private-bespoke/page.jsx").includes('"@type": "Service"'), "Private travel page publishes Service structured data");
+check(existsSync(join(root, "public", "626d871d-6631-466f-ae78-7efafa06cb1e.txt")), "IndexNow ownership key is publicly deployable");
 check(existsSync(join(root, "app", "destinations", "tanzania", "page.jsx")), "Tanzania destination landing page exists");
 check(existsSync(join(root, "app", "destinations", "zanzibar", "page.jsx")), "Zanzibar destination landing page exists");
 check(read("app/sitemap.js").includes("/destinations/tanzania") && read("app/sitemap.js").includes("/destinations/zanzibar"), "Destination landing pages are in the sitemap");

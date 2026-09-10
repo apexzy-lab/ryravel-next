@@ -5,7 +5,7 @@ import { arcs, journeys, arcFor, journeyFor } from "../../data";
 import ExhaustedRestoration from "./ExhaustedRestoration";
 import ExhaustedRestorationSix from "./ExhaustedRestorationSix";
 import ExhaustedRestorationNine from "./ExhaustedRestorationNine";
-import { buildMetadata } from "../../seo";
+import { absoluteUrl, buildMetadata } from "../../seo";
 
 export function generateStaticParams() {
   return [...arcs.map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
@@ -75,15 +75,66 @@ function JourneyPage({ journey }) {
   );
 }
 
+function StructuredJourney({ journey, children }) {
+  const arc = arcFor(journey.arc);
+  const canonical = absoluteUrl(`/journeys/${journey.slug}`);
+  const tripJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    "@id": `${canonical}#trip`,
+    name: journey.title,
+    description: journey.description,
+    url: canonical,
+    provider: { "@id": "https://ryravel.com/#organization" },
+    touristType: arc.label,
+    itinerary: journey.destination.split("·").map((name) => ({ "@type": "TouristDestination", name: name.trim() })),
+    ...(journey.image ? { image: absoluteUrl(journey.image) } : {}),
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Ryravel", item: absoluteUrl("/") },
+      { "@type": "ListItem", position: 2, name: "Journeys", item: absoluteUrl("/journeys") },
+      { "@type": "ListItem", position: 3, name: journey.title, item: canonical },
+    ],
+  };
+  return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(tripJsonLd) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+    {children}
+  </>;
+}
+
+function StructuredArc({ arc, children }) {
+  const cards = journeys.filter((journey) => journey.arc === arc.id);
+  const canonical = absoluteUrl(`/journeys/${arc.id}`);
+  const collectionJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${canonical}#collection`,
+    name: arc.title,
+    description: arc.intro,
+    url: canonical,
+    isPartOf: { "@id": "https://ryravel.com/#website" },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: cards.length,
+      itemListElement: cards.map((journey, index) => ({ "@type": "ListItem", position: index + 1, name: journey.title, url: absoluteUrl(`/journeys/${journey.slug}`) })),
+    },
+  };
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }} />{children}</>;
+}
+
 export default async function JourneyRoute({ params }) {
   const { slug } = await params;
   if (aliases[slug]) permanentRedirect(`/journeys/${aliases[slug]}`);
-  if (slug === "ex6") return <ExhaustedRestoration />;
-  if (slug === "ex9") return <ExhaustedRestorationSix />;
-  if (slug === "rn9") return <ExhaustedRestorationNine />;
   const journey = journeyFor(slug);
-  if (journey) return <JourneyPage journey={journey} />;
+  if (journey) {
+    const content = slug === "ex6" ? <ExhaustedRestoration /> : slug === "ex9" ? <ExhaustedRestorationSix /> : slug === "rn9" ? <ExhaustedRestorationNine /> : <JourneyPage journey={journey} />;
+    return <StructuredJourney journey={journey}>{content}</StructuredJourney>;
+  }
   const arc = arcFor(slug);
-  if (arc) return <ArcPage arc={arc} />;
+  if (arc) return <StructuredArc arc={arc}><ArcPage arc={arc} /></StructuredArc>;
   notFound();
 }

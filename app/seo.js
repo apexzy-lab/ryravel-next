@@ -44,6 +44,24 @@ export const organizationJsonLd = {
   email: "curator@ryravel.com",
   description: DEFAULT_DESCRIPTION,
   areaServed: ["Tanzania", "Zanzibar", "Serengeti", "Ngorongoro"],
+  knowsAbout: ["Bespoke luxury travel", "Private Tanzania safaris", "Luxury Zanzibar journeys", "Serengeti travel", "Ngorongoro travel", "Kilimanjaro journeys", "Emotion-led travel design"],
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+1-760-514-0361",
+    email: "curator@ryravel.com",
+    contactType: "travel planning",
+    availableLanguage: "English",
+  },
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Ryravel private journey collections",
+    itemListElement: [
+      ["Private Tanzania safaris", "/destinations/tanzania"],
+      ["Luxury Zanzibar journeys", "/destinations/zanzibar"],
+      ["Bespoke private travel", "/private-bespoke"],
+      ["Emotion-led journeys", "/journeys"],
+    ].map(([name, path]) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, url: absoluteUrl(path) } })),
+  },
   sameAs: ["https://www.linkedin.com/company/ryravel"],
 };
 

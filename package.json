@@ -15,6 +15,7 @@
     "deploy:legacy-redirects": "wrangler deploy --config legacy-redirects/wrangler.jsonc",
     "test:gtmcr-background": "node scripts/test-gtmcr-background.mjs",
     "test:seo": "node scripts/test-seo.mjs",
+    "submit:indexnow": "node scripts/submit-indexnow.mjs",
     "db:generate": "drizzle-kit generate --config drizzle.config.js"
   },
   "dependencies": {

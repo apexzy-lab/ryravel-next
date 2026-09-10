@@ -1,15 +1,31 @@
 import Link from "next/link";
 import { CTA, JourneyCard, PageHero } from "../components/Blocks";
 import { arcs, journeys } from "../data";
-import { buildMetadata } from "../seo";
+import { absoluteUrl, buildMetadata } from "../seo";
 
 export const metadata = buildMetadata({ title: "Bespoke Tanzania & Zanzibar Journeys", description: "Explore private journeys across Tanzania and Zanzibar, each designed around the way you want to feel when you return.", path: "/journeys" });
+
+const journeyCollectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${absoluteUrl("/journeys")}#collection`,
+  name: "Ryravel bespoke Tanzania and Zanzibar journeys",
+  url: absoluteUrl("/journeys"),
+  description: metadata.description,
+  isPartOf: { "@id": "https://ryravel.com/#website" },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: journeys.length,
+    itemListElement: journeys.map((journey, index) => ({ "@type": "ListItem", position: index + 1, name: journey.title, url: absoluteUrl(`/journeys/${journey.slug}`) })),
+  },
+};
 
 export default function JourneysPage() {
   const arcCount = arcs.length;
   const journeyCount = journeys.length;
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(journeyCollectionJsonLd) }} />
       <PageHero kicker="Journeys · Tanzania collection" title="Crafted for the way" emphasis="you want to arrive." copy={`${arcCount} emotional arcs. ${journeyCount} journeys. Every one begins with a feeling.`} />
       <nav className="filter-nav"><a href="#all">All journeys</a>{arcs.map((arc) => <a href={`#${arc.id}`} key={arc.id}>{arc.shortTitle} arc</a>)}<Link href="/private-bespoke">Private & bespoke</Link><Link href="/gifting">Gifting</Link></nav>
       <section className="catalogue paper-section" id="all">
