@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import legacyRedirects from "../legacy-redirects/worker.js";
+import { caseStudies } from "../app/case-studies/caseStudies.js";
 
 const root = process.cwd();
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -25,7 +26,13 @@ check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begi
 check(read("app/request/layout.jsx").includes('path: "/request"'), "Request page has canonical metadata");
 check(read("app/journeys/[slug]/page.jsx").includes("permanentRedirect"), "Legacy journey aliases use permanent redirects");
 check(read("app/tours/stillness/page.jsx").includes("permanentRedirect"), "Legacy Stillness collection URL uses a permanent redirect");
-check(!read("app/case-studies/she-stopped-apologizing-for-needing-to-stop/page.jsx").includes("You may not need a better vacation."), "Removed Amara sentence is absent");
+check(caseStudies.length === 7, "All seven case studies are in the collection");
+check(new Set(caseStudies.map(({ slug }) => slug)).size === caseStudies.length, "Every case study has a unique URL slug");
+check(caseStudies.every((study) => study.sections.length === 4 && study.quote && study.description), "Every case study has a complete narrative, testimonial and SEO description");
+check(!read("app/case-studies/caseStudies.js").includes("You may not need a better vacation."), "Removed Amara sentence is absent");
+check(read("app/case-studies/[slug]/page.jsx").includes('"@type": "Article"'), "Case study pages publish Article structured data");
+check(read("app/case-studies/[slug]/page.jsx").includes('"@type": "BreadcrumbList"'), "Case study pages publish breadcrumb structured data");
+check(read("app/case-studies/page.jsx").includes('"@type": "ItemList"'), "Case study index publishes the complete ItemList");
 check(existsSync(join(root, "app", "destinations", "tanzania", "page.jsx")), "Tanzania destination landing page exists");
 check(existsSync(join(root, "app", "destinations", "zanzibar", "page.jsx")), "Zanzibar destination landing page exists");
 check(read("app/sitemap.js").includes("/destinations/tanzania") && read("app/sitemap.js").includes("/destinations/zanzibar"), "Destination landing pages are in the sitemap");
