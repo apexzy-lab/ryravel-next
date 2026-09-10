@@ -1,7 +1,7 @@
 import "./globals.css";
 import "./homepage.css";
 import SiteChrome from "./components/SiteChrome";
-import { DEFAULT_DESCRIPTION, organizationJsonLd, SITE_NAME, SITE_URL, websiteJsonLd } from "./seo";
+import { DEFAULT_DESCRIPTION, organizationJsonLd, SITE_NAME, SITE_URL } from "./seo";
 
 export const metadata = {
   metadataBase: new URL(SITE_URL),
@@ -30,7 +30,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>

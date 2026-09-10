@@ -1,27 +1,25 @@
 import Link from "next/link";
+import { absoluteUrl, buildMetadata } from "../seo";
 
-export const metadata = {
-  title: "Traveller Stories",
-  description: "Real accounts of journeys designed around how a traveller needed to feel—and what changed after they returned.",
-  alternates: { canonical: "https://ryravel.com/case-studies" },
-  openGraph: {
-    title: "Traveller Stories · Ryravel",
-    description: "What brought a traveller to Ryravel, what was designed around them, and what remained when they came home.",
-    url: "https://ryravel.com/case-studies",
-    type: "website",
-    images: [{ url: "https://ryravel.com/journeys/ex9/exhausted-zanzibar-coast.webp", alt: "A quiet stretch of Zanzibar coastline" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Traveller Stories · Ryravel",
-    description: "Journeys documented by what changed after the traveller returned.",
-    images: ["https://ryravel.com/journeys/ex9/exhausted-zanzibar-coast.webp"],
+export const metadata = buildMetadata({ title: "Luxury Travel Case Studies", description: "Ryravel case studies document why a traveller came, how their private journey was designed and what changed after they returned.", path: "/case-studies", image: "/journeys/ex9/exhausted-zanzibar-coast.webp" });
+
+const collectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Ryravel luxury travel case studies",
+  url: absoluteUrl("/case-studies"),
+  description: metadata.description,
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: 1,
+    itemListElement: [{ "@type": "ListItem", position: 1, url: absoluteUrl("/case-studies/she-stopped-apologizing-for-needing-to-stop"), name: "She stopped apologizing for needing to stop" }],
   },
 };
 
 export default function CaseStudiesPage() {
   return (
     <main className="case-studies-index">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }} />
       <section className="cs-index-hero">
         <div className="cs-index-intro">
           <span className="cs-kicker">The Return · Traveller stories</span>

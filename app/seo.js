@@ -6,12 +6,12 @@ export function absoluteUrl(path = "/") {
   return new URL(path, SITE_URL).toString();
 }
 
-export function buildMetadata({ title, description = DEFAULT_DESCRIPTION, path = "/", image, type = "website", robots } = {}) {
+export function buildMetadata({ title, description = DEFAULT_DESCRIPTION, path = "/", image, type = "website", robots, absoluteTitle = false } = {}) {
   const canonical = absoluteUrl(path);
   const images = image ? [{ url: absoluteUrl(image), alt: title || SITE_NAME }] : undefined;
 
   return {
-    title,
+    title: absoluteTitle && title ? { absolute: title } : title,
     description,
     alternates: { canonical },
     robots: robots || { index: true, follow: true },
@@ -53,6 +53,7 @@ export const websiteJsonLd = {
   "@id": `${SITE_URL}/#website`,
   url: `${SITE_URL}/`,
   name: SITE_NAME,
+  alternateName: "Ryravel Travel",
   description: DEFAULT_DESCRIPTION,
   publisher: { "@id": `${SITE_URL}/#organization` },
   inLanguage: "en",

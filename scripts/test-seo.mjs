@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import legacyRedirects from "../legacy-redirects/worker.js";
 
 const root = process.cwd();
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -18,10 +19,28 @@ check(existsSync(join(root, "app", "sitemap.js")), "sitemap.xml route exists");
 check(read("app/robots.js").includes("/curator-desk"), "Curator workspace is excluded from crawling");
 check(read("app/layout.jsx").includes("organizationJsonLd"), "Organization structured data is present");
 check(read("app/layout.jsx").includes("metadataBase"), "Absolute metadata base is configured");
+check(read("app/page.jsx").includes("websiteJsonLd"), "WebSite structured data is present on the homepage");
+check(read("app/seo.js").includes('alternateName: "Ryravel Travel"'), "WebSite structured data supplies a stable alternate name");
+check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begins with the Ryravel brand exactly");
 check(read("app/request/layout.jsx").includes('path: "/request"'), "Request page has canonical metadata");
 check(read("app/journeys/[slug]/page.jsx").includes("permanentRedirect"), "Legacy journey aliases use permanent redirects");
 check(read("app/tours/stillness/page.jsx").includes("permanentRedirect"), "Legacy Stillness collection URL uses a permanent redirect");
 check(!read("app/case-studies/she-stopped-apologizing-for-needing-to-stop/page.jsx").includes("You may not need a better vacation."), "Removed Amara sentence is absent");
+check(existsSync(join(root, "app", "destinations", "tanzania", "page.jsx")), "Tanzania destination landing page exists");
+check(existsSync(join(root, "app", "destinations", "zanzibar", "page.jsx")), "Zanzibar destination landing page exists");
+check(read("app/sitemap.js").includes("/destinations/tanzania") && read("app/sitemap.js").includes("/destinations/zanzibar"), "Destination landing pages are in the sitemap");
+check(!read("app/data.js").includes('slug: "ex11"'), "Duplicate eleven-night journey record is removed");
+for (const legacyPath of ["/contact", "/contact-us", "/forms", "/services", "/about-us"]) {
+  check(read("next.config.mjs").includes(`source: "${legacyPath}"`), `Legacy root URL ${legacyPath} has a permanent redirect`);
+}
+for (const brokenPath of ["/journeys/st7", "/journeys/di6", "/journeys/pu5", "/journeys/pu7"]) {
+  check(!read("app/components/HomepageExperience.jsx").includes(brokenPath), `Homepage no longer links to missing ${brokenPath}`);
+}
+
+const legacyLuxury = await legacyRedirects.fetch(new Request("https://blog.ryravel.com/zanzibar-luxury-resorts-2026-new-hotel-openings-private-island-retreats/"));
+check(legacyLuxury.status === 301 && legacyLuxury.headers.get("location") === "https://ryravel.com/destinations/zanzibar", "Relevant retired blog authority redirects to Zanzibar");
+const legacyIrrelevant = await legacyRedirects.fetch(new Request("https://blog.ryravel.com/how-to-apply-for-a-netherlands-tourist-visa/"));
+check(legacyIrrelevant.status === 410 && legacyIrrelevant.headers.get("x-robots-tag")?.includes("noindex"), "Irrelevant retired blog content returns 410 and noindex");
 
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);

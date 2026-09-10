@@ -1,11 +1,13 @@
 import { arcs, journeys } from "./data";
 import { absoluteUrl } from "./seo";
 
-const lastModified = new Date("2026-09-08T00:00:00.000Z");
+const lastModified = new Date("2026-09-10T00:00:00.000Z");
 
 const staticRoutes = [
   ["/", "weekly", 1],
   ["/journeys", "weekly", 0.95],
+  ["/destinations/tanzania", "monthly", 0.9],
+  ["/destinations/zanzibar", "monthly", 0.9],
   ["/about", "monthly", 0.8],
   ["/the-return", "monthly", 0.8],
   ["/case-studies", "monthly", 0.8],

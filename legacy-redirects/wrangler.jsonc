@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "ryravel-legacy-redirects",
+  "main": "worker.js",
+  "compatibility_date": "2026-09-10",
+  "routes": [
+    { "pattern": "app.ryravel.com/*", "zone_name": "ryravel.com" },
+    { "pattern": "blog.ryravel.com", "custom_domain": true }
+  ]
+}
