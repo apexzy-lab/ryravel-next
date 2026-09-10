@@ -16,6 +16,7 @@
     "test:gtmcr-background": "node scripts/test-gtmcr-background.mjs",
     "test:seo": "node scripts/test-seo.mjs",
     "submit:indexnow": "node scripts/submit-indexnow.mjs",
+    "verify:search-live": "node scripts/verify-live-search.mjs",
     "db:generate": "drizzle-kit generate --config drizzle.config.js"
   },
   "dependencies": {
