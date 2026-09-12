@@ -25,7 +25,24 @@ check(read("app/layout.jsx").includes("metadataBase"), "Absolute metadata base i
 check(read("app/page.jsx").includes("websiteJsonLd"), "WebSite structured data is present on the homepage");
 check(read("app/seo.js").includes('alternateName: "Ryravel Travel"'), "WebSite structured data supplies a stable alternate name");
 check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begins with the Ryravel brand exactly");
+check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around How You Feel"), "Homepage title uses the broad feeling-led Ryravel positioning");
+check(read("app/seo.js").includes("private Tanzania safaris and Zanzibar escapes to Africa and beyond"), "Global description retains destination keywords without narrowing the brand");
 check(read("app/request/layout.jsx").includes('path: "/request"'), "Request page has canonical metadata");
+check(existsSync(join(root, "public", "images", "the-return-river.jpg")), "The Return hero image is deployable");
+const returnPage = read("app/the-return/page.jsx");
+for (const passage of [
+  "The Return is not a feeling you get on the trip.",
+  "You know the version of yourself that exists at the end of the second day.",
+  "Most trips are designed around what you will see.",
+  "Stillness is not",
+  "What landscape does, when it is vast enough",
+  "The person who came back and slept.",
+  "The person who had been circling a decision for eight months.",
+  "The couple who came back having chosen each other again.",
+  "The person who came back smaller",
+  "That is the only promise we make.",
+  "Every journey is designed directly by the founder.",
+]) check(returnPage.includes(passage), `The Return retains supplied copy: ${passage}`);
 check(read("app/journeys/[slug]/page.jsx").includes("permanentRedirect"), "Legacy journey aliases use permanent redirects");
 check(read("app/tours/stillness/page.jsx").includes("permanentRedirect"), "Legacy Stillness collection URL uses a permanent redirect");
 check(caseStudies.length === 7, "All seven case studies are in the collection");

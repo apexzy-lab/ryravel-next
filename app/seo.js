@@ -1,6 +1,6 @@
 export const SITE_URL = "https://ryravel.com";
 export const SITE_NAME = "Ryravel";
-export const DEFAULT_DESCRIPTION = "Bespoke luxury travel in Tanzania and Zanzibar, designed around how you want to feel and who you want to be when you return.";
+export const DEFAULT_DESCRIPTION = "Bespoke luxury journeys designed around how you want to feel, from private Tanzania safaris and Zanzibar escapes to Africa and beyond.";
 
 export function absoluteUrl(path = "/") {
   return new URL(path, SITE_URL).toString();
@@ -16,7 +16,7 @@ export function buildMetadata({ title, description = DEFAULT_DESCRIPTION, path =
     alternates: { canonical },
     robots: robots || { index: true, follow: true },
     openGraph: {
-      title: title ? `${title} · ${SITE_NAME}` : `${SITE_NAME} — Bespoke travel designed around how you feel`,
+      title: title ? `${title} · ${SITE_NAME}` : `${SITE_NAME} | Bespoke Travel Designed Around How You Feel`,
       description,
       url: canonical,
       siteName: SITE_NAME,
@@ -43,8 +43,8 @@ export const organizationJsonLd = {
   telephone: "+1-760-514-0361",
   email: "curator@ryravel.com",
   description: DEFAULT_DESCRIPTION,
-  areaServed: ["Tanzania", "Zanzibar", "Serengeti", "Ngorongoro"],
-  knowsAbout: ["Bespoke luxury travel", "Private Tanzania safaris", "Luxury Zanzibar journeys", "Serengeti travel", "Ngorongoro travel", "Kilimanjaro journeys", "Emotion-led travel design"],
+  areaServed: ["Africa", "Tanzania", "Zanzibar", "Kenya", "Egypt", "Morocco", "Seychelles", "Qatar"],
+  knowsAbout: ["Bespoke luxury travel", "Private African journeys", "Private Tanzania safaris", "Luxury Zanzibar journeys", "Serengeti travel", "Ngorongoro travel", "Kilimanjaro journeys", "Emotion-led travel design"],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+1-760-514-0361",

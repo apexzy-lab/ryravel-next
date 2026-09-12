@@ -2,8 +2,8 @@ import HomepageExperience from "./components/HomepageExperience";
 import { buildMetadata, websiteJsonLd } from "./seo";
 
 export const metadata = buildMetadata({
-  title: "Ryravel | Bespoke Luxury Travel in Tanzania & Zanzibar",
-  description: "Private, bespoke journeys across Tanzania and Zanzibar, designed around how you want to feel and who you want to be when you return.",
+  title: "Ryravel | Bespoke Travel Designed Around How You Feel",
+  description: "Bespoke luxury journeys designed around how you want to feel, from private Tanzania safaris and Zanzibar escapes to Africa and beyond.",
   path: "/",
   absoluteTitle: true,
 });
