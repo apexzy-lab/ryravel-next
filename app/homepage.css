@@ -122,8 +122,11 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .jcard-pp { color: var(--home-muted); font-family: "Inter",sans-serif; font-size: 10px; font-weight: 300; }
 .new-home .jcard-explore { border-bottom: .5px solid var(--home-red); color: var(--home-red); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
 
-.new-home .stillness { align-items: center; background: var(--home-ink); display: grid; gap: 6rem; grid-template-columns: .36fr 1fr; padding: 8rem 3.5rem; }
-.new-home .stillness-word { color: rgba(255,255,255,.05); font-family: "Playfair Display",serif; font-size: clamp(64px,10vw,128px); font-style: italic; line-height: .88; }
+.new-home .stillness { align-items: center; background: var(--home-ink); display: grid; gap: 5rem; grid-template-columns: minmax(300px,.72fr) 1fr; padding: 5rem 3.5rem; }
+.new-home .stillness-visual { aspect-ratio: 4 / 5; min-height: 560px; overflow: hidden; position: relative; }
+.new-home .stillness-visual::after { background: linear-gradient(180deg,rgba(5,10,7,.04) 42%,rgba(5,10,7,.74)); content: ""; inset: 0; pointer-events: none; position: absolute; }
+.new-home .stillness-visual img { height: 100%; object-fit: cover; width: 100%; }
+.new-home .stillness-word { bottom: 2.25rem; color: rgba(255,255,255,.78); font-family: "Playfair Display",serif; font-size: clamp(58px,7vw,102px); font-style: italic; left: 2.25rem; line-height: .82; position: absolute; z-index: 1; }
 .new-home .stillness-right .kicker { color: rgba(255,255,255,.28); }
 .new-home .stillness-right h2 { color: #fff; font-family: "Playfair Display",serif; font-size: clamp(26px,3vw,36px); font-weight: 400; line-height: 1.25; margin-bottom: 1.5rem; }
 .new-home .stillness-right > p { color: rgba(255,255,255,.42); font-size: 14px; line-height: 1.85; margin-bottom: 2.5rem; }
@@ -187,6 +190,7 @@ html:has(.new-home) body { background: #faf8f5; }
 @media (max-width:960px) {
   .new-home .hero-body { padding: 0 1.75rem 4rem; }
   .new-home .manifesto,.new-home .stillness { gap: 3rem; grid-template-columns: 1fr; }
+  .new-home .stillness-visual { aspect-ratio: 4 / 5; min-height: 0; }
   .new-home .return-grid,.new-home .principles-grid,.new-home .journey-grid { grid-template-columns: 1fr; }
   .new-home .return-card { border-right: 0; }
   .new-home .return-card + .return-card { border-top: .5px solid var(--home-border); }

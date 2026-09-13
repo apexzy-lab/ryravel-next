@@ -37,6 +37,7 @@ check(read("app/api/enquiries/route.js").includes("RESEND_API_KEY") && read("app
 check(read("app/api/enquiries/route.js").includes("curator@updates.ryravel.com"), "Confirmation email sends from the Resend-verified Ryravel subdomain");
 check(existsSync(join(root, "app", "components", "JourneyProof.jsx")), "Journey-specific case study proof component exists");
 check(read("app/journeys/[slug]/page.jsx").includes("requestHrefFor") && read("app/journeys/[slug]/page.jsx").includes("<JourneyProof"), "Journey pages carry context into enquiries and surface case-study proof");
+check(read("app/components/HomepageExperience.jsx").includes("/images/stillness-collection-forest.jpg"), "Homepage Stillness feature uses the supplied collection image");
 check(existsSync(join(root, "public", "images", "the-return-river.jpg")), "The Return hero image is deployable");
 check(existsSync(join(root, "public", "images", "stillness-collection-forest.jpg")), "Stillness Collection hero image is deployable");
 check(read("app/journeys/[slug]/page.jsx").includes("/images/stillness-collection-forest.jpg"), "Stillness Collection uses the supplied forest image");
