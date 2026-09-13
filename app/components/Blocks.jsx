@@ -34,13 +34,14 @@ export function JourneyCard({ journey }) {
   );
 }
 
-export function CTA({ title = "How do you want to feel?", copy = "Tell us—and we will build the rest. One honest conversation is all it takes to begin." }) {
+export function CTA({ title = "How do you want to feel?", copy = "Tell us—and we will build the rest. One honest conversation is all it takes to begin.", requestHref = "/request" }) {
+  const callHref = `${requestHref}${requestHref.includes("?") ? "&" : "?"}conversation=private-call`;
   return (
     <section className="global-cta">
       <span className="kicker">Ready to start</span>
       <h2>{title}</h2>
       <p>{copy}</p>
-      <div><Link className="button button-red" href="/request">Begin the conversation</Link><Link className="button button-outline" href="/journeys">Explore journeys</Link></div>
+      <div><Link className="button button-red" href={requestHref}>Begin the conversation</Link><Link className="button button-outline" href={callHref}>Request a private call</Link></div>
     </section>
   );
 }

@@ -14,6 +14,8 @@ let worker;
 let workerOutput = "";
 let slowSignal;
 let resolveSlowSignal;
+let confirmationSignal;
+let resolveConfirmationSignal;
 
 function runWrangler(args) {
   const result = spawnSync(wrangler, args, { cwd: root, encoding: "utf8", shell: true, windowsHide: true });
@@ -76,7 +78,9 @@ const mock = createServer((request, response) => {
     await new Promise((resolve) => setTimeout(resolve, slowDelayMs));
     response.writeHead(202, { "Content-Type": "application/json" });
     response.end("{}");
-    resolveSlowSignal({ payload, elapsedMs: performance.now() - startedAt });
+    const result = { payload, elapsedMs: performance.now() - startedAt };
+    if (request.url === "/emails") resolveConfirmationSignal(result);
+    else resolveSlowSignal(result);
   });
 });
 
@@ -87,6 +91,7 @@ try {
   await new Promise((resolve) => mock.listen(0, "127.0.0.1", resolve));
   const mockPort = mock.address().port;
   slowSignal = new Promise((resolve) => { resolveSlowSignal = resolve; });
+  confirmationSignal = new Promise((resolve) => { resolveConfirmationSignal = resolve; });
 
   worker = spawn(wrangler, [
     "dev",
@@ -95,6 +100,8 @@ try {
     "--port", String(workerPort),
     "--var", "GTMCR_SIGNAL_TOKEN:test-token",
     "--var", `GTMCR_SIGNALS_API_URL:http://127.0.0.1:${mockPort}/api/v1/events`,
+    "--var", "RESEND_API_KEY:test-resend-token",
+    "--var", `RESEND_API_URL:http://127.0.0.1:${mockPort}/emails`,
   ], { cwd: root, shell: true, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
   worker.stdout.on("data", (chunk) => { workerOutput += chunk; });
   worker.stderr.on("data", (chunk) => { workerOutput += chunk; });
@@ -113,6 +120,13 @@ try {
     throw new Error(`GTMCR properties are incomplete: ${JSON.stringify(delivered.payload.properties)}`);
   }
   if ("message" in delivered.payload.properties) throw new Error("Sensitive enquiry message was sent to GTMCR");
+  const confirmation = await Promise.race([
+    confirmationSignal,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`Guest confirmation did not finish.\n${workerOutput}`)), slowDelayMs + 3000)),
+  ]);
+  if (confirmation.payload.to?.[0] !== "slow-signal@example.test" || !confirmation.payload.subject?.includes(slowSubmission.reference)) {
+    throw new Error(`Guest confirmation is incomplete: ${JSON.stringify(confirmation.payload)}`);
+  }
 
   await new Promise((resolve) => mock.close(resolve));
   const outageSubmission = await submit("outage-signal@example.test");
@@ -123,6 +137,7 @@ try {
     outageResponse: { visitorMs: Math.round(outageSubmission.elapsedMs), status: 201 },
     backgroundDeliveryCompleted: true,
     outageDidNotBreakSubmission: true,
+    guestConfirmationQueuedInBackground: true,
     sensitiveMessageExcluded: true,
   }));
 } finally {

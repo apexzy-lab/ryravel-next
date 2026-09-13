@@ -28,6 +28,14 @@ check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begi
 check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around How You Feel"), "Homepage title uses the broad feeling-led Ryravel positioning");
 check(read("app/seo.js").includes("private Tanzania safaris and Zanzibar escapes to Africa and beyond"), "Global description retains destination keywords without narrowing the brand");
 check(read("app/request/layout.jsx").includes('path: "/request"'), "Request page has canonical metadata");
+const requestPage = read("app/request/page.jsx");
+check(requestPage.includes("Countries · 3 regions") && !requestPage.includes("Regions · Tanzania"), "Request page reflects Ryravel's international positioning");
+check(!requestPage.includes('defaultValue="+234"'), "Request page does not assume a Nigerian calling code");
+check(requestPage.includes("request-journey-context") && requestPage.includes("preferredCallTime"), "Request page preserves journey and private-call context");
+check(requestPage.includes("What happens next") && requestPage.includes("Your proposal"), "Request page explains the post-enquiry process");
+check(read("app/api/enquiries/route.js").includes("RESEND_API_KEY") && read("app/api/enquiries/route.js").includes("queueGuestConfirmation"), "Branded guest confirmation email is integrated without blocking submission");
+check(existsSync(join(root, "app", "components", "JourneyProof.jsx")), "Journey-specific case study proof component exists");
+check(read("app/journeys/[slug]/page.jsx").includes("requestHrefFor") && read("app/journeys/[slug]/page.jsx").includes("<JourneyProof"), "Journey pages carry context into enquiries and surface case-study proof");
 check(existsSync(join(root, "public", "images", "the-return-river.jpg")), "The Return hero image is deployable");
 check(existsSync(join(root, "public", "images", "stillness-collection-forest.jpg")), "Stillness Collection hero image is deployable");
 check(read("app/journeys/[slug]/page.jsx").includes("/images/stillness-collection-forest.jpg"), "Stillness Collection uses the supplied forest image");

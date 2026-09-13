@@ -6,6 +6,18 @@ import ExhaustedRestoration from "./ExhaustedRestoration";
 import ExhaustedRestorationSix from "./ExhaustedRestorationSix";
 import ExhaustedRestorationNine from "./ExhaustedRestorationNine";
 import { absoluteUrl, buildMetadata } from "../../seo";
+import JourneyProof from "../../components/JourneyProof";
+
+function requestHrefFor(journey) {
+  const query = new URLSearchParams({
+    journey: journey.slug,
+    name: journey.title,
+    destination: journey.destination,
+    nights: String(journey.nights),
+    price: journey.price,
+  });
+  return `/request?${query.toString()}`;
+}
 
 export function generateStaticParams() {
   return [...arcs.map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
@@ -50,13 +62,15 @@ function ArcPage({ arc }) {
       </section>
       <section className="arc-story paper-section"><p className="lead">{arc.story}</p><span className="kicker">How the arc works</span><div className="principle-grid">{arc.principles.map(([title, copy], index) => <article key={title}><span>— 0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
       <section className="arc-journeys paper-section"><div className="section-heading"><div><span className="kicker">Choose your arc</span><h2>{cards.length} journeys. <em>One feeling.</em></h2></div></div><div className="journey-cards">{cards.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>
-      <CTA />
+      <JourneyProof arc={arc.id} />
+      <CTA requestHref={`/request?arc=${encodeURIComponent(arc.id)}&name=${encodeURIComponent(arc.title)}`} />
     </main>
   );
 }
 
 function JourneyPage({ journey }) {
   const arc = arcFor(journey.arc);
+  const requestHref = requestHrefFor(journey);
   const dayTitles = ["You are here now", "The body arrives", "Go deeper", "Receive the unexpected", "The transformation moment", "The lightest day", "The return begins", "Carry it forward"];
   return (
     <main>
@@ -73,9 +87,10 @@ function JourneyPage({ journey }) {
           </div>
         ))}
       </section>
-      <section className="investment paper-section"><div><span className="kicker">Investment</span><h2>{journey.nights} nights. Everything included.</h2><p>International flights are not included. Private transfers, experiences, indicated meals, signature rituals and curator support are included.</p>{journey.priceNote && <p className="price-note">{journey.priceNote}</p>}</div><div><small>From</small><strong>{journey.price}</strong><span>/ {journey.unit || "person"}</span><Link className="button button-red" href="/request">Begin the conversation →</Link></div></section>
+      <JourneyProof arc={journey.arc} />
+      <section className="investment paper-section"><div><span className="kicker">Investment</span><h2>{journey.nights} nights. Everything included.</h2><p>International flights are not included. Private transfers, experiences, indicated meals, signature rituals and curator support are included.</p>{journey.priceNote && <p className="price-note">{journey.priceNote}</p>}</div><div><small>From</small><strong>{journey.price}</strong><span>/ {journey.unit || "person"}</span><Link className="button button-red" href={requestHref}>Begin the conversation →</Link></div></section>
       <section className="related paper-section"><span className="kicker">Continue exploring</span><div className="journey-cards">{journeys.filter((item) => item.arc === journey.arc && item.slug !== journey.slug).map((item) => <JourneyCard journey={item} key={item.slug} />)}</div></section>
-      <CTA title={journey.tagline} copy="A curator will adapt every detail to your dates, pace and the feeling you want to carry home." />
+      <CTA title={journey.tagline} copy="A curator will adapt every detail to your dates, pace and the feeling you want to carry home." requestHref={requestHref} />
     </main>
   );
 }
