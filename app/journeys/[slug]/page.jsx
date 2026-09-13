@@ -6,6 +6,7 @@ import ExhaustedRestoration from "./ExhaustedRestoration";
 import ExhaustedRestorationSix from "./ExhaustedRestorationSix";
 import ExhaustedRestorationNine from "./ExhaustedRestorationNine";
 import KimbilioJourney from "./KimbilioJourney";
+import KimyaJourney from "./KimyaJourney";
 import { absoluteUrl, buildMetadata } from "../../seo";
 import JourneyProof from "../../components/JourneyProof";
 
@@ -180,7 +181,7 @@ export default async function JourneyRoute({ params }) {
   if (aliases[slug]) permanentRedirect(`/journeys/${aliases[slug]}`);
   const journey = journeyFor(slug);
   if (journey) {
-    const content = slug === "ex6" ? <ExhaustedRestoration /> : slug === "ex9" ? <ExhaustedRestorationSix /> : slug === "rn9" ? <ExhaustedRestorationNine /> : slug === "kimbilio" ? <KimbilioJourney journey={journey} /> : <JourneyPage journey={journey} />;
+    const content = slug === "ex6" ? <ExhaustedRestoration /> : slug === "ex9" ? <ExhaustedRestorationSix /> : slug === "rn9" ? <ExhaustedRestorationNine /> : slug === "kimbilio" ? <KimbilioJourney journey={journey} /> : slug === "kimya" ? <KimyaJourney journey={journey} /> : <JourneyPage journey={journey} />;
     return <StructuredJourney journey={journey}>{content}</StructuredJourney>;
   }
   const arc = arcFor(slug);
