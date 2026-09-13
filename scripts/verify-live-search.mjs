@@ -7,6 +7,8 @@ const tests = [
   ["homepage", `${base}/`, "OAI-SearchBot", ["Ryravel | Bespoke Travel Designed Around How You Feel", "Bespoke travel designed"]],
   ["journeys", `${base}/journeys`, "Googlebot", ["ItemList"]],
   ["journey-ex9", `${base}/journeys/ex9`, "bingbot", ["TouristTrip"]],
+  ["stillness-collection", `${base}/journeys/stillness`, "Googlebot", ["/images/stillness-collection-forest.jpg", "has-hero-image", "Stillness"]],
+  ["stillness-legacy-url", `${base}/tours/stillness`, "OAI-SearchBot", ["/images/stillness-collection-forest.jpg", "Stillness"]],
   ["case-studies", `${base}/case-studies`, "OAI-SearchBot", ["Case Studies"]],
   ["private-bespoke", `${base}/private-bespoke`, "Googlebot", ["Service"]],
   ["the-return", `${base}/the-return`, "Googlebot", ["/images/the-return-river.jpg", "The person who had been circling a decision for eight months.", "Every journey is designed directly by the founder."]],

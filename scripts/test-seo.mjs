@@ -29,6 +29,8 @@ check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around Ho
 check(read("app/seo.js").includes("private Tanzania safaris and Zanzibar escapes to Africa and beyond"), "Global description retains destination keywords without narrowing the brand");
 check(read("app/request/layout.jsx").includes('path: "/request"'), "Request page has canonical metadata");
 check(existsSync(join(root, "public", "images", "the-return-river.jpg")), "The Return hero image is deployable");
+check(existsSync(join(root, "public", "images", "stillness-collection-forest.jpg")), "Stillness Collection hero image is deployable");
+check(read("app/journeys/[slug]/page.jsx").includes("/images/stillness-collection-forest.jpg"), "Stillness Collection uses the supplied forest image");
 const returnPage = read("app/the-return/page.jsx");
 for (const passage of [
   "The Return is not a feeling you get on the trip.",

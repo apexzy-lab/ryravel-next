@@ -190,6 +190,10 @@ em { color: var(--red); font-style: italic; }
 .arc-row-heading a { color: var(--red); font-size: 9px; font-weight: 700; text-transform: uppercase; }
 
 .arc-hero, .journey-detail-hero { background: radial-gradient(circle at 75% 20%, color-mix(in srgb, var(--arc) 28%, #0a0a08), #050504 68%); color: #fff; overflow: hidden; padding: 140px max(7vw,42px) 75px; position: relative; }
+.arc-hero.has-hero-image { min-height: min(820px,calc(100svh - 76px)); display: flex; align-items: flex-end; }
+.arc-hero.has-hero-image::after { display: none; }
+.arc-hero-image { height: 100%; inset: 0; object-fit: cover; object-position: center 56%; position: absolute; width: 100%; }
+.arc-hero-image-overlay { background: linear-gradient(90deg,rgba(3,8,5,.9) 0%,rgba(3,8,5,.66) 46%,rgba(3,8,5,.16) 100%),linear-gradient(0deg,rgba(3,8,5,.78) 0%,transparent 64%); inset: 0; position: absolute; }
 .arc-hero > div, .journey-detail-hero > div { max-width: 940px; }
 .arc-hero a { color: rgba(255,255,255,.45); display: block; font-size: 9px; margin-bottom: 60px; text-transform: uppercase; }
 .arc-hero h1, .journey-detail-hero h1 { font-size: clamp(52px,7vw,96px); letter-spacing: -.055em; line-height: .9; }
@@ -317,7 +321,7 @@ html:has(.request-page) .site-header .menu-button i { background: #fff; }
   .review-grid, .return-stories, .reviews-page, .footer-grid { grid-template-columns: 1fr; }.review-grid article { border-bottom: 1px solid var(--paper-line); border-right: 0; padding: 28px 0; }
   .journey-cards, .journey-preview .journey-cards, .property-grid, .gift-grid, .principles > div, .principle-grid { grid-template-columns: 1fr; }.journey-card-art { height: 230px; }.principles article, .principle-grid article { border-bottom: 1px solid var(--paper-line); border-right: 0; padding: 28px 0; }
   .stillness-feature > div:first-child { min-height: 330px; }.stillness-feature > div:last-child { padding: 50px 24px; }
-  .page-hero, .arc-hero, .journey-detail-hero { min-height: 420px; padding: 120px 24px 55px; }.page-hero h1, .arc-hero h1, .journey-detail-hero h1 { font-size: 50px; }.filter-nav { padding-inline: 24px; }
+  .page-hero, .arc-hero, .journey-detail-hero { min-height: 420px; padding: 120px 24px 55px; }.arc-hero.has-hero-image { min-height: calc(100svh - 68px); }.arc-hero-image { object-position: center 48%; }.page-hero h1, .arc-hero h1, .journey-detail-hero h1 { font-size: 50px; }.filter-nav { padding-inline: 24px; }
   .catalogue { padding-top: 40px; }.arc-row-heading { align-items: flex-start; flex-direction: column; gap: 14px; }.journey-facts { align-items: flex-start; flex-direction: column; gap: 12px; }
   .journey-intro, .itinerary, .investment, .article header, .article-body { padding: 60px 24px; }.journey-intro > em { font-size: 21px; }
   .request-opening { min-height: 0; }.request-hero { min-height: 440px; padding: 70px 24px; }.request-hero h1 { font-size: 45px; }.curator-hours { padding: 50px 24px; }

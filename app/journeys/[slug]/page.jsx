@@ -40,9 +40,14 @@ export async function generateMetadata({ params }) {
 
 function ArcPage({ arc }) {
   const cards = journeys.filter((journey) => journey.arc === arc.id);
+  const heroImage = arc.id === "stillness" ? "/images/stillness-collection-forest.jpg" : null;
   return (
     <main>
-      <section className={`arc-hero arc-${arc.id}`}><div><Link href="/journeys">← All journeys</Link><span className="kicker">Emotional arc · {arc.label}</span><h1>{arc.title}</h1><em>{arc.subtitle}</em><p>{arc.intro}</p></div></section>
+      <section className={`arc-hero arc-${arc.id} ${heroImage ? "has-hero-image" : ""}`}>
+        {heroImage && <img className="arc-hero-image" src={heroImage} alt="A quiet boat beneath sunlit forest reflected in still water" width="1080" height="1350" fetchPriority="high" />}
+        {heroImage && <i className="arc-hero-image-overlay" aria-hidden="true" />}
+        <div><Link href="/journeys">← All journeys</Link><span className="kicker">Emotional arc · {arc.label}</span><h1>{arc.title}</h1><em>{arc.subtitle}</em><p>{arc.intro}</p></div>
+      </section>
       <section className="arc-story paper-section"><p className="lead">{arc.story}</p><span className="kicker">How the arc works</span><div className="principle-grid">{arc.principles.map(([title, copy], index) => <article key={title}><span>— 0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
       <section className="arc-journeys paper-section"><div className="section-heading"><div><span className="kicker">Choose your arc</span><h2>{cards.length} journeys. <em>One feeling.</em></h2></div></div><div className="journey-cards">{cards.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>
       <CTA />
