@@ -122,18 +122,17 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .jcard-pp { color: var(--home-muted); font-family: "Inter",sans-serif; font-size: 10px; font-weight: 300; }
 .new-home .jcard-explore { border-bottom: .5px solid var(--home-red); color: var(--home-red); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
 
-.new-home .stillness { align-items: center; background: var(--home-ink); display: grid; gap: 5rem; grid-template-columns: minmax(300px,.72fr) 1fr; padding: 5rem 3.5rem; }
-.new-home .stillness-visual { aspect-ratio: 4 / 5; min-height: 560px; overflow: hidden; position: relative; }
-.new-home .stillness-visual img { height: 100%; object-fit: cover; width: 100%; }
-.new-home .stillness-right .kicker { color: rgba(255,255,255,.28); }
-.new-home .stillness-right h2 { color: #fff; font-family: "Playfair Display",serif; font-size: clamp(26px,3vw,36px); font-weight: 400; line-height: 1.25; margin-bottom: 1.5rem; }
-.new-home .stillness-right > p { color: rgba(255,255,255,.42); font-size: 14px; line-height: 1.85; margin-bottom: 2.5rem; }
-.new-home .stillness-cards { background: rgba(255,255,255,.07); display: grid; gap: 1px; grid-template-columns: repeat(2,minmax(0,1fr)); margin-bottom: 2rem; }
-.new-home .stillness-card { background: #17150f; display: block; padding: 1.5rem; }
-.new-home .stillness-dur { color: rgba(255,255,255,.22); font-size: 9px; letter-spacing: .2em; margin-bottom: .75rem; text-transform: uppercase; }
-.new-home .stillness-name { color: #fff; font-family: "Playfair Display",serif; font-size: 19px; margin-bottom: .5rem; }
-.new-home .stillness-sub { color: rgba(255,255,255,.28); font-size: 12px; line-height: 1.6; margin-bottom: 1.25rem; }
-.new-home .stillness-exp,.new-home .stillness-all { border-bottom: .5px solid rgba(255,255,255,.1); color: rgba(255,255,255,.28); font-size: 9px; letter-spacing: .16em; padding-bottom: 1px; text-transform: uppercase; }
+.new-home .stillness { align-items: flex-end; background: #0a0c09; display: flex; min-height: clamp(620px,78vw,900px); overflow: hidden; padding: clamp(5rem,10vw,9rem) clamp(1.75rem,6vw,6rem); position: relative; }
+.new-home .stillness-visual { inset: 0; position: absolute; }
+.new-home .stillness-visual img { height: 100%; object-fit: cover; object-position: center 52%; width: 100%; }
+.new-home .stillness-shade { background: linear-gradient(90deg,rgba(4,7,5,.94) 0%,rgba(4,7,5,.74) 34%,rgba(4,7,5,.24) 67%,rgba(4,7,5,.04) 100%),linear-gradient(0deg,rgba(4,7,5,.55),transparent 58%); inset: 0; position: absolute; }
+.new-home .stillness-content { max-width: 800px; position: relative; z-index: 1; }
+.new-home .stillness-content .kicker { color: rgba(255,255,255,.76); margin-bottom: 1.8rem; }
+.new-home .stillness-content h2 { color: #fff; font-family: "Playfair Display",serif; font-size: clamp(38px,5.2vw,72px); font-weight: 400; letter-spacing: -.025em; line-height: 1.08; margin-bottom: 1.5rem; text-wrap: balance; }
+.new-home .stillness-content > p { color: rgba(255,255,255,.66); font-size: clamp(14px,1.4vw,17px); line-height: 1.75; margin-bottom: 2.3rem; max-width: 560px; }
+.new-home .stillness-all { border: 1px solid var(--home-red); color: #fff; display: inline-flex; font-size: 10px; font-weight: 500; letter-spacing: .18em; padding: 1.15rem 1.55rem; text-transform: uppercase; transition: background .2s ease,border-color .2s ease; }
+.new-home .stillness-all:hover { background: var(--home-red); border-color: var(--home-red); }
+.new-home .stillness-meta { color: rgba(255,255,255,.4); display: block; font-size: 9px; letter-spacing: .2em; margin-top: 1.5rem; text-transform: uppercase; }
 
 .new-home .quiz-section { background: var(--home-warm); color: var(--home-ink); padding: 6rem 3.5rem; }
 .new-home .quiz-intro { display: block; margin: 0 auto 3rem; max-width: 620px; text-align: center; }
@@ -187,13 +186,11 @@ html:has(.new-home) body { background: #faf8f5; }
 
 @media (max-width:960px) {
   .new-home .hero-body { padding: 0 1.75rem 4rem; }
-  .new-home .manifesto,.new-home .stillness { gap: 3rem; grid-template-columns: 1fr; }
-  .new-home .stillness-visual { aspect-ratio: 4 / 5; min-height: 0; }
+  .new-home .manifesto { gap: 3rem; grid-template-columns: 1fr; }
   .new-home .return-grid,.new-home .principles-grid,.new-home .journey-grid { grid-template-columns: 1fr; }
   .new-home .return-card { border-right: 0; }
   .new-home .return-card + .return-card { border-top: .5px solid var(--home-border); }
   .new-home .principle + .principle { border-left: 0; border-top: .5px solid var(--home-border); padding-left: 0; }
-  .new-home .stillness-cards { grid-template-columns: 1fr; }
   .new-home .manifesto,.new-home .return-section,.new-home .principles,.new-home .journeys,.new-home .stillness,.new-home .quiz-section,.new-home .global-cta { padding-left: 1.75rem; padding-right: 1.75rem; }
 }
 
@@ -210,6 +207,11 @@ html:has(.new-home) body { background: #faf8f5; }
   .new-home .quiz-q { font-size: 21px; }
   .new-home .quiz-opt { font-size: 14px; padding: .9rem 1rem; }
   .new-home .quiz-nav { gap: 1rem; }
+  .new-home .stillness { min-height: 680px; padding-bottom: 4.5rem; }
+  .new-home .stillness-visual img { object-position: 58% center; }
+  .new-home .stillness-shade { background: linear-gradient(0deg,rgba(4,7,5,.95) 0%,rgba(4,7,5,.74) 48%,rgba(4,7,5,.14) 83%); }
+  .new-home .stillness-content h2 { font-size: clamp(36px,11vw,50px); }
+  .new-home .stillness-all { justify-content: center; text-align: center; width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -50,8 +50,15 @@ export default function KimyaJourney({ journey }) {
       </section>
 
       <section className={styles.opening}>
-        <p>My apartment has a white noise machine, a fan I never turn off, and a fridge that hums louder than it should. I didn&apos;t notice any of that until someone pointed it out. I&apos;d stopped hearing my own home a long time ago. What I hadn&apos;t stopped hearing was the ping, always the ping, from somewhere in the flat, at every hour a person could reasonably be asleep.</p>
-        <p>Four nights on an island with no road in. I didn&apos;t book this because I was burned out. I booked it because I genuinely could not remember the last time a room was quiet, actually quiet, not “no one&apos;s talking” quiet, but nothing-asking-anything-of-my-ears quiet.</p>
+        <div className={styles.openingMain}>
+          <span className={styles.sectionLabel}>Why Kimya</span>
+          <h2>The point is not to escape noise.<br />It is to hear yourself again.</h2>
+          <div className={styles.openingCopy}>
+            <p>My apartment has a white noise machine, a fan I never turn off, and a fridge that hums louder than it should. I didn&apos;t notice any of that until someone pointed it out. I&apos;d stopped hearing my own home a long time ago. What I hadn&apos;t stopped hearing was the ping, always the ping, from somewhere in the flat, at every hour a person could reasonably be asleep.</p>
+            <p>Four nights on an island with no road in. I didn&apos;t book this because I was burned out. I booked it because I genuinely could not remember the last time a room was quiet, actually quiet, not “no one&apos;s talking” quiet, but nothing-asking-anything-of-my-ears quiet.</p>
+          </div>
+        </div>
+        <aside className={styles.openingAside}><span>In one sentence</span><p>The first silence you have heard in years.</p></aside>
       </section>
 
       <section className={styles.before}>

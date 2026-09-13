@@ -55,8 +55,15 @@ export default function KimbilioJourney({ journey }) {
       </section>
 
       <section className={styles.opening}>
-        <p>Nobody has said no to me in about a decade. My assistant screens the calls that don&apos;t matter and puts through the ones that do, and lately the ones that “do” arrive at 6am, 11pm, on a Sunday, without apology. I didn&apos;t come to Katavi tired. I came here done being found.</p>
-        <p>Four nights. Fly-in only, which mattered more to me than any amenity list. I didn&apos;t want a spa menu. I wanted a place that made the decision for me, the way a locked door makes a decision a closed one doesn&apos;t.</p>
+        <div className={styles.openingMain}>
+          <span className={styles.sectionLabel}>Why Kimbilio</span>
+          <h2>The point is not to do less.<br />It is to stop being found.</h2>
+          <div className={styles.openingCopy}>
+            <p>Nobody has said no to me in about a decade. My assistant screens the calls that don&apos;t matter and puts through the ones that do, and lately the ones that “do” arrive at 6am, 11pm, on a Sunday, without apology. I didn&apos;t come to Katavi tired. I came here done being found.</p>
+            <p>Four nights. Fly-in only, which mattered more to me than any amenity list. I didn&apos;t want a spa menu. I wanted a place that made the decision for me, the way a locked door makes a decision a closed one doesn&apos;t.</p>
+          </div>
+        </div>
+        <aside className={styles.openingAside}><span>In one sentence</span><p>A place the world cannot reach you.</p></aside>
       </section>
 
       <section className={styles.before}>

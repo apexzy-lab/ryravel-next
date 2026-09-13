@@ -15,9 +15,15 @@
 .facts div { border-right: 1px solid rgba(255,255,255,.13); padding: 1.5rem clamp(1.5rem,4vw,4rem); }
 .facts dt { color: rgba(255,255,255,.48); font-size: 9px; letter-spacing: .2em; margin-bottom: .45rem; text-transform: uppercase; }
 .facts dd { font-family: Georgia,"Times New Roman",serif; font-size: clamp(15px,1.5vw,20px); margin: 0; }
-.opening { display: grid; font-family: Georgia,"Times New Roman",serif; font-size: clamp(25px,3.2vw,44px); gap: 3rem; grid-template-columns: 1fr 1fr; line-height: 1.35; padding: clamp(5rem,10vw,10rem) clamp(1.5rem,8vw,9rem); }
-.opening p { line-height: 1.35; margin: 0; }
-.opening p + p { color: var(--moss); }
+.opening { align-items: start; display: grid; gap: clamp(3rem,8vw,8rem); grid-template-columns: minmax(0,1.55fr) minmax(230px,.45fr); padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
+.openingMain { max-width: 900px; }
+.openingMain h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(38px,5vw,68px); font-weight: 400; letter-spacing: -.035em; line-height: 1.06; margin: 0 0 clamp(2.5rem,5vw,4.5rem); text-wrap: balance; }
+.openingCopy { display: grid; gap: 1.5rem; max-width: 760px; }
+.openingCopy p { color: #45473f; font-family: Arial,sans-serif; font-size: clamp(16px,1.35vw,19px); font-weight: 400; line-height: 1.82; margin: 0; }
+.openingCopy p + p { color: var(--moss); }
+.openingAside { border-left: 1px solid var(--line); margin-top: 5.4rem; padding-left: clamp(1.5rem,3vw,3rem); }
+.openingAside span { color: #77796f; font-size: 9px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+.openingAside p { color: var(--moss); font-family: Georgia,"Times New Roman",serif; font-size: clamp(25px,2.7vw,38px); font-weight: 400; line-height: 1.25; margin: 1.4rem 0 0; }
 .before,.return { background: #dedbcf; display: grid; gap: clamp(3rem,8vw,9rem); grid-template-columns: .8fr 1.2fr; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
 .sectionLabel { color: #6e7e66; display: block; margin-bottom: 1.5rem; }
 .before h2,.return h2,.rule h2,.season h2,.investment h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(40px,5.5vw,72px); font-weight: 400; letter-spacing: -.04em; line-height: 1.02; margin: 0; }
@@ -123,7 +129,8 @@
   .opening,.before,.fit,.day,.return,.season,.availability,.investment,.faqs,.nextSteps > div,.related > header { gap: 2rem; grid-template-columns: 1fr; }
   .related > div { grid-template-columns: 1fr; }
   .related > div > a { min-height: 220px; }
-  .opening { font-size: 27px; }
+  .opening { grid-template-columns: 1fr; }
+  .openingAside { margin-top: 0; max-width: 520px; }
   .facts { grid-template-columns: 1fr; }
   .facts div { border-bottom: 1px solid rgba(255,255,255,.13); border-right: 0; padding-block: .8rem; }
   .facts dt { margin-bottom: .2rem; }
@@ -135,7 +142,8 @@
 @media (max-width: 560px) {
   .heroBody h1 { font-size: 72px; }
   .heroBody h2 { font-size: 32px; }
-  .opening { font-size: 23px; }
+  .openingMain h2 { font-size: 38px; }
+  .openingCopy p { font-size: 16px; }
   .landscape figcaption { line-height: 1.6; }
   .signature { margin-top: 2rem; }
   .months { grid-template-columns: repeat(3,1fr); }
