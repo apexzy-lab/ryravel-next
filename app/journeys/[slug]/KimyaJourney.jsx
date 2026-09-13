@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
+import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
 
 const days = [
   {
@@ -27,6 +28,7 @@ const days = [
 
 export default function KimyaJourney({ journey }) {
   const requestHref = `/request?journey=${journey.slug}&name=${encodeURIComponent(journey.title)}&destination=${encodeURIComponent(journey.destination)}&nights=${journey.nights}&price=${encodeURIComponent(journey.price)}`;
+  const callHref = `${requestHref}&conversation=private-call`;
 
   return (
     <main className={`${styles.page} ${styles.kimya}`}>
@@ -100,16 +102,31 @@ export default function KimyaJourney({ journey }) {
         <strong>Nights 1–4</strong>
       </section>
 
+      <section className={styles.season}>
+        <div><span className={styles.sectionLabel}>Available Months</span><h2>June through March.</h2><p>Rubondo Island Camp closes in April and May for the long rains. June through October is cooler and drier; the quieter green months bring migratory birds, butterflies and a more tropical rhythm.</p></div>
+        <div className={styles.months} aria-label="Kimya travel season">
+          {["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map((month, index) => <span className={![3, 4].includes(index) ? styles.openMonth : ""} key={month}>{month}</span>)}
+          <p className={styles.monthLegend}><b>Open</b> June–March<br /><b>Closed</b> April–May for the long rains</p>
+        </div>
+      </section>
+
+      <JourneyAvailability journey={journey} title="When would you choose quiet?" copy="Choose a preferred date and who will travel. We will check the camp, internal flight and island transfer together, then return with a considered route—not a disconnected list of bookings." openMonths={journey.availableMonths} closedNote="Rubondo Island Camp closes in April and May for the long rains." />
+
       <section className={styles.investment}>
         <div><span className={styles.sectionLabel}>Investment</span><h2>Four nights.<br />A silence you don&apos;t<br /><em>have to manufacture.</em></h2></div>
-        <div className={styles.price}><small>From</small><strong>$9,950</strong><span>/ person sharing</span><p>International flights to and from Mwanza not included, along with travel insurance beyond medical evacuation cover, premium spirits, gratuities, and personal purchases. All transfers and internal flights, four nights full board with house drinks, all camp activities, The Listening, the Departure Box, and the Ryravel journal are included.</p><Link href={requestHref}>Begin the conversation →</Link><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
+        <div className={styles.price}><small>From</small><strong>$9,950</strong><span>/ person sharing</span><p>International flights to and from Mwanza not included, along with travel insurance beyond medical evacuation cover, premium spirits, gratuities, and personal purchases. All transfers and internal flights, four nights full board with house drinks, all camp activities, The Listening, the Departure Box, and the Ryravel journal are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
       </section>
+
+      <JourneyProofSection />
+      <JourneyFaqs journey={journey} />
 
       <section className={styles.nextSteps}>
         <div><span className={styles.sectionLabel}>What happens next</span><h2>A private conversation.<br />Then a considered direction.</h2></div>
         <ol><li><span>01</span><div><h3>Tell us where you are</h3><p>Share the dates, pace and kind of quiet you need.</p></div></li><li><span>02</span><div><h3>Speak with your curator</h3><p>We clarify what the journey must protect and what it should leave out.</p></div></li><li><span>03</span><div><h3>Receive your Kimya direction</h3><p>A considered journey shaped around you, not a catalogue itinerary.</p></div></li></ol>
         <Link href={requestHref}>Plan Kimya privately →</Link>
       </section>
+
+      <StillnessAlternatives currentSlug={journey.slug} />
 
       <section className={styles.closing}>
         <div className={styles.backLinks}><Link href="/journeys">← Back to all journeys</Link><Link href="/journeys/stillness">The Stillness Collection</Link></div>

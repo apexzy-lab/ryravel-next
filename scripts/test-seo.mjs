@@ -75,6 +75,8 @@ check(existsSync(join(root, "public", "journeys", "kimbilio", "katavi-sunset.jpg
 const kimbilioPage = read("app/journeys/[slug]/KimbilioJourney.jsx");
 for (const passage of ["Nobody has said no to me in about a decade.", "The box arrived", "The Signature Moment", "Usiku · The Night Drive", "You never have to", "One camp. No alternative offered, on purpose.", "Thirty days", "June through October.", "One decision that", "I did not come here to be found."]) check(kimbilioPage.includes(passage), `Kimbilio retains supplied copy: ${passage}`);
 check(read("app/journeys/[slug]/page.jsx").includes("journey.images.map") && read("app/journeys/[slug]/page.jsx").includes("subTrip:"), "Kimbilio schema includes crawlable images and visible day-level itinerary");
+check(read("app/journeys/[slug]/page.jsx").includes('"@type": "FAQPage"') && kimbilio.faqs.length >= 4, "Kimbilio publishes visible planning answers as FAQ structured data");
+check(kimbilioPage.includes("JourneyAvailability") && kimbilioPage.includes("Request a private call") && kimbilioPage.includes("JourneyProofSection") && kimbilioPage.includes("StillnessAlternatives"), "Kimbilio has availability, private-call, proof and related-journey conversion paths");
 check(read("app/components/HomepageExperience.jsx").includes('/journeys/kimbilio'), "Homepage Stillness feature links to Kimbilio");
 const kimya = journeys.find((journey) => journey.slug === "kimya");
 check(Boolean(kimya) && kimya.arc === "stillness" && kimya.nights === 4, "Kimya is a first-class Stillness Collection journey");
@@ -82,6 +84,8 @@ check(existsSync(join(root, "public", "journeys", "kimya", "rubondo-island.jpg")
 const kimyaPage = read("app/journeys/[slug]/KimyaJourney.jsx");
 for (const passage of ["My apartment has a white noise machine", "Not burned out.", "The Crossing", "The First Silence", "The Signature Moment", "The Listening", "The Middle of the Lake", "Hearing Yourself Again", "The Kimya Rule", "One camp, on an island with no road in.", "A silence you don", "I didn&apos;t know how loud my life was."]) check(kimyaPage.includes(passage), `Kimya retains supplied copy: ${passage}`);
 check(kimyaPage.includes("Is Kimya for you?") && kimyaPage.includes("What happens next") && kimyaPage.includes("A curator responds personally"), "Kimya includes qualification, reassurance and next-step conversion paths");
+check(kimya.availableMonths.length === 10 && kimya.faqs.length >= 4 && kimyaPage.includes("JourneyAvailability") && kimyaPage.includes("Request a private call") && kimyaPage.includes("JourneyProofSection") && kimyaPage.includes("StillnessAlternatives"), "Kimya has season, availability, private-call, proof, FAQ and related-journey parity");
+check(read("app/journeys/[slug]/JourneyPlanning.jsx").includes('name="start-date"') && read("app/journeys/[slug]/JourneyPlanning.jsx").includes('name="party"'), "Stillness availability checks preserve dates and party size in the enquiry handoff");
 check(read("app/components/HomepageExperience.jsx").includes('/journeys/kimya'), "Homepage Stillness feature links to Kimya");
 check(read("app/private-bespoke/page.jsx").includes('"@type": "Service"'), "Private travel page publishes Service structured data");
 check(existsSync(join(root, "public", "626d871d-6631-466f-ae78-7efafa06cb1e.txt")), "IndexNow ownership key is publicly deployable");

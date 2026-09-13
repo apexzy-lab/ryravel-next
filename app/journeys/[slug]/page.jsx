@@ -149,9 +149,20 @@ function StructuredJourney({ journey, children }) {
       { "@type": "ListItem", position: 3, name: journey.title, item: canonical },
     ],
   };
+  const faqJsonLd = journey.faqs?.length ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${canonical}#faq`,
+    mainEntity: journey.faqs.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
+  } : null;
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(tripJsonLd) }} />
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+    {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
     {children}
   </>;
 }
