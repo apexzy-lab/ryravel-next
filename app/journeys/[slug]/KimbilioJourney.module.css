@@ -1,0 +1,94 @@
+.page { --ink: #12130f; --cream: #f3f0e9; --moss: #3d4938; --sage: #87937d; --line: rgba(18,19,15,.14); background: var(--cream); color: var(--ink); }
+.page p { line-height: 1.82; }
+.hero { color: #fff; min-height: calc(100svh - 72px); overflow: hidden; position: relative; }
+.hero > img { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; }
+.heroShade { background: linear-gradient(180deg,rgba(8,10,7,.52),rgba(8,10,7,.08) 35%,rgba(8,10,7,.78)); inset: 0; position: absolute; }
+.heroTop { align-items: center; display: flex; font-size: 10px; justify-content: space-between; letter-spacing: .18em; padding: 2rem clamp(1.5rem,4vw,4rem); position: relative; text-transform: uppercase; }
+.heroTop a,.heroTop span { color: rgba(255,255,255,.72); }
+.heroBody { bottom: 10.5rem; left: clamp(1.5rem,7vw,8rem); max-width: 760px; position: absolute; }
+.eyebrow,.sectionLabel { font-size: 10px; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; }
+.heroBody h1 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(72px,11vw,150px); font-weight: 400; letter-spacing: -.055em; line-height: .82; margin: .9rem 0; }
+.meaning { color: rgba(255,255,255,.65); font-family: Georgia,"Times New Roman",serif; font-size: 16px; font-style: italic; }
+.heroBody h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(28px,4vw,52px); font-weight: 400; line-height: 1.06; margin-top: 2rem; }
+.facts { align-items: stretch; backdrop-filter: blur(10px); background: rgba(10,12,8,.56); bottom: 0; display: grid; grid-template-columns: repeat(3,1fr); left: 0; margin: 0; position: absolute; right: 0; }
+.facts div { border-right: 1px solid rgba(255,255,255,.13); padding: 1.5rem clamp(1.5rem,4vw,4rem); }
+.facts dt { color: rgba(255,255,255,.48); font-size: 9px; letter-spacing: .2em; margin-bottom: .45rem; text-transform: uppercase; }
+.facts dd { font-family: Georgia,"Times New Roman",serif; font-size: clamp(15px,1.5vw,20px); margin: 0; }
+.opening { display: grid; font-family: Georgia,"Times New Roman",serif; font-size: clamp(25px,3.2vw,44px); gap: 3rem; grid-template-columns: 1fr 1fr; line-height: 1.35; padding: clamp(5rem,10vw,10rem) clamp(1.5rem,8vw,9rem); }
+.opening p { line-height: 1.35; margin: 0; }
+.opening p + p { color: var(--moss); }
+.before,.return { background: #dedbcf; display: grid; gap: clamp(3rem,8vw,9rem); grid-template-columns: .8fr 1.2fr; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
+.sectionLabel { color: #6e7e66; display: block; margin-bottom: 1.5rem; }
+.before h2,.return h2,.rule h2,.season h2,.investment h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(40px,5.5vw,72px); font-weight: 400; letter-spacing: -.04em; line-height: 1.02; margin: 0; }
+.before p,.return > p,.rule p,.season p,.price p { color: #4f5149; font-size: 15px; margin: 0 0 1.25rem; max-width: 760px; }
+.itinerary { padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
+.itinerary > header { margin-bottom: 5rem; }
+.itinerary > header h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(44px,6vw,78px); font-weight: 400; letter-spacing: -.04em; line-height: 1.02; margin: 0; }
+.itinerary em,.return em,.investment em { color: #6f8066; font-weight: 400; }
+.day { border-top: 1px solid var(--line); display: grid; gap: clamp(2rem,7vw,8rem); grid-template-columns: .7fr 1.3fr; padding: 3.5rem 0; }
+.dayMeta > span { color: #7d8975; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+.dayMeta h3 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(31px,4vw,52px); font-weight: 400; line-height: 1.05; margin: .75rem 0; }
+.dayMeta small { color: #77776f; display: block; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; }
+.day > p { color: #4c4d46; font-size: 15px; margin: 0; max-width: 760px; }
+.landscape { margin: 3rem calc(clamp(1.5rem,8vw,9rem) * -1) 6rem; }
+.landscape img { display: block; max-height: 76vh; object-fit: cover; width: 100%; }
+.landscape figcaption { color: #77776f; font-size: 11px; letter-spacing: .06em; padding: 1rem clamp(1.5rem,8vw,9rem); }
+.signature { background: var(--ink); color: #fff; margin: 4rem calc(clamp(1.5rem,8vw,9rem) * -1); padding: clamp(5rem,10vw,10rem) clamp(1.5rem,12vw,14rem); }
+.signature > span { color: #95a18c; font-size: 10px; letter-spacing: .24em; text-transform: uppercase; }
+.signatureName { color: rgba(255,255,255,.55); font-family: Georgia,"Times New Roman",serif; font-style: italic; margin: 1rem 0 2.5rem; }
+.signature h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(44px,6vw,78px); font-weight: 400; line-height: 1.03; margin-bottom: 3rem; }
+.signature > p:not(.signatureName) { color: rgba(255,255,255,.58); font-size: 15px; max-width: 780px; }
+.pullQuote { border-left: 1px solid #829078; font-family: Georgia,"Times New Roman",serif; font-size: clamp(30px,4.5vw,58px); font-style: italic; line-height: 1.2; margin: 4rem 0; max-width: 1050px; padding-left: clamp(1.5rem,5vw,5rem); }
+.rule { background: #475242; color: #fff; padding: clamp(6rem,11vw,11rem) clamp(1.5rem,12vw,14rem); }
+.rule .sectionLabel { color: rgba(255,255,255,.48); }
+.rule p { color: rgba(255,255,255,.64); margin-top: 2.5rem; }
+.stay { align-items: end; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; padding: clamp(4rem,7vw,7rem) clamp(1.5rem,8vw,9rem); }
+.stay h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(36px,5vw,62px); font-weight: 400; line-height: 1.05; margin: 0 0 2rem; max-width: 830px; }
+.stay h3 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(26px,3vw,38px); font-weight: 400; margin: .5rem 0; }
+.stay p { color: #6b6c64; margin: 0; }
+.stay .hotelZone { color: #6e7e66; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+.stay strong { color: #6e7e66; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+.return { background: #e7e3d9; }
+.return em { font-style: italic; }
+.season { display: grid; gap: 5rem; grid-template-columns: 1fr 1fr; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
+.season p { margin-top: 2rem; }
+.months { align-self: center; display: grid; gap: .5rem; grid-template-columns: repeat(4,1fr); }
+.months span { align-items: center; border: 1px solid var(--line); color: #aaa99f; display: flex; font-size: 10px; height: 64px; justify-content: center; letter-spacing: .14em; text-transform: uppercase; }
+.months .openMonth { background: #596651; border-color: #596651; color: #fff; }
+.months .monthLegend { color: #6b6c64; font-size: 11px; grid-column: 1 / -1; line-height: 1.7; margin: .75rem 0 0; }
+.investment { background: #d9d4c6; display: grid; gap: clamp(3rem,8vw,9rem); grid-template-columns: 1fr 1fr; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
+.price small,.price > span { color: #77776f; display: block; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; }
+.price strong { display: block; font-family: Georgia,"Times New Roman",serif; font-size: clamp(56px,8vw,100px); font-weight: 400; letter-spacing: -.05em; line-height: 1; margin: .8rem 0; }
+.price p { border-top: 1px solid var(--line); margin-top: 2rem; padding-top: 2rem; }
+.price a { background: var(--ink); color: #fff; display: inline-block; font-size: 10px; letter-spacing: .18em; margin-top: 1rem; padding: 1rem 1.4rem; text-transform: uppercase; }
+.closing { background: #0c0e0b; color: #fff; padding: clamp(6rem,12vw,12rem) clamp(1.5rem,8vw,9rem); text-align: center; }
+.backLinks { display: flex; gap: 1.5rem; justify-content: center; }
+.backLinks a { color: rgba(255,255,255,.45); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
+.closing blockquote { font-family: Georgia,"Times New Roman",serif; font-size: clamp(34px,5.5vw,72px); font-style: italic; line-height: 1.15; margin: 5rem auto 2.5rem; max-width: 1100px; }
+.closing p { color: rgba(255,255,255,.35); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+
+@media (max-width: 900px) {
+  .heroBody { bottom: 13rem; }
+  .opening,.before,.day,.return,.season,.investment { gap: 2rem; grid-template-columns: 1fr; }
+  .opening { font-size: 27px; }
+  .facts { grid-template-columns: 1fr; }
+  .facts div { border-bottom: 1px solid rgba(255,255,255,.13); border-right: 0; padding-block: .8rem; }
+  .facts dt { margin-bottom: .2rem; }
+  .hero { min-height: 820px; }
+  .heroTop span { display: none; }
+  .stay { align-items: flex-start; flex-direction: column; gap: 1.5rem; }
+}
+
+@media (max-width: 560px) {
+  .heroBody h1 { font-size: 72px; }
+  .heroBody h2 { font-size: 32px; }
+  .opening { font-size: 23px; }
+  .landscape figcaption { line-height: 1.6; }
+  .signature { margin-top: 2rem; }
+  .months { grid-template-columns: repeat(3,1fr); }
+  .pullQuote { margin-block: 2.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page * { scroll-behavior: auto !important; }
+}

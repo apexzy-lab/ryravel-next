@@ -128,8 +128,8 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .stillness-right .kicker { color: rgba(255,255,255,.28); }
 .new-home .stillness-right h2 { color: #fff; font-family: "Playfair Display",serif; font-size: clamp(26px,3vw,36px); font-weight: 400; line-height: 1.25; margin-bottom: 1.5rem; }
 .new-home .stillness-right > p { color: rgba(255,255,255,.42); font-size: 14px; line-height: 1.85; margin-bottom: 2.5rem; }
-.new-home .stillness-cards { background: rgba(255,255,255,.07); display: grid; gap: 1px; grid-template-columns: 1fr 1fr; margin-bottom: 2rem; }
-.new-home .stillness-card { background: #17150f; display: block; padding: 2rem; }
+.new-home .stillness-cards { background: rgba(255,255,255,.07); display: grid; gap: 1px; grid-template-columns: repeat(3,minmax(0,1fr)); margin-bottom: 2rem; }
+.new-home .stillness-card { background: #17150f; display: block; padding: 1.5rem; }
 .new-home .stillness-dur { color: rgba(255,255,255,.22); font-size: 9px; letter-spacing: .2em; margin-bottom: .75rem; text-transform: uppercase; }
 .new-home .stillness-name { color: #fff; font-family: "Playfair Display",serif; font-size: 19px; margin-bottom: .5rem; }
 .new-home .stillness-sub { color: rgba(255,255,255,.28); font-size: 12px; line-height: 1.6; margin-bottom: 1.25rem; }

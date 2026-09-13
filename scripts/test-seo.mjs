@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import legacyRedirects from "../legacy-redirects/worker.js";
 import { caseStudies } from "../app/case-studies/caseStudies.js";
+import { arcs, journeys } from "../app/data.js";
 
 const root = process.cwd();
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -66,6 +67,15 @@ check(read("app/case-studies/[slug]/page.jsx").includes('"@type": "BreadcrumbLis
 check(read("app/case-studies/page.jsx").includes('"@type": "ItemList"'), "Case study index publishes the complete ItemList");
 check(read("app/journeys/page.jsx").includes('"@type": "ItemList"'), "Journey index publishes a machine-readable ItemList");
 check(read("app/journeys/[slug]/page.jsx").includes('"@type": "TouristTrip"'), "Journey pages publish TouristTrip structured data");
+const kimbilio = journeys.find((journey) => journey.slug === "kimbilio");
+const stillness = arcs.find((arc) => arc.id === "stillness");
+check(Boolean(kimbilio) && kimbilio.arc === "stillness" && kimbilio.nights === 4, "Kimbilio is a first-class Stillness Collection journey");
+check(stillness?.intro.startsWith("Three wilderness journeys"), "Stillness Collection count includes Kimbilio");
+check(existsSync(join(root, "public", "journeys", "kimbilio", "katavi-sunset.jpg")) && existsSync(join(root, "public", "journeys", "kimbilio", "katavi-floodplain.jpg")), "Both supplied Katavi images are deployable");
+const kimbilioPage = read("app/journeys/[slug]/KimbilioJourney.jsx");
+for (const passage of ["Nobody has said no to me in about a decade.", "The box arrived", "The Signature Moment", "Usiku · The Night Drive", "You never have to", "One camp. No alternative offered, on purpose.", "Thirty days", "June through October.", "One decision that", "I did not come here to be found."]) check(kimbilioPage.includes(passage), `Kimbilio retains supplied copy: ${passage}`);
+check(read("app/journeys/[slug]/page.jsx").includes("journey.images.map") && read("app/journeys/[slug]/page.jsx").includes("subTrip:"), "Kimbilio schema includes crawlable images and visible day-level itinerary");
+check(read("app/components/HomepageExperience.jsx").includes('/journeys/kimbilio'), "Homepage Stillness feature links to Kimbilio");
 check(read("app/private-bespoke/page.jsx").includes('"@type": "Service"'), "Private travel page publishes Service structured data");
 check(existsSync(join(root, "public", "626d871d-6631-466f-ae78-7efafa06cb1e.txt")), "IndexNow ownership key is publicly deployable");
 check(existsSync(join(root, "app", "destinations", "tanzania", "page.jsx")), "Tanzania destination landing page exists");

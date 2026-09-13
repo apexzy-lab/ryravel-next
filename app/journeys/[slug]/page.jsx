@@ -5,6 +5,7 @@ import { arcs, journeys, arcFor, journeyFor } from "../../data";
 import ExhaustedRestoration from "./ExhaustedRestoration";
 import ExhaustedRestorationSix from "./ExhaustedRestorationSix";
 import ExhaustedRestorationNine from "./ExhaustedRestorationNine";
+import KimbilioJourney from "./KimbilioJourney";
 import { absoluteUrl, buildMetadata } from "../../seo";
 import JourneyProof from "../../components/JourneyProof";
 
@@ -43,10 +44,11 @@ export async function generateMetadata({ params }) {
   const item = journeyFor(slug) || arcFor(slug);
   if (!item) return { robots: { index: false, follow: false } };
   return buildMetadata({
-    title: item.title,
-    description: item.description || item.intro || `Explore ${item.title}, a private Ryravel journey designed around how you want to feel.`,
+    title: item.seoTitle || item.title,
+    description: item.seoDescription || item.description || item.intro || `Explore ${item.title}, a private Ryravel journey designed around how you want to feel.`,
     path: `/journeys/${slug}`,
     image: item.image,
+    keywords: item.keywords,
   });
 }
 
@@ -107,8 +109,35 @@ function StructuredJourney({ journey, children }) {
     url: canonical,
     provider: { "@id": "https://ryravel.com/#organization" },
     touristType: arc.label,
-    itinerary: journey.destination.split("·").map((name) => ({ "@type": "TouristDestination", name: name.trim() })),
-    ...(journey.image ? { image: absoluteUrl(journey.image) } : {}),
+    itinerary: {
+      "@type": "ItemList",
+      itemListElement: journey.destination.split("·").map((name, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: { "@type": "TouristDestination", name: name.trim() },
+      })),
+    },
+    ...(journey.keywords ? { keywords: journey.keywords.join(", ") } : {}),
+    ...(journey.tripOrigin ? { tripOrigin: { "@type": "Place", name: journey.tripOrigin } } : {}),
+    ...(journey.days ? {
+      subTrip: journey.phases.map((name, index) => ({
+        "@type": "TouristTrip",
+        name: `Day ${index + 1}: ${name}`,
+        touristType: arc.label,
+        partOfTrip: { "@id": `${canonical}#trip` },
+      })),
+    } : {}),
+    ...(journey.price ? {
+      offers: {
+        "@type": "Offer",
+        price: journey.price.replace(/[^0-9.]/g, ""),
+        priceCurrency: "USD",
+        url: canonical,
+        availability: "https://schema.org/InStock",
+        description: journey.priceNote || `From ${journey.price} per ${journey.unit || "person"}`,
+      },
+    } : {}),
+    ...(journey.images ? { image: journey.images.map((image) => absoluteUrl(image)) } : journey.image ? { image: absoluteUrl(journey.image) } : {}),
   };
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -151,7 +180,7 @@ export default async function JourneyRoute({ params }) {
   if (aliases[slug]) permanentRedirect(`/journeys/${aliases[slug]}`);
   const journey = journeyFor(slug);
   if (journey) {
-    const content = slug === "ex6" ? <ExhaustedRestoration /> : slug === "ex9" ? <ExhaustedRestorationSix /> : slug === "rn9" ? <ExhaustedRestorationNine /> : <JourneyPage journey={journey} />;
+    const content = slug === "ex6" ? <ExhaustedRestoration /> : slug === "ex9" ? <ExhaustedRestorationSix /> : slug === "rn9" ? <ExhaustedRestorationNine /> : slug === "kimbilio" ? <KimbilioJourney journey={journey} /> : <JourneyPage journey={journey} />;
     return <StructuredJourney journey={journey}>{content}</StructuredJourney>;
   }
   const arc = arcFor(slug);

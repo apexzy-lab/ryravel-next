@@ -7,6 +7,7 @@ const tests = [
   ["homepage", `${base}/`, "OAI-SearchBot", ["Ryravel | Bespoke Travel Designed Around How You Feel", "Bespoke travel designed"]],
   ["journeys", `${base}/journeys`, "Googlebot", ["ItemList"]],
   ["journey-ex9", `${base}/journeys/ex9`, "bingbot", ["TouristTrip"]],
+  ["journey-kimbilio", `${base}/journeys/kimbilio`, "Googlebot", ["Kimbilio: Private Luxury Katavi Safari", "TouristTrip", "katavi-sunset.jpg", "katavi-floodplain.jpg", "Usiku · The Night Drive", "$5,500"]],
   ["stillness-collection", `${base}/journeys/stillness`, "Googlebot", ["/images/stillness-collection-forest.jpg", "has-hero-image", "Stillness"]],
   ["stillness-legacy-url", `${base}/tours/stillness`, "OAI-SearchBot", ["/images/stillness-collection-forest.jpg", "Stillness"]],
   ["case-studies", `${base}/case-studies`, "OAI-SearchBot", ["Case Studies"]],

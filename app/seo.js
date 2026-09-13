@@ -6,13 +6,14 @@ export function absoluteUrl(path = "/") {
   return new URL(path, SITE_URL).toString();
 }
 
-export function buildMetadata({ title, description = DEFAULT_DESCRIPTION, path = "/", image, type = "website", robots, absoluteTitle = false } = {}) {
+export function buildMetadata({ title, description = DEFAULT_DESCRIPTION, path = "/", image, type = "website", robots, absoluteTitle = false, keywords } = {}) {
   const canonical = absoluteUrl(path);
   const images = image ? [{ url: absoluteUrl(image), alt: title || SITE_NAME }] : undefined;
 
   return {
     title: absoluteTitle && title ? { absolute: title } : title,
     description,
+    ...(keywords?.length ? { keywords } : {}),
     alternates: { canonical },
     robots: robots || { index: true, follow: true },
     openGraph: {
