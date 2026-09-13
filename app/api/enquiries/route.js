@@ -83,7 +83,8 @@ function escapeHtml(value) {
 async function sendGuestConfirmation({ name, email, reference: enquiryReference, feeling, travelMonth, travelYear, journey, contactPreference }) {
   const apiKey = String(runtimeEnv().RESEND_API_KEY || "").trim();
   if (!apiKey) return;
-  const from = String(runtimeEnv().RESEND_FROM_EMAIL || "Ryravel Curator <curator@ryravel.com>").trim();
+  // Send from the Resend-verified subdomain. Replies still go to the public curator inbox.
+  const from = String(runtimeEnv().RESEND_FROM_EMAIL || "Ryravel Curator <curator@updates.ryravel.com>").trim();
   const endpoint = String(runtimeEnv().RESEND_API_URL || "https://api.resend.com/emails").trim();
   const journeyLine = journey?.name
     ? `<tr><td style="padding:8px 0;color:#887d70">Journey</td><td style="padding:8px 0;text-align:right;color:#17140f;font-weight:600">${escapeHtml(journey.name)}</td></tr>`

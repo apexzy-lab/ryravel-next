@@ -34,6 +34,7 @@ check(!requestPage.includes('defaultValue="+234"'), "Request page does not assum
 check(requestPage.includes("request-journey-context") && requestPage.includes("preferredCallTime"), "Request page preserves journey and private-call context");
 check(requestPage.includes("What happens next") && requestPage.includes("Your proposal"), "Request page explains the post-enquiry process");
 check(read("app/api/enquiries/route.js").includes("RESEND_API_KEY") && read("app/api/enquiries/route.js").includes("queueGuestConfirmation"), "Branded guest confirmation email is integrated without blocking submission");
+check(read("app/api/enquiries/route.js").includes("curator@updates.ryravel.com"), "Confirmation email sends from the Resend-verified Ryravel subdomain");
 check(existsSync(join(root, "app", "components", "JourneyProof.jsx")), "Journey-specific case study proof component exists");
 check(read("app/journeys/[slug]/page.jsx").includes("requestHrefFor") && read("app/journeys/[slug]/page.jsx").includes("<JourneyProof"), "Journey pages carry context into enquiries and surface case-study proof");
 check(existsSync(join(root, "public", "images", "the-return-river.jpg")), "The Return hero image is deployable");
