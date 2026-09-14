@@ -21,6 +21,8 @@ const [home, legacyJourney, currentJourney] = await Promise.all([
   get("/journeys/ex6"),
   get("/journeys/kupona"),
 ]);
+const newJourneySlugs = ["kimbilio", "kimya", "kupona", "runyararo", "utalala"];
+const newJourneyPages = await Promise.all(newJourneySlugs.map((slug) => get(`/journeys/${slug}`)));
 
 assert(home.response.status === 200, "homepage returns 200");
 assert(legacyJourney.response.status === 200, "legacy journey returns 200");
@@ -43,3 +45,9 @@ assert(css.includes("stillness-word"), "redesigned Stillness composition is live
 assert(!/font-family\s*:\s*(?:Georgia|Arial|Outfit)/i.test(css), "page styles do not bypass the shared typography system");
 assert(legacyJourney.body.includes("restoration-page"), "legacy journey uses the normalized journey shell");
 assert(currentJourney.body.includes("Kupona"), "current journey content remains available");
+newJourneyPages.forEach(({ response, body }, index) => {
+  const slug = newJourneySlugs[index];
+  assert(response.status === 200, `${slug} returns 200`);
+  assert((body.match(/Explore journey/g) || []).length === 3, `${slug} shows exactly three related journeys`);
+  assert(body.includes("Explore the complete Stillness Collection"), `${slug} links to the complete Stillness Collection`);
+});

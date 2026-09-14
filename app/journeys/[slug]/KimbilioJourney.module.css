@@ -121,13 +121,14 @@
 .nextSteps li p { color: #666b6b; font-size: 14px; margin: 0; }
 .related { background: #dedbd1; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
 .related > header { display: grid; gap: 2rem; grid-template-columns: .6fr 1.4fr; margin-bottom: 4rem; }
-.related > div { display: grid; gap: 1px; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); }
-.related > div > a { background: rgba(255,255,255,.5); display: flex; flex-direction: column; min-height: 280px; padding: clamp(1.5rem,3vw,2.5rem); transition: background .2s ease,transform .2s ease; }
+.related > div { display: grid; gap: 1px; grid-template-columns: repeat(3,minmax(0,1fr)); }
+.related > div > a { background: rgba(255,255,255,.5); display: flex; flex-direction: column; min-height: 250px; padding: clamp(1.5rem,3vw,2.5rem); transition: background .2s ease,transform .2s ease; }
 .related > div > a:hover { background: #fff; transform: translateY(-3px); }
 .related a > span,.related a > b { color: #6e7668; font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
 .related h3 { font-family: var(--font-serif); font-size: clamp(30px,3.5vw,46px); font-weight: 400; margin: 2rem 0 .7rem; }
 .related a > p { color: #595b54; font-size: 13px; margin: 0 0 2rem; }
 .related a > b { margin-top: auto; }
+.relatedAll { border-bottom: 1px solid #c0392b; color: #c0392b; display: table; font-size: 10px; font-weight: 500; letter-spacing: .17em; margin: 2.25rem 0 0 auto; padding-bottom: .3rem; text-transform: uppercase; }
 .closing { background: #0c0e0b; color: #fff; padding: clamp(6rem,12vw,12rem) clamp(1.5rem,8vw,9rem); text-align: center; }
 .backLinks { display: flex; gap: 1.5rem; justify-content: center; }
 .backLinks a { color: rgba(255,255,255,.45); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; }
@@ -137,7 +138,7 @@
 @media (max-width: 900px) {
   .heroBody { bottom: 13rem; }
   .opening,.before,.fit,.day,.return,.season,.availability,.investment,.faqs,.nextSteps > div,.related > header { gap: 2rem; grid-template-columns: 1fr; }
-  .related > div { grid-template-columns: 1fr; }
+  .related > div { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .related > div > a { min-height: 220px; }
   .opening { grid-template-columns: 1fr; }
   .openingAside { margin-top: 0; max-width: 520px; }
@@ -162,6 +163,8 @@
   .priceActions { flex-direction: column; }
   .priceActions a { text-align: center; }
   .pullQuote { margin-block: 2.5rem; }
+  .related > div { grid-template-columns: 1fr; }
+  .relatedAll { line-height: 1.6; margin-left: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
