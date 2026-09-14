@@ -47,7 +47,8 @@ assert(legacyJourney.body.includes("restoration-page"), "legacy journey uses the
 assert(currentJourney.body.includes("Kupona"), "current journey content remains available");
 newJourneyPages.forEach(({ response, body }, index) => {
   const slug = newJourneySlugs[index];
+  const visibleHtml = body.replace(/<script[\s\S]*?<\/script>/gi, "");
   assert(response.status === 200, `${slug} returns 200`);
-  assert((body.match(/Explore journey/g) || []).length === 3, `${slug} shows exactly three related journeys`);
+  assert((visibleHtml.match(/Explore journey/g) || []).length === 3, `${slug} shows exactly three related journeys`);
   assert(body.includes("Explore the complete Stillness Collection"), `${slug} links to the complete Stillness Collection`);
 });
