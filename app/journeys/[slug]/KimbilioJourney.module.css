@@ -2,9 +2,11 @@
 .kimya { --moss: #314956; --sage: #7e9aa8; }
 .kupona { --moss: #664936; --sage: #a47b62; }
 .runyararo { --moss: #4b5133; --sage: #92986a; }
+.utalala { --moss: #5a4934; --sage: #9a8266; }
 .page p { line-height: 1.82; }
 .hero { color: #fff; min-height: calc(100svh - 72px); overflow: hidden; position: relative; }
 .hero > img { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; }
+.utalala .hero > img { object-position: 35% center; }
 .heroShade { background: linear-gradient(180deg,rgba(8,10,7,.52),rgba(8,10,7,.08) 35%,rgba(8,10,7,.78)); inset: 0; position: absolute; }
 .heroTop { align-items: center; display: flex; font-size: 10px; justify-content: space-between; letter-spacing: .18em; padding: 2rem clamp(1.5rem,4vw,4rem); position: relative; text-transform: uppercase; }
 .heroTop a,.heroTop span { color: rgba(255,255,255,.72); }
@@ -59,6 +61,7 @@
 .kimya .rule { background: #263d49; }
 .kupona .rule { background: #493326; }
 .runyararo .rule { background: #35391f; }
+.utalala .rule { background: #3d3022; }
 .rule .sectionLabel { color: rgba(255,255,255,.48); }
 .rule p { color: rgba(255,255,255,.64); margin-top: 2.5rem; }
 .stay { align-items: end; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; padding: clamp(4rem,7vw,7rem) clamp(1.5rem,8vw,9rem); }
@@ -79,6 +82,7 @@
 .kimya .availability { background: #172b35; }
 .kupona .availability { background: #2b211b; }
 .runyararo .availability { background: #202315; }
+.utalala .availability { background: #211a14; }
 .availabilityIntro h2,.faqs h2,.related h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(38px,5vw,66px); font-weight: 400; letter-spacing: -.04em; line-height: 1.05; margin: 0; }
 .availabilityIntro > p { color: rgba(255,255,255,.59); font-size: 14px; margin: 1.6rem 0 0; max-width: 600px; }
 .availability .sectionLabel { color: rgba(255,255,255,.48); }

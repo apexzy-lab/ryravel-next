@@ -48,7 +48,7 @@ export function JourneyFaqs({ journey }) {
 }
 
 export function StillnessAlternatives({ currentSlug }) {
-  const cards = ["kimbilio", "kimya", "kupona", "runyararo", "st6", "st9"].filter((slug) => slug !== currentSlug).map(journeyFor).filter(Boolean);
+  const cards = ["kimbilio", "kimya", "kupona", "runyararo", "utalala", "st6", "st9"].filter((slug) => slug !== currentSlug).map(journeyFor).filter(Boolean);
   return (
     <section className={styles.related} aria-labelledby={`${currentSlug}-related`}>
       <header><span className={styles.sectionLabel}>Continue within Stillness</span><h2 id={`${currentSlug}-related`}>The same need.<br />A different landscape.</h2></header>
