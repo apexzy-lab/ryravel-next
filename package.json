@@ -20,6 +20,7 @@
     "verify:kupona-live": "node scripts/verify-kupona-live.mjs",
     "verify:runyararo-live": "node scripts/verify-runyararo-live.mjs",
     "verify:utalala-live": "node scripts/verify-utalala-live.mjs",
+    "verify:design-live": "node scripts/verify-design-system-live.mjs",
     "db:generate": "drizzle-kit generate --config drizzle.config.js"
   },
   "dependencies": {

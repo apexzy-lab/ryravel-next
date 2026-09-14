@@ -80,11 +80,8 @@ export default function HomepageExperience() {
       <div className="stillness-visual" aria-hidden="true"><img src="/images/stillness-collection-forest.jpg" alt="" width="1080" height="1350" loading="lazy" /></div>
       <div className="stillness-shade" aria-hidden="true" />
       <div className="stillness-content">
-        <span className="kicker">The Stillness Collection</span>
-        <h2 id="stillness-heading">You did not come here to see more.<br />You came here to need less.</h2>
-        <p>Private journeys shaped around silence, distance and the rare relief of being unreachable.</p>
+        <h2 className="stillness-word" id="stillness-heading">Stillness</h2>
         <Link className="stillness-all" href="/journeys/stillness">Explore the Stillness Collection →</Link>
-        <span className="stillness-meta">Africa · Private by design</span>
       </div>
     </section>
 
