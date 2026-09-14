@@ -48,7 +48,9 @@ assert(currentJourney.body.includes("Kupona"), "current journey content remains 
 newJourneyPages.forEach(({ response, body }, index) => {
   const slug = newJourneySlugs[index];
   const visibleHtml = body.replace(/<script[\s\S]*?<\/script>/gi, "");
+  const relatedSection = visibleHtml.match(new RegExp(`aria-labelledby="${slug}-related"[\\s\\S]*?Explore the complete Stillness Collection`))?.[0] || "";
   assert(response.status === 200, `${slug} returns 200`);
   assert((visibleHtml.match(/Explore journey/g) || []).length === 3, `${slug} shows exactly three related journeys`);
+  assert((relatedSection.match(/<img /g) || []).length === 3, `${slug} shows three image-led related journeys`);
   assert(body.includes("Explore the complete Stillness Collection"), `${slug} links to the complete Stillness Collection`);
 });

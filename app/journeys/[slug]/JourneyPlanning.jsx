@@ -48,7 +48,7 @@ export function JourneyFaqs({ journey }) {
 }
 
 export function StillnessAlternatives({ currentSlug }) {
-  const collection = ["kimbilio", "kimya", "kupona", "runyararo", "utalala", "st6", "st9"];
+  const collection = ["kimbilio", "kimya", "kupona", "runyararo", "utalala"];
   const currentIndex = Math.max(collection.indexOf(currentSlug), 0);
   const cards = [...collection.slice(currentIndex + 1), ...collection.slice(0, currentIndex)]
     .map(journeyFor)
@@ -57,7 +57,14 @@ export function StillnessAlternatives({ currentSlug }) {
   return (
     <section className={styles.related} aria-labelledby={`${currentSlug}-related`}>
       <header><span className={styles.sectionLabel}>Continue within Stillness</span><h2 id={`${currentSlug}-related`}>The same need.<br />A different landscape.</h2></header>
-      <div>{cards.map((journey) => <Link href={`/journeys/${journey.slug}`} key={journey.slug}><span>{journey.nights} nights · {journey.destination}</span><h3>{journey.title}</h3><p>{journey.tagline}</p><b>Explore journey →</b></Link>)}</div>
+      <div>{cards.map((journey) => <Link className={styles.relatedCard} href={`/journeys/${journey.slug}`} key={journey.slug}>
+        <img src={journey.image} alt={journey.imageAlt} loading="lazy" />
+        <i aria-hidden="true" />
+        <span>{journey.nights} nights · {journey.destination}</span>
+        <h3>{journey.title}</h3>
+        <p>{journey.tagline}</p>
+        <b>Explore journey →</b>
+      </Link>)}</div>
       <Link className={styles.relatedAll} href="/journeys/stillness">Explore the complete Stillness Collection →</Link>
     </section>
   );

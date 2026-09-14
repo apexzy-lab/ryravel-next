@@ -121,13 +121,18 @@
 .nextSteps li p { color: #666b6b; font-size: 14px; margin: 0; }
 .related { background: #dedbd1; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
 .related > header { display: grid; gap: 2rem; grid-template-columns: .6fr 1.4fr; margin-bottom: 4rem; }
-.related > div { display: grid; gap: 1px; grid-template-columns: repeat(3,minmax(0,1fr)); }
-.related > div > a { background: rgba(255,255,255,.5); display: flex; flex-direction: column; min-height: 250px; padding: clamp(1.5rem,3vw,2.5rem); transition: background .2s ease,transform .2s ease; }
-.related > div > a:hover { background: #fff; transform: translateY(-3px); }
-.related a > span,.related a > b { color: #6e7668; font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
-.related h3 { font-family: var(--font-serif); font-size: clamp(30px,3.5vw,46px); font-weight: 400; margin: 2rem 0 .7rem; }
-.related a > p { color: #595b54; font-size: 13px; margin: 0 0 2rem; }
-.related a > b { margin-top: auto; }
+.related > div { display: grid; gap: 2px; grid-template-columns: repeat(3,minmax(0,1fr)); }
+.relatedCard { color: #fff; display: flex; flex-direction: column; justify-content: flex-end; min-height: clamp(320px,34vw,480px); overflow: hidden; padding: clamp(1.5rem,3vw,2.5rem); position: relative; }
+.relatedCard img,.relatedCard > i { height: 100%; inset: 0; position: absolute; width: 100%; }
+.relatedCard img { object-fit: cover; transition: transform .55s ease; }
+.relatedCard > i { background: linear-gradient(180deg,rgba(7,9,7,.12),rgba(7,9,7,.22) 38%,rgba(7,9,7,.9)); z-index: 1; }
+.relatedCard > span,.relatedCard > h3,.relatedCard > p,.relatedCard > b { position: relative; z-index: 2; }
+.relatedCard > span,.relatedCard > b { color: rgba(255,255,255,.82); font-size: 9px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+.relatedCard > span { margin-bottom: auto; }
+.relatedCard h3 { color: #fff; font-family: var(--font-serif); font-size: clamp(30px,3.5vw,46px); font-weight: 400; margin: 2rem 0 .7rem; }
+.relatedCard > p { color: rgba(255,255,255,.72); font-size: 13px; margin: 0 0 2rem; max-width: 380px; }
+.relatedCard > b { color: #fff; }
+.relatedCard:hover img { transform: scale(1.035); }
 .relatedAll { border-bottom: 1px solid #c0392b; color: #c0392b; display: table; font-size: 10px; font-weight: 500; letter-spacing: .17em; margin: 2.25rem 0 0 auto; padding-bottom: .3rem; text-transform: uppercase; }
 .closing { background: #0c0e0b; color: #fff; padding: clamp(6rem,12vw,12rem) clamp(1.5rem,8vw,9rem); text-align: center; }
 .backLinks { display: flex; gap: 1.5rem; justify-content: center; }
@@ -139,7 +144,7 @@
   .heroBody { bottom: 13rem; }
   .opening,.before,.fit,.day,.return,.season,.availability,.investment,.faqs,.nextSteps > div,.related > header { gap: 2rem; grid-template-columns: 1fr; }
   .related > div { grid-template-columns: repeat(2,minmax(0,1fr)); }
-  .related > div > a { min-height: 220px; }
+  .relatedCard { min-height: 360px; }
   .opening { grid-template-columns: 1fr; }
   .openingAside { margin-top: 0; max-width: 520px; }
   .facts { grid-template-columns: 1fr; }
