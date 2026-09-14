@@ -70,7 +70,7 @@ check(read("app/journeys/[slug]/page.jsx").includes('"@type": "TouristTrip"'), "
 const kimbilio = journeys.find((journey) => journey.slug === "kimbilio");
 const stillness = arcs.find((arc) => arc.id === "stillness");
 check(Boolean(kimbilio) && kimbilio.arc === "stillness" && kimbilio.nights === 4, "Kimbilio is a first-class Stillness Collection journey");
-check(stillness?.intro.startsWith("Five wilderness journeys"), "Stillness Collection count includes Kimbilio, Kimya and Kupona");
+check(stillness?.intro.startsWith("Six wilderness journeys"), "Stillness Collection count includes Kimbilio, Kimya, Kupona and Runyararo");
 check(existsSync(join(root, "public", "journeys", "kimbilio", "katavi-sunset.jpg")) && existsSync(join(root, "public", "journeys", "kimbilio", "katavi-floodplain.jpg")), "Both supplied Katavi images are deployable");
 const kimbilioPage = read("app/journeys/[slug]/KimbilioJourney.jsx");
 for (const passage of ["Nobody has said no to me in about a decade.", "The box arrived", "The Signature Moment", "Usiku · The Night Drive", "You never have to", "One camp. No alternative offered, on purpose.", "Thirty days", "June through October.", "One decision that", "I did not come here to be found."]) check(kimbilioPage.includes(passage), `Kimbilio retains supplied copy: ${passage}`);
@@ -91,8 +91,14 @@ check(existsSync(join(root, "public", "journeys", "kupona", "matetsi-river-suite
 const kuponaPage = read("app/journeys/[slug]/KuponaJourney.jsx");
 for (const passage of ["I&apos;ve been running a clinic", "Not looking for adventure.", "The Landing", "Water, Not Walls", "The Long Middle", "Strength Returns", "The Kupona Principle", "One reserve, 15 kilometres of river", "January through March.", "What&apos;s depleted", "I didn&apos;t come here to be fixed."]) check(kuponaPage.includes(passage), `Kupona retains supplied copy: ${passage}`);
 check(kupona.availableMonths.length === 3 && kupona.faqs.length >= 4 && kuponaPage.includes("JourneyAvailability") && kuponaPage.includes("Request a private call") && kuponaPage.includes("JourneyProofSection") && kuponaPage.includes("StillnessAlternatives"), "Kupona has season, availability, private-call, proof, FAQ and related-journey parity");
+const runyararo = journeys.find((journey) => journey.slug === "runyararo");
+check(Boolean(runyararo) && runyararo.arc === "stillness" && runyararo.nights === 4 && runyararo.destination.includes("Hwange"), "Runyararo is a first-class Stillness Collection journey");
+check(existsSync(join(root, "public", "journeys", "runyararo", "hwange-sunset.webp")) && existsSync(join(root, "public", "journeys", "runyararo", "hwange-leopard.webp")), "Both supplied Hwange images are deployable");
+const runyararoPage = read("app/journeys/[slug]/RunyararoJourney.jsx");
+for (const passage of ["I&apos;ve done the spa weekend", "Functional.", "Never at peace.", "The Long Way In", "The Veld Goes Quiet", "The Middle of Nowhere", "Peace Is a Place", "The Runyararo Principle", "Seven tents.", "January through March.", "A location the noise can&apos;t reach.", "The noise was never really coming from outside."]) check(runyararoPage.includes(passage), `Runyararo retains supplied copy: ${passage}`);
+check(runyararo.availableMonths.length === 3 && runyararo.faqs.length >= 4 && runyararoPage.includes("JourneyAvailability") && runyararoPage.includes("Request a private call") && runyararoPage.includes("JourneyProofSection") && runyararoPage.includes("StillnessAlternatives"), "Runyararo has season, availability, private-call, proof, FAQ and related-journey parity");
 const homepage = read("app/components/HomepageExperience.jsx");
-check(homepage.includes('href="/journeys/stillness"') && !homepage.includes('href="/journeys/kimbilio"') && !homepage.includes('href="/journeys/kimya"') && !homepage.includes('href="/journeys/kupona"'), "Homepage Stillness feature uses one general collection link without individual tour links");
+check(homepage.includes('href="/journeys/stillness"') && !homepage.includes('href="/journeys/kimbilio"') && !homepage.includes('href="/journeys/kimya"') && !homepage.includes('href="/journeys/kupona"') && !homepage.includes('href="/journeys/runyararo"'), "Homepage Stillness feature uses one general collection link without individual tour links");
 check(read("app/private-bespoke/page.jsx").includes('"@type": "Service"'), "Private travel page publishes Service structured data");
 check(existsSync(join(root, "public", "626d871d-6631-466f-ae78-7efafa06cb1e.txt")), "IndexNow ownership key is publicly deployable");
 check(existsSync(join(root, "app", "destinations", "tanzania", "page.jsx")), "Tanzania destination landing page exists");
