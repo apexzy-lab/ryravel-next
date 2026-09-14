@@ -2,7 +2,7 @@ import { arcs, journeys } from "./data";
 import { absoluteUrl } from "./seo";
 import { caseStudies } from "./case-studies/caseStudies";
 
-const lastModified = new Date("2026-09-13T00:00:00.000Z");
+const lastModified = new Date("2026-09-14T00:00:00.000Z");
 
 const staticRoutes = [
   ["/", "weekly", 1],

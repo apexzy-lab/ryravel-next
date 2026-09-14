@@ -84,7 +84,7 @@ export default function HomepageExperience() {
         <h2 id="stillness-heading">You did not come here to see more.<br />You came here to need less.</h2>
         <p>Private journeys shaped around silence, distance and the rare relief of being unreachable.</p>
         <Link className="stillness-all" href="/journeys/stillness">Explore the Stillness Collection →</Link>
-        <span className="stillness-meta">Tanzania · Private by design</span>
+        <span className="stillness-meta">Africa · Private by design</span>
       </div>
     </section>
 

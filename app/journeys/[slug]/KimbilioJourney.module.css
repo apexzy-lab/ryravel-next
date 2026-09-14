@@ -1,5 +1,6 @@
 .page { --ink: #12130f; --cream: #f3f0e9; --moss: #3d4938; --sage: #87937d; --line: rgba(18,19,15,.14); background: var(--cream); color: var(--ink); }
 .kimya { --moss: #314956; --sage: #7e9aa8; }
+.kupona { --moss: #664936; --sage: #a47b62; }
 .page p { line-height: 1.82; }
 .hero { color: #fff; min-height: calc(100svh - 72px); overflow: hidden; position: relative; }
 .hero > img { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; }
@@ -55,6 +56,7 @@
 .pullQuote { border-left: 1px solid #829078; font-family: Georgia,"Times New Roman",serif; font-size: clamp(30px,4.5vw,58px); font-style: italic; line-height: 1.2; margin: 4rem 0; max-width: 1050px; padding-left: clamp(1.5rem,5vw,5rem); }
 .rule { background: #475242; color: #fff; padding: clamp(6rem,11vw,11rem) clamp(1.5rem,12vw,14rem); }
 .kimya .rule { background: #263d49; }
+.kupona .rule { background: #493326; }
 .rule .sectionLabel { color: rgba(255,255,255,.48); }
 .rule p { color: rgba(255,255,255,.64); margin-top: 2.5rem; }
 .stay { align-items: end; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; padding: clamp(4rem,7vw,7rem) clamp(1.5rem,8vw,9rem); }
@@ -73,6 +75,7 @@
 .months .monthLegend { color: #6b6c64; font-size: 11px; grid-column: 1 / -1; line-height: 1.7; margin: .75rem 0 0; }
 .availability { background: #11130f; color: #fff; display: grid; gap: clamp(3rem,8vw,9rem); grid-template-columns: .85fr 1.15fr; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
 .kimya .availability { background: #172b35; }
+.kupona .availability { background: #2b211b; }
 .availabilityIntro h2,.faqs h2,.related h2 { font-family: Georgia,"Times New Roman",serif; font-size: clamp(38px,5vw,66px); font-weight: 400; letter-spacing: -.04em; line-height: 1.05; margin: 0; }
 .availabilityIntro > p { color: rgba(255,255,255,.59); font-size: 14px; margin: 1.6rem 0 0; max-width: 600px; }
 .availability .sectionLabel { color: rgba(255,255,255,.48); }
@@ -111,7 +114,7 @@
 .nextSteps li p { color: #666b6b; font-size: 14px; margin: 0; }
 .related { background: #dedbd1; padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
 .related > header { display: grid; gap: 2rem; grid-template-columns: .6fr 1.4fr; margin-bottom: 4rem; }
-.related > div { display: grid; gap: 1px; grid-template-columns: repeat(3,1fr); }
+.related > div { display: grid; gap: 1px; grid-template-columns: repeat(auto-fit,minmax(230px,1fr)); }
 .related > div > a { background: rgba(255,255,255,.5); display: flex; flex-direction: column; min-height: 280px; padding: clamp(1.5rem,3vw,2.5rem); transition: background .2s ease,transform .2s ease; }
 .related > div > a:hover { background: #fff; transform: translateY(-3px); }
 .related a > span,.related a > b { color: #6e7668; font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }

@@ -17,6 +17,7 @@
     "test:seo": "node scripts/test-seo.mjs",
     "submit:indexnow": "node scripts/submit-indexnow.mjs",
     "verify:search-live": "node scripts/verify-live-search.mjs",
+    "verify:kupona-live": "node scripts/verify-kupona-live.mjs",
     "db:generate": "drizzle-kit generate --config drizzle.config.js"
   },
   "dependencies": {
