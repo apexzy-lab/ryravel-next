@@ -16,24 +16,6 @@ const feelings = [
 
 const budgets = ["$5,000 – $7,000", "$7,000 – $12,000", "$12,000 – $20,000", "$20,000 – $30,000", "$30,000+"];
 
-const officeHours = [
-  ["Monday", "9:00am – 11:00pm"],
-  ["Tuesday", "9:00am – 11:00pm"],
-  ["Wednesday", "9:00am – 11:00pm"],
-  ["Thursday", "9:00am – 11:00pm"],
-  ["Friday", "9:00am – 11:00pm"],
-  ["Saturday", "9:00am – 11:00pm"],
-  ["Sunday", "Closed"],
-];
-
-const stats = [
-  ["100%", "Bespoke journeys"],
-  ["20+", "Partner properties"],
-  ["6", "Countries · 3 regions"],
-  ["24/7", "Curator support"],
-  ["< 24h", "Response time"],
-];
-
 const countryCodes = [
   ["US / Canada", "+1"], ["United Kingdom", "+44"], ["Nigeria", "+234"],
   ["South Africa", "+27"], ["Tanzania", "+255"], ["Kenya", "+254"],
@@ -41,6 +23,7 @@ const countryCodes = [
 ];
 
 export default function RequestPage() {
+  const [step, setStep] = useState(1);
   const [feeling, setFeeling] = useState("");
   const [budget, setBudget] = useState("");
   const [sent, setSent] = useState(false);
@@ -55,6 +38,8 @@ export default function RequestPage() {
   const [travelMonth, setTravelMonth] = useState("");
   const [travelYear, setTravelYear] = useState("");
   const [people, setPeople] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  const formRef = useRef(null);
   const turnstileMount = useRef(null);
   const turnstileWidget = useRef(null);
 
@@ -83,12 +68,8 @@ export default function RequestPage() {
     if (party) setPeople(party === "Solo traveller" ? "1 person" : party === "2 people sharing" ? "2 people" : party);
   }, []);
 
-  function requestPrivateCall() {
-    setContactPreference("private-call");
-    window.requestAnimationFrame(() => document.getElementById("journey-request")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-  }
-
   useEffect(() => {
+    if (step !== 3) return undefined;
     let cancelled = false;
     async function prepareTurnstile() {
       try {
@@ -130,23 +111,56 @@ export default function RequestPage() {
       if (window.turnstile && turnstileWidget.current !== null) window.turnstile.remove(turnstileWidget.current);
       turnstileWidget.current = null;
     };
-  }, []);
+  }, [step]);
+
+  function formValue(name) {
+    return String(new FormData(formRef.current).get(name) || "").trim();
+  }
+
+  function validateStep(activeStep) {
+    const errors = {};
+    if (activeStep === 1 && !feeling) errors.feeling = "Choose the feeling closest to where you are right now.";
+    if (activeStep === 2) {
+      if (!travelMonth) errors.month = "Choose a travel month.";
+      if (!travelYear) errors.year = "Choose a travel year.";
+      if (!formValue("duration")) errors.duration = "Choose a journey length.";
+      if (!people) errors.people = "Tell us how many people will travel.";
+      if (!budget) errors.budget = "Choose an investment range.";
+    }
+    if (activeStep === 3) {
+      const name = formValue("name");
+      const email = formValue("email");
+      const countryCode = formValue("country-code");
+      const phone = formValue("phone");
+      if (!name) errors.name = "Enter your name.";
+      if (!/^\S+@\S+\.\S+$/.test(email)) errors.email = "Enter a valid email address.";
+      if (!countryCode) errors.countryCode = "Choose a calling code.";
+      if (!phone) errors.phone = "Enter your telephone number.";
+      if (contactPreference === "private-call" && !preferredCallTime) errors.preferredCallTime = "Choose when the curator team should contact you.";
+      if (turnstileEnabled && !turnstileToken) errors.turnstile = "Complete the security check before submitting.";
+    }
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
+  function changeStep(nextStep) {
+    setError("");
+    setFieldErrors({});
+    setStep(nextStep);
+    window.requestAnimationFrame(() => document.getElementById("request-progress")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }
+
+  function continueRequest() {
+    if (validateStep(step)) changeStep(Math.min(step + 1, 3));
+  }
 
   async function submit(event) {
     event.preventDefault();
     setError("");
-    if (!feeling || !budget) {
-      setError("Please choose the feeling and investment range that fit this journey.");
-      return;
-    }
-    if (turnstileEnabled && !turnstileToken) {
-      setError("Please complete the security check before submitting.");
-      return;
-    }
+    if (!validateStep(3)) return;
     setSending(true);
     const form = new FormData(event.currentTarget);
     const payload = Object.fromEntries(form.entries());
-    payload.emailConfirmation = form.get("email-confirmation");
     payload.countryCode = form.get("country-code");
     payload.newsletter = form.has("newsletter");
     payload.journey = journeyContext;
@@ -178,31 +192,6 @@ export default function RequestPage() {
 
   return (
     <main className="request-page">
-      <section className="request-opening">
-        <div className="request-hero">
-          <div>
-            <span className="kicker">Plan my journey</span>
-            <h1>Every journey begins<br />with one honest<br /><em>conversation.</em></h1>
-            <p>Tell us how you want to feel. We will take it from there. A dedicated curator will respond within one business day.</p>
-          </div>
-        </div>
-        <aside className="curator-hours">
-          <span className="kicker">We are here</span>
-          <h2>Speak to a curator directly</h2>
-          <p>Prefer a call before filling anything in? We understand. Our curators are available during office hours and always lead with listening.</p>
-          <button className="request-call-button" type="button" onClick={requestPrivateCall}>Request a private conversation <span>→</span></button>
-          <div className="hours-card">
-            <span>Office hours</span>
-            {officeHours.map(([day, time]) => <div key={day}><b>{day}</b><small className={time === "Closed" ? "closed" : ""}>{time}</small></div>)}
-            <em>West Africa Time (UTC+1) · excluding national holidays</em>
-          </div>
-        </aside>
-      </section>
-
-      <section className="request-stats">
-        {stats.map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
-      </section>
-
       {sent ? (
         <section className="request-thanks">
           <span>✓</span>
@@ -213,60 +202,75 @@ export default function RequestPage() {
           <button className="button button-red" type="button" onClick={() => { setSent(false); setReference(""); }}>Return to the form</button>
         </section>
       ) : (
-        <form className="journey-request-form" id="journey-request" onSubmit={submit}>
-          <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
-          {journeyContext ? <section className="request-journey-context" aria-label="Selected journey"><div><span>Your selected journey</span><h2>{journeyContext.name}</h2><p>{journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}{journeyContext.destination}</p></div><div>{journeyContext.price ? <><small>From</small><strong>{journeyContext.price}</strong></> : <strong>Bespoke</strong>}<a href={`/journeys/${journeyContext.slug}`}>Review journey ↗</a></div></section> : null}
-          <section className="request-contact-choice" aria-labelledby="contact-choice-title"><div><span className="kicker">How would you like to begin?</span><h2 id="contact-choice-title">Choose the kind of first conversation.</h2></div><div><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => setContactPreference("written-enquiry")}><strong>Written journey request</strong><small>Share the essentials now. A curator replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => setContactPreference("private-call")}><strong>Private curator call</strong><small>Tell us the essentials, then we will contact you to arrange a private conversation.</small></button></div></section>
-          <section className="feeling-fieldset">
-            <div className="request-section-heading"><span>Your feeling</span><small>Select the feeling closest to where you are right now.</small></div>
-            <p className="feeling-intro">Before we ask where, we ask how. Choose the feeling that is truest to you right now. This shapes everything we build for you.</p>
-            <div className="feeling-grid">
-              {feelings.map(([name, title, copy]) => (
-                <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => setFeeling(name)} aria-pressed={feeling === name}>
-                  <em>{name}</em><strong>{title}</strong><small>{copy}</small>
-                </button>
-              ))}
-            </div>
-            <input type="hidden" name="feeling" value={feeling} />
-            <small className="selection-note">You can select the answer that feels most honest.</small>
-          </section>
+        <section className="progressive-request" id="request-progress">
+          <header className="progressive-request-header">
+            <div><span className="kicker">Plan my journey</span><h1>A journey shaped<br /><em>in three moves.</em></h1><p>Private journeys across Africa and beyond.</p></div>
+            <ol className="progressive-stepper" aria-label={`Step ${step} of 3`}>
+              {["How you feel", "Your journey", "Your details"].map((label, index) => <li className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} key={label}><b>0{index + 1}</b><span>{label}</span></li>)}
+            </ol>
+          </header>
 
-          <section className="request-form-card">
-            <div className="request-section-heading"><span>Your trip</span></div>
-            <div className="request-fields">
-              <label>When would you like to go? <b>*</b><select name="month" value={travelMonth} onChange={(event) => setTravelMonth(event.target.value)} required><option value="" disabled>Select month</option>{["January","February","March","April","May","June","July","August","September","October","November","December"].map((month) => <option key={month}>{month}</option>)}</select></label>
-              <label>Year <b>*</b><select name="year" value={travelYear} onChange={(event) => setTravelYear(event.target.value)} required><option value="" disabled>Select year</option>{[2026, 2027, 2028, 2029].map((year) => <option key={year}>{year}</option>)}</select></label>
-              <label>How long? <b>*</b><select name="duration" defaultValue="" required><option value="" disabled>Select duration</option><option>5–6 nights</option><option>7–9 nights</option><option>10–12 nights</option><option>More than 12 nights</option></select></label>
-              <label>How many people? <b>*</b><select name="people" value={people} onChange={(event) => setPeople(event.target.value)} required><option value="" disabled>Select</option><option>1 person</option><option>2 people</option><option>3–4 people</option><option>5–8 people</option><option>9+ people</option></select></label>
-            </div>
-            <fieldset className="budget-fieldset">
-              <legend>Investment per person <b>*</b></legend>
-              <p>All Ryravel journeys are fully bespoke. Select the range that best reflects your intention.</p>
-              <div>{budgets.map((value) => <button className={budget === value ? "selected" : ""} type="button" key={value} onClick={() => setBudget(value)} aria-pressed={budget === value}><strong>{value}</strong><small>per person</small></button>)}</div>
-              <input type="hidden" name="budget" value={budget} />
-            </fieldset>
-            <label className="request-message">Any other comments or requests<textarea name="message" rows="5" placeholder="Tell us anything else that feels important. A milestone you are marking, a specific experience you have in mind, something you read that made you think of us…" /></label>
-          </section>
+          <form className="progressive-form" id="journey-request" ref={formRef} onSubmit={submit} noValidate>
+            <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
+            <div className="progressive-workspace">
+              <div className="progressive-stage-card">
+                <section className="progressive-stage" hidden={step !== 1} aria-labelledby="feeling-stage-title">
+                  <div className="progressive-stage-heading"><div><span className="kicker">01 · How you feel</span><h2 id="feeling-stage-title">Right now, honestly—<br />how are you?</h2></div><small>Step 1 of 3 · about 30 seconds</small></div>
+                  <p className="progressive-intro">Choose the feeling closest to where you are. This shapes what comes next.</p>
+                  <div className="progressive-feelings">
+                    {feelings.map(([name, title, copy]) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { setFeeling(name); setFieldErrors({}); }} aria-pressed={feeling === name}><em>{name}</em><strong>{title}</strong><small>{copy}</small></button>)}
+                  </div>
+                  <input type="hidden" name="feeling" value={feeling} />
+                  {fieldErrors.feeling ? <p className="progressive-field-error" role="alert">{fieldErrors.feeling}</p> : null}
+                </section>
 
-          <section className="request-form-card">
-            <div className="request-section-heading"><span>Your details</span></div>
-            <div className="request-fields">
-              <label>Your name <b>*</b><input name="name" placeholder="Full name" required /></label>
-              <label>How did you hear about us?<select name="referral" defaultValue=""><option value="" disabled>Select</option><option>Recommendation</option><option>Google</option><option>Instagram</option><option>Press</option><option>Other</option></select></label>
-              <label>Email address <b>*</b><input name="email" type="email" placeholder="your@email.com" required /></label>
-              <label>Confirm email address <b>*</b><input name="email-confirmation" type="email" placeholder="Confirm your email" required /></label>
-              <label className="wide">Telephone <b>*</b><span className="phone-field"><select name="country-code" defaultValue="" required aria-label="Country calling code"><option value="" disabled>Code</option>{countryCodes.map(([country, code]) => <option value={code} key={`${country}-${code}`}>{country} {code}</option>)}</select><input name="phone" type="tel" placeholder="Phone number" autoComplete="tel-national" required /></span></label>
-              {contactPreference === "private-call" ? <label className="wide">Best time for your curator to contact you <b>*</b><select name="preferred-call-time" value={preferredCallTime} onChange={(event) => setPreferredCallTime(event.target.value)} required><option value="" disabled>Select a window</option><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option><option>Let the curator propose a time by email</option></select></label> : null}
+                <section className="progressive-stage" hidden={step !== 2} aria-labelledby="journey-stage-title">
+                  <div className="progressive-stage-heading"><div><span className="kicker">02 · Your journey</span><h2 id="journey-stage-title">What shape should<br />this journey take?</h2></div><small>Step 2 of 3 · about 1 minute</small></div>
+                  <div className="progressive-fields">
+                    <label>Travel month <b>*</b><select name="month" value={travelMonth} onChange={(event) => { setTravelMonth(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select month</option>{["January","February","March","April","May","June","July","August","September","October","November","December"].map((month) => <option key={month}>{month}</option>)}</select>{fieldErrors.month ? <small role="alert">{fieldErrors.month}</small> : null}</label>
+                    <label>Year <b>*</b><select name="year" value={travelYear} onChange={(event) => { setTravelYear(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select year</option>{[2026, 2027, 2028, 2029].map((year) => <option key={year}>{year}</option>)}</select>{fieldErrors.year ? <small role="alert">{fieldErrors.year}</small> : null}</label>
+                    <label>Journey length <b>*</b><select name="duration" defaultValue="" onChange={() => setFieldErrors({})}><option value="" disabled>Select duration</option><option>5–6 nights</option><option>7–9 nights</option><option>10–12 nights</option><option>More than 12 nights</option></select>{fieldErrors.duration ? <small role="alert">{fieldErrors.duration}</small> : null}</label>
+                    <label>Travelling as <b>*</b><select name="people" value={people} onChange={(event) => { setPeople(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select</option><option>1 person</option><option>2 people</option><option>3–4 people</option><option>5–8 people</option><option>9+ people</option></select>{fieldErrors.people ? <small role="alert">{fieldErrors.people}</small> : null}</label>
+                  </div>
+                  <fieldset className="progressive-budget"><legend>Investment per person <b>*</b></legend><p>This gives the curator team a useful direction. It does not commit you to a booking.</p><div>{budgets.map((value) => <button className={budget === value ? "selected" : ""} type="button" key={value} onClick={() => { setBudget(value); setFieldErrors({}); }} aria-pressed={budget === value}><strong>{value}</strong><small>per person</small></button>)}</div><input type="hidden" name="budget" value={budget} />{fieldErrors.budget ? <small className="progressive-field-error" role="alert">{fieldErrors.budget}</small> : null}</fieldset>
+                  <label className="progressive-message">Anything else that matters<textarea name="message" rows="4" placeholder="A milestone, a pace you need, or something you want the curator team to understand…" /></label>
+                </section>
+
+                <section className="progressive-stage" hidden={step !== 3} aria-labelledby="details-stage-title">
+                  <div className="progressive-stage-heading"><div><span className="kicker">03 · Your details</span><h2 id="details-stage-title">Where should the<br />conversation begin?</h2></div><small>Final step · about 45 seconds</small></div>
+                  <div className="progressive-contact-choice" aria-label="Conversation preference"><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => setContactPreference("written-enquiry")}><strong>Written journey request</strong><small>The curator team replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => setContactPreference("private-call")}><strong>Private curator call</strong><small>We contact you to arrange a private conversation.</small></button></div>
+                  <div className="progressive-fields progressive-details">
+                    <label>Your name <b>*</b><input name="name" placeholder="Full name" autoComplete="name" onChange={() => setFieldErrors({})} />{fieldErrors.name ? <small role="alert">{fieldErrors.name}</small> : null}</label>
+                    <label>Email address <b>*</b><input name="email" type="email" placeholder="your@email.com" autoComplete="email" onChange={() => setFieldErrors({})} />{fieldErrors.email ? <small role="alert">{fieldErrors.email}</small> : null}</label>
+                    <label className="wide">Telephone <b>*</b><span className="phone-field"><select name="country-code" defaultValue="" aria-label="Country calling code" onChange={() => setFieldErrors({})}><option value="" disabled>Code</option>{countryCodes.map(([country, code]) => <option value={code} key={`${country}-${code}`}>{country} {code}</option>)}</select><input name="phone" type="tel" placeholder="Phone number" autoComplete="tel-national" onChange={() => setFieldErrors({})} /></span>{fieldErrors.countryCode || fieldErrors.phone ? <small role="alert">{fieldErrors.countryCode || fieldErrors.phone}</small> : null}</label>
+                    {contactPreference === "private-call" ? <label className="wide">Best contact time <b>*</b><select name="preferred-call-time" value={preferredCallTime} onChange={(event) => { setPreferredCallTime(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select a window</option><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option><option>Let the curator team propose a time by email</option></select>{fieldErrors.preferredCallTime ? <small role="alert">{fieldErrors.preferredCallTime}</small> : null}</label> : null}
+                    <label>How did you hear about us?<select name="referral" defaultValue=""><option value="" disabled>Select</option><option>Recommendation</option><option>Google</option><option>Instagram</option><option>Press</option><option>Other</option></select></label>
+                  </div>
+                  <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>Send me occasional traveller case studies and carefully chosen journey notes from Ryravel.</span></label>
+                  {turnstileEnabled ? <div className="request-turnstile"><div ref={turnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}
+                  {fieldErrors.turnstile ? <p className="progressive-field-error" role="alert">{fieldErrors.turnstile}</p> : null}
+                  {error ? <p className="request-error" role="alert">{error}</p> : null}
+                </section>
+
+                <div className="progressive-actions">
+                  {step > 1 ? <button className="progressive-back" type="button" onClick={() => changeStep(step - 1)}>← Back</button> : <span>Your answers are preserved between steps.</span>}
+                  {step < 3 ? <button className="progressive-next" type="button" onClick={continueRequest}>Continue →</button> : <button className="progressive-next" type="submit" disabled={sending}>{sending ? "Sending…" : contactPreference === "private-call" ? "Request private call →" : "Submit journey request →"}</button>}
+                </div>
+              </div>
+
+              <aside className="progressive-summary">
+                <span className="kicker">Your direction so far</span>
+                <h3>{journeyContext?.name || (feeling ? `${feeling}, a journey to be shaped` : "A journey designed around how you feel")}</h3>
+                <p>{journeyContext ? `${journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}${journeyContext.destination}` : "Your curator will use these answers to shape the destination, pace and experience."}</p>
+                <dl><div><dt>Feeling</dt><dd>{feeling || "Not selected"}</dd></div><div><dt>Travellers</dt><dd>{people || "Not selected"}</dd></div><div><dt>Window</dt><dd>{travelMonth && travelYear ? `${travelMonth} ${travelYear}` : "Not selected"}</dd></div>{budget ? <div><dt>Investment</dt><dd>{budget}</dd></div> : null}</dl>
+                {journeyContext ? <a href={`/journeys/${journeyContext.slug}`}>Review selected journey ↗</a> : null}
+                <div className="progressive-team-note"><strong>A curator team, not an algorithm.</strong><p>Every completed request is reviewed personally by the Ryravel curator team. You will receive a considered response within one business day.</p></div>
+                <div className="progressive-next-summary"><strong>What happens next</strong><ol><li>Personal review by the curator team.</li><li>One private conversation.</li><li>A considered journey direction and proposal.</li></ol></div>
+                <small>Nothing is booked until you are ready. Turnstile appears only at final submission.</small>
+              </aside>
             </div>
-            <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>Send me occasional traveller case studies and carefully chosen journey notes from Ryravel.</span></label>
-            {turnstileEnabled ? <div className="request-turnstile"><div ref={turnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}
-            <section className="request-next-steps" aria-labelledby="request-next-title"><span className="kicker">What happens next</span><h2 id="request-next-title">One request. Then a human conversation.</h2><ol><li><b>01</b><span><strong>Personal review</strong>Your curator reads the feeling, timing and investment direction you shared.</span></li><li><b>02</b><span><strong>Private conversation</strong>We reply within one business day and arrange a call when that is how you prefer to begin.</span></li><li><b>03</b><span><strong>Journey direction</strong>Only after listening do we shape the place, pace and first investment direction.</span></li><li><b>04</b><span><strong>Your proposal</strong>You receive a considered journey proposal. Nothing is booked until you are ready.</span></li></ol></section>
-            <div className="request-submit">
-              <p>Your enquiry is handled personally by a Ryravel curator. You will hear from a real person within one business day.</p>
-              <div>{error ? <p className="request-error" role="alert">{error}</p> : null}<button className="button button-red" type="submit" disabled={sending}>{sending ? "Sending…" : "Submit enquiry →"}</button></div>
-            </div>
-          </section>
-        </form>
+          </form>
+        </section>
       )}
     </main>
   );

@@ -128,7 +128,6 @@ export async function POST(request) {
 
   const name = clean(payload.name, 120);
   const email = clean(payload.email, 254).toLowerCase();
-  const emailConfirmation = clean(payload.emailConfirmation, 254).toLowerCase();
   const feeling = clean(payload.feeling, 40);
   const travelMonth = clean(payload.month, 20);
   const travelYear = clean(payload.year, 4);
@@ -150,7 +149,7 @@ export async function POST(request) {
   const preferredCallTime = contactPreference === "private-call" ? clean(payload.preferredCallTime, 100) : "";
 
   if (!name || !email || !phone || !duration || !people || !budget || !travelYear) return jsonError("Complete every required field.", 422);
-  if (!/^\S+@\S+\.\S+$/.test(email) || email !== emailConfirmation) return jsonError("Enter matching email addresses.", 422);
+  if (!/^\S+@\S+\.\S+$/.test(email)) return jsonError("Enter a valid email address.", 422);
   if (!feelings.has(feeling)) return jsonError("Choose how you want to feel.", 422);
   if (!months.has(travelMonth)) return jsonError("Choose a travel month.", 422);
   if (!/^20\d{2}$/.test(travelYear)) return jsonError("Choose a valid travel year.", 422);
