@@ -147,7 +147,9 @@ export default function RequestPage() {
     setError("");
     setFieldErrors({});
     setStep(nextStep);
-    window.requestAnimationFrame(() => document.getElementById("request-progress")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    if (window.matchMedia("(max-width: 900px), (max-height: 719px)").matches) {
+      window.requestAnimationFrame(() => document.getElementById("request-progress")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    }
   }
 
   function continueRequest() {

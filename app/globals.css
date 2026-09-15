@@ -333,6 +333,7 @@ html:has(.request-page) .site-header .brand-light { display: block; }
 html:has(.request-page) .site-header .brand-dark { display: none !important; }
 html:has(.request-page) .site-header .desktop-nav a, html:has(.request-page) .site-header .phone { color: rgba(255,255,255,.45); }
 html:has(.request-page) .site-header .menu-button i { background: #fff; }
+html:has(.request-page) .site-footer { display: none; }
 .article header { background: var(--bg); padding: 100px max(18vw,50px); }.article header > a { color: var(--muted); display: block; font-size: 9px; margin-bottom: 50px; text-transform: uppercase; }.article h1 { font-size: clamp(48px,6vw,84px); line-height: .94; }.article header p { color: var(--muted); font-size: 18px; line-height: 1.8; margin-top: 25px; max-width: 700px; }.article-body { background: var(--paper); color: var(--ink); padding: 90px max(25vw,50px); }.article-body p { color: var(--ink-muted); font-size: 17px; line-height: 1.95; margin-bottom: 28px; }.article-body h2 { font-size: 34px; margin: 60px 0 20px; }.article-body blockquote { border-left: 2px solid var(--red); font-size: 27px; font-style: italic; line-height: 1.6; margin: 50px 0; padding-left: 25px; }
 .legal h2 { margin: 30px 0 10px; }.legal p { color: var(--ink-muted); line-height: 1.9; }
 .not-found { align-items: center; display: flex; flex-direction: column; min-height: 70vh; justify-content: center; padding: 60px; text-align: center; }.not-found > span { color: var(--red); font-size: 80px; font-weight: 900; }.not-found h1 { font-size: 42px; }.not-found p { color: var(--muted); margin: 16px 0 30px; }.not-found > div { display: flex; gap: 12px; }
@@ -489,6 +490,98 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
 .progressive-next-summary > strong { color: var(--red); font-size: 8px; letter-spacing: .13em; text-transform: uppercase; }
 .progressive-next-summary ol { color: rgba(255,255,255,.43); font-size: 10px; line-height: 1.65; margin: 12px 0 0; padding-left: 18px; }
 .progressive-summary > small { color: rgba(255,255,255,.25); display: block; font-size: 9px; line-height: 1.6; margin-top: 22px; }
+@media (min-width: 901px) and (min-height: 720px) {
+  html:has(.request-page), body:has(.request-page) { height: 100%; overflow: hidden; }
+  html:has(.request-page) .site-header { height: 64px; }
+  .request-page { height: calc(100dvh - 64px); overflow: hidden; }
+  .progressive-request { display: grid; grid-template-rows: auto minmax(0,1fr); height: 100%; min-height: 0; padding: clamp(18px,2.5vh,28px) max(3vw,32px); }
+  .progressive-request-header { gap: clamp(32px,4vw,64px); grid-template-columns: minmax(420px,.85fr) minmax(0,1.15fr); margin-bottom: clamp(12px,1.7vh,18px); }
+  .progressive-request-header h1 { font-size: clamp(38px,3.4vw,50px); margin-top: 8px; }
+  .progressive-request-header p { margin-top: 9px; }
+  .progressive-stepper li { padding-bottom: 11px; }
+  .progressive-stepper b { margin-bottom: 5px; }
+  .progressive-stepper span { font-size: clamp(15px,1.35vw,19px); }
+  .progressive-form, .progressive-workspace { height: 100%; min-height: 0; }
+  .progressive-workspace { gap: clamp(24px,3.5vw,52px); grid-template-columns: minmax(0,1.55fr) minmax(250px,.45fr); }
+  .progressive-stage-card { display: flex; flex-direction: column; height: 100%; justify-content: space-between; padding: clamp(20px,2.8vh,30px) clamp(24px,3vw,40px); }
+  .progressive-stage { min-height: 0; }
+  .progressive-stage-heading h2 { font-size: clamp(32px,3.1vw,44px); margin-top: 8px; }
+  .progressive-intro { margin: 10px 0 14px; }
+  .progressive-feelings { gap: 7px; grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .progressive-feelings button { min-height: 92px; padding: 13px; }
+  .progressive-feelings em { font-size: 17px; }
+  .progressive-feelings small { font-size: 9px; line-height: 1.35; margin-top: 5px; }
+  .progressive-fields { gap: 10px 18px; margin-top: 14px; }
+  .progressive-fields input, .progressive-fields select, .progressive-message textarea { margin-top: 4px; min-height: 38px; padding-block: 6px; }
+  .progressive-budget { margin-top: 15px; }
+  .progressive-budget > p { line-height: 1.4; margin: 4px 0 8px; }
+  .progressive-budget button { min-height: 48px; padding: 7px 5px; }
+  .progressive-message { margin-top: 14px; }
+  .progressive-message textarea { min-height: 48px; resize: none; }
+  .progressive-contact-choice { margin-top: 14px; }
+  .progressive-contact-choice button { min-height: 68px; padding: 12px 14px; }
+  .progressive-contact-choice small { margin-top: 4px; }
+  .newsletter-field { margin-top: 10px; }
+  .request-turnstile { margin-top: 8px; }
+  .progressive-actions { margin-top: 12px; min-height: 48px; padding-top: 10px; }
+  .progressive-next { min-height: 42px; }
+  .progressive-summary { height: 100%; overflow: hidden; padding-top: 16px; }
+  .progressive-summary h3 { font-size: clamp(24px,2.3vw,34px); margin: 10px 0 7px; }
+  .progressive-summary > p { font-size: 11px; line-height: 1.5; }
+  .progressive-summary dl { margin: 14px 0; padding: 6px 0; }
+  .progressive-summary dl > div { padding: 5px 0; }
+  .progressive-summary > a { margin-bottom: 12px; }
+  .progressive-team-note { padding-top: 13px; }
+  .progressive-team-note strong { font-size: 16px; }
+  .progressive-team-note p { font-size: 10px; line-height: 1.45; margin-top: 5px; }
+  .progressive-next-summary { margin-top: 12px; padding-top: 12px; }
+  .progressive-next-summary ol { font-size: 9px; line-height: 1.45; margin-top: 6px; }
+  .progressive-summary > small { font-size: 8px; line-height: 1.4; margin-top: 10px; }
+}
+@media (min-width: 901px) and (min-height: 720px) and (max-height: 820px) {
+  .progressive-request { padding-block: 10px; }
+  .progressive-request-header { margin-bottom: 7px; }
+  .progressive-request-header h1 { font-size: 38px; line-height: .9; margin-top: 5px; }
+  .progressive-request-header p { font-size: 9px; margin-top: 5px; }
+  .progressive-stepper li { padding-bottom: 7px; }
+  .progressive-stepper b { margin-bottom: 3px; }
+  .progressive-stepper span { font-size: 15px; }
+  .progressive-stage-card { padding: 15px 24px; }
+  .progressive-stage-heading h2 { font-size: 32px; line-height: .94; margin-top: 5px; }
+  .progressive-stage-heading > small { font-size: 8px; }
+  .progressive-intro { font-size: 11px; line-height: 1.4; margin: 7px 0 9px; }
+  .progressive-feelings { gap: 5px; }
+  .progressive-feelings button { min-height: 72px; padding: 9px 11px; }
+  .progressive-feelings em { font-size: 15px; }
+  .progressive-feelings strong { font-size: 9px; }
+  .progressive-feelings small { font-size: 8px; line-height: 1.25; margin-top: 3px; }
+  .progressive-fields { gap: 6px 16px; margin-top: 8px; }
+  .progressive-fields input, .progressive-fields select, .progressive-message textarea { font-size: 12px; margin-top: 2px; min-height: 30px; padding-block: 3px; }
+  .progressive-budget { margin-top: 9px; }
+  .progressive-budget > p { font-size: 9px; margin: 2px 0 5px; }
+  .progressive-budget button { min-height: 40px; }
+  .progressive-message { margin-top: 8px; }
+  .progressive-message textarea { min-height: 34px; }
+  .progressive-contact-choice { gap: 7px; margin-top: 8px; }
+  .progressive-contact-choice button { min-height: 52px; padding: 8px 11px; }
+  .progressive-contact-choice strong { font-size: 10px; }
+  .progressive-contact-choice small { font-size: 8px; line-height: 1.3; }
+  .newsletter-field { margin-top: 6px; padding: 9px 12px; }
+  .request-turnstile { margin-top: 4px; }
+  .progressive-actions { margin-top: 6px; min-height: 38px; padding-top: 6px; }
+  .progressive-next { min-height: 36px; }
+  .progressive-summary { padding-top: 10px; }
+  .progressive-summary h3 { font-size: 25px; margin: 7px 0 4px; }
+  .progressive-summary dl { margin: 8px 0; padding: 3px 0; }
+  .progressive-summary dl > div { padding: 3px 0; }
+  .progressive-summary > a { margin-bottom: 7px; }
+  .progressive-team-note { padding-top: 8px; }
+  .progressive-team-note strong { font-size: 14px; }
+  .progressive-team-note p { font-size: 8px; line-height: 1.35; }
+  .progressive-next-summary { margin-top: 8px; padding-top: 8px; }
+  .progressive-next-summary ol { font-size: 8px; line-height: 1.35; margin-top: 4px; }
+  .progressive-summary > small { font-size: 7px; margin-top: 6px; }
+}
 @media (max-width: 900px) {
   .progressive-request-header { align-items: start; grid-template-columns: 1fr; }.progressive-request-header h1 { max-width: 640px; }
   .progressive-workspace { grid-template-columns: 1fr; }.progressive-summary { display: grid; gap: 18px; grid-template-columns: 1fr 1fr; }.progressive-summary .kicker, .progressive-summary h3, .progressive-summary > p { grid-column: 1/-1; }.progressive-summary dl { margin: 0; }.progressive-team-note { border-top: 0; padding-top: 0; }

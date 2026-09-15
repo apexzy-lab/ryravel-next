@@ -38,6 +38,9 @@ check(requestPage.includes('const [step, setStep]') && requestPage.includes("Ste
 check(!requestPage.includes("email-confirmation") && !requestPage.includes("Confirm email address"), "Progressive request form removes the duplicate email field");
 check(requestPage.includes("if (step !== 3) return undefined") && requestPage.includes("turnstileMount"), "Turnstile initializes only on the final request stage");
 check(requestPage.includes("Ryravel curator team") && !requestPage.includes("Maryangel"), "Request reassurance represents the professional curator team");
+const globalCss = read("app/globals.css");
+check(globalCss.includes("body:has(.request-page) { height: 100%; overflow: hidden; }") && globalCss.includes(".request-page { height: calc(100dvh - 64px); overflow: hidden; }"), "Desktop request flow is locked to one viewport without page scrolling");
+check(globalCss.includes("html:has(.request-page) .site-footer { display: none; }"), "Focused request flow removes the below-fold site footer");
 check(read("app/api/enquiries/route.js").includes("RESEND_API_KEY") && read("app/api/enquiries/route.js").includes("queueGuestConfirmation"), "Branded guest confirmation email is integrated without blocking submission");
 check(!read("app/api/enquiries/route.js").includes("emailConfirmation") && read("app/api/enquiries/route.js").includes("Enter a valid email address."), "Enquiry API validates one email address without duplicate confirmation");
 check(read("app/api/enquiries/route.js").includes("curator@updates.ryravel.com"), "Confirmation email sends from the Resend-verified Ryravel subdomain");
