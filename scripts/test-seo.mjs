@@ -41,7 +41,7 @@ check(requestPage.includes("Ryravel curator team") && !requestPage.includes("Mar
 const globalCss = read("app/globals.css");
 check(globalCss.includes("body:has(.request-page) { height: 100%; overflow: hidden; }") && globalCss.includes(".request-page { height: calc(100dvh - 64px); overflow: hidden; }"), "Desktop request flow is locked to one viewport without page scrolling");
 check(globalCss.includes("html:has(.request-page) .site-footer { display: none; }"), "Focused request flow removes the below-fold site footer");
-check(globalCss.includes(".progressive-workspace > * { min-width: 0; width: 100%; }") && globalCss.includes("grid-template-columns: minmax(0,1fr) clamp(250px,22vw,320px)"), "Every progressive stage uses one invariant form and summary grid");
+check(globalCss.includes(".progressive-request { grid-template-columns: minmax(0,1fr)") && globalCss.includes(".progressive-workspace > * { min-width: 0; width: 100%; }") && globalCss.includes("grid-template-columns: minmax(0,1fr) clamp(250px,22vw,320px)"), "Every progressive stage uses one invariant form and summary grid");
 check(read("app/api/enquiries/route.js").includes("RESEND_API_KEY") && read("app/api/enquiries/route.js").includes("queueGuestConfirmation"), "Branded guest confirmation email is integrated without blocking submission");
 check(!read("app/api/enquiries/route.js").includes("emailConfirmation") && read("app/api/enquiries/route.js").includes("Enter a valid email address."), "Enquiry API validates one email address without duplicate confirmation");
 check(read("app/api/enquiries/route.js").includes("curator@updates.ryravel.com"), "Confirmation email sends from the Resend-verified Ryravel subdomain");
