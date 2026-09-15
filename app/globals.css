@@ -436,8 +436,9 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
 .progressive-stepper li.active, .progressive-stepper li.complete { border-color: var(--red); color: #fff; }
 .progressive-stepper b { color: var(--red); display: block; font-size: 8px; letter-spacing: .14em; margin-bottom: 8px; }
 .progressive-stepper span { font-family: var(--font-serif); font-size: clamp(16px,1.7vw,22px); }
-.progressive-form, .progressive-workspace { margin: 0 auto; max-width: 1440px; }
-.progressive-workspace { display: grid; gap: clamp(32px,5vw,76px); grid-template-columns: minmax(0,1.45fr) minmax(250px,.55fr); }
+.progressive-form { margin: 0 auto; max-width: 1440px; width: 100%; }
+.progressive-workspace { display: grid; gap: clamp(32px,5vw,76px); grid-template-columns: minmax(0,1fr) clamp(250px,22vw,320px); margin: 0 auto; max-width: 1440px; width: 100%; }
+.progressive-workspace > * { min-width: 0; width: 100%; }
 .progressive-stage-card { background: #201f1d; min-width: 0; padding: clamp(30px,4.5vw,62px); }
 .progressive-stage-heading { align-items: start; display: flex; gap: 24px; justify-content: space-between; }
 .progressive-stage-heading h2 { font-size: clamp(36px,4vw,58px); letter-spacing: -.035em; line-height: 1.02; margin-top: 15px; }
@@ -476,7 +477,7 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
 .progressive-next { background: var(--red); border: 0; color: #fff; font-size: 9px; font-weight: 800; letter-spacing: .14em; min-height: 48px; padding: 0 25px; text-transform: uppercase; }
 .progressive-next:disabled { cursor: wait; opacity: .65; }
 .progressive-summary { align-self: start; border-top: 1px solid rgba(255,255,255,.2); padding-top: 24px; }
-.progressive-summary h3 { font-size: clamp(27px,2.8vw,40px); line-height: 1.05; margin: 16px 0 12px; }
+.progressive-summary h3 { font-size: clamp(27px,2.8vw,40px); line-height: 1.05; margin: 16px 0 12px; min-height: 2.1em; }
 .progressive-summary > p { color: rgba(255,255,255,.46); font-size: 12px; line-height: 1.7; }
 .progressive-summary dl { border-block: 1px solid rgba(255,255,255,.12); margin: 25px 0; padding: 12px 0; }
 .progressive-summary dl > div { align-items: baseline; display: flex; gap: 18px; justify-content: space-between; padding: 8px 0; }
@@ -502,10 +503,10 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
   .progressive-stepper b { margin-bottom: 5px; }
   .progressive-stepper span { font-size: clamp(15px,1.35vw,19px); }
   .progressive-form, .progressive-workspace { height: 100%; min-height: 0; }
-  .progressive-workspace { gap: clamp(24px,3.5vw,52px); grid-template-columns: minmax(0,1.55fr) minmax(250px,.45fr); }
+  .progressive-workspace { gap: clamp(24px,3.5vw,52px); grid-template-columns: minmax(0,1fr) clamp(250px,22vw,320px); }
   .progressive-stage-card { display: flex; flex-direction: column; height: 100%; justify-content: space-between; padding: clamp(20px,2.8vh,30px) clamp(24px,3vw,40px); }
   .progressive-stage { min-height: 0; }
-  .progressive-stage-heading h2 { font-size: clamp(32px,3.1vw,44px); margin-top: 8px; }
+  .progressive-stage-heading h2 { font-size: clamp(32px,3.1vw,44px); margin-top: 8px; min-height: 2.04em; }
   .progressive-intro { margin: 10px 0 14px; }
   .progressive-feelings { gap: 7px; grid-template-columns: repeat(4,minmax(0,1fr)); }
   .progressive-feelings button { min-height: 92px; padding: 13px; }
