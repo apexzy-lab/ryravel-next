@@ -313,7 +313,7 @@ em { color: var(--red); font-style: italic; }
 .request-submit { align-items: center; border-top: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; margin-top: 28px; padding-top: 28px; }
 .request-submit p { color: rgba(255,255,255,.28); font-size: 10px; line-height: 1.7; max-width: 390px; }
 .request-submit .button { border: 0; min-width: 210px; }
-.request-thanks { margin: 0 auto; max-width: 850px; min-height: 65vh; padding: 120px 40px; text-align: center; }.request-thanks > span { color: var(--red); font-size: 50px; }.request-thanks h1 { font-size: clamp(42px,6vw,76px); margin: 20px 0; }.request-thanks > p:not(.kicker) { color: rgba(255,255,255,.4); line-height: 1.8; margin: 0 auto 30px; max-width: 600px; }.request-thanks a { color: var(--red); }
+.request-thanks { align-items: center; display: flex; flex-direction: column; justify-content: center; margin: 0 auto; max-width: 850px; min-height: calc(100dvh - 64px); padding: clamp(48px,8vh,80px) 40px; text-align: center; }.request-thanks > span { color: var(--red); font-size: 50px; line-height: 1; }.request-thanks h1 { font-size: clamp(42px,6vw,76px); margin: 16px 0; }.request-thanks > p:not(.kicker) { color: rgba(255,255,255,.4); line-height: 1.8; margin: 0 auto 24px; max-width: 600px; }.request-thanks a { color: var(--red); }
 .request-thanks-next { border: 1px solid rgba(255,255,255,.1); margin: 0 auto 30px; max-width: 620px; padding: 24px 30px; text-align: left; }
 .request-thanks-next > span { color: var(--red); font-size: 9px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
 .request-thanks-next ol { color: rgba(255,255,255,.55); line-height: 1.6; margin: 16px 0 0; padding-left: 20px; }
@@ -492,9 +492,11 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
 .progressive-next-summary ol { color: rgba(255,255,255,.43); font-size: 10px; line-height: 1.65; margin: 12px 0 0; padding-left: 18px; }
 .progressive-summary > small { color: rgba(255,255,255,.25); display: block; font-size: 9px; line-height: 1.6; margin-top: 22px; }
 @media (min-width: 901px) and (min-height: 720px) {
-  html:has(.request-page), body:has(.request-page) { height: 100%; overflow: hidden; }
+  html:has(.request-page:not(.request-page-complete)), body:has(.request-page:not(.request-page-complete)) { height: 100%; overflow: hidden; }
   html:has(.request-page) .site-header { height: 64px; }
-  .request-page { height: calc(100dvh - 64px); overflow: hidden; }
+  .request-page:not(.request-page-complete) { height: calc(100dvh - 64px); overflow: hidden; }
+  .request-page-complete { min-height: calc(100dvh - 64px); overflow: visible; }
+  .request-page-complete .request-thanks { min-height: calc(100dvh - 64px); padding-block: clamp(28px,4vh,42px); }
   .progressive-request { display: grid; grid-template-rows: auto minmax(0,1fr); height: 100%; min-height: 0; padding: clamp(18px,2.5vh,28px) max(3vw,32px); }
   .progressive-request-header { gap: clamp(32px,4vw,64px); grid-template-columns: minmax(420px,.85fr) minmax(0,1.15fr); margin-bottom: clamp(12px,1.7vh,18px); }
   .progressive-request-header h1 { font-size: clamp(38px,3.4vw,50px); margin-top: 8px; }

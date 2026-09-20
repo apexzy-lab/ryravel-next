@@ -193,7 +193,7 @@ export default function RequestPage() {
   }
 
   return (
-    <main className="request-page">
+    <main className={`request-page${sent ? " request-page-complete" : ""}`}>
       {sent ? (
         <section className="request-thanks">
           <span>✓</span>

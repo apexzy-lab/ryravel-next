@@ -39,7 +39,8 @@ check(!requestPage.includes("email-confirmation") && !requestPage.includes("Conf
 check(requestPage.includes("if (step !== 3) return undefined") && requestPage.includes("turnstileMount"), "Turnstile initializes only on the final request stage");
 check(requestPage.includes("Ryravel curator team") && !requestPage.includes("Maryangel"), "Request reassurance represents the professional curator team");
 const globalCss = read("app/globals.css");
-check(globalCss.includes("body:has(.request-page) { height: 100%; overflow: hidden; }") && globalCss.includes(".request-page { height: calc(100dvh - 64px); overflow: hidden; }"), "Desktop request flow is locked to one viewport without page scrolling");
+check(globalCss.includes("body:has(.request-page:not(.request-page-complete)) { height: 100%; overflow: hidden; }") && globalCss.includes(".request-page:not(.request-page-complete) { height: calc(100dvh - 64px); overflow: hidden; }"), "Desktop request flow is locked to one viewport without page scrolling");
+check(requestPage.includes('request-page-complete') && globalCss.includes(".request-page-complete { min-height: calc(100dvh - 64px); overflow: visible; }"), "Completed enquiry screen is never clipped by the fixed form viewport");
 check(globalCss.includes("html:has(.request-page) .site-footer { display: none; }"), "Focused request flow removes the below-fold site footer");
 check(globalCss.includes(".progressive-request { grid-template-columns: minmax(0,1fr)") && globalCss.includes(".progressive-workspace > * { min-width: 0; width: 100%; }") && globalCss.includes("grid-template-columns: minmax(0,1fr) clamp(250px,22vw,320px)"), "Every progressive stage uses one invariant form and summary grid");
 check(read("app/api/enquiries/route.js").includes("RESEND_API_KEY") && read("app/api/enquiries/route.js").includes("queueGuestConfirmation"), "Branded guest confirmation email is integrated without blocking submission");
