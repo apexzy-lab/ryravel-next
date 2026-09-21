@@ -206,9 +206,9 @@ export default function RequestPage() {
       ) : (
         <section className="progressive-request" id="request-progress">
           <header className="progressive-request-header">
-            <div><span className="kicker">Plan my journey</span><h1>A journey shaped<br /><em>in three moves.</em></h1><p>Private journeys across Africa and beyond.</p></div>
+            <div className="progressive-request-title"><span className="kicker">Plan my journey</span><p>Private journeys, shaped personally.</p></div>
             <ol className="progressive-stepper" aria-label={`Step ${step} of 3`}>
-              {["How you feel", "Your journey", "Your details"].map((label, index) => <li className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} key={label}><b>0{index + 1}</b><span>{label}</span></li>)}
+              {["How you feel", "Your journey", "Your details"].map((label, index) => <li className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} aria-current={step === index + 1 ? "step" : undefined} key={label}><b>0{index + 1}</b><span>{label}</span></li>)}
             </ol>
           </header>
 
@@ -220,7 +220,7 @@ export default function RequestPage() {
                   <div className="progressive-stage-heading"><div><span className="kicker">01 · How you feel</span><h2 id="feeling-stage-title">Right now, honestly—<br />how are you?</h2></div><small>Step 1 of 3 · about 30 seconds</small></div>
                   <p className="progressive-intro">Choose the feeling closest to where you are. This shapes what comes next.</p>
                   <div className="progressive-feelings">
-                    {feelings.map(([name, title, copy]) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { setFeeling(name); setFieldErrors({}); }} aria-pressed={feeling === name}><em>{name}</em><strong>{title}</strong><small>{copy}</small></button>)}
+                    {feelings.map(([name, title], index) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { setFeeling(name); setFieldErrors({}); }} aria-pressed={feeling === name}><span className="progressive-feeling-mark" aria-hidden="true">{feeling === name ? "✓" : String(index + 1).padStart(2, "0")}</span><em>{name}</em><strong>{title}</strong></button>)}
                   </div>
                   <input type="hidden" name="feeling" value={feeling} />
                   {fieldErrors.feeling ? <p className="progressive-field-error" role="alert">{fieldErrors.feeling}</p> : null}
@@ -262,7 +262,7 @@ export default function RequestPage() {
 
               <aside className="progressive-summary">
                 <span className="kicker">Your direction so far</span>
-                <h3>{journeyContext?.name || (feeling ? `${feeling}, a journey to be shaped` : "A journey designed around how you feel")}</h3>
+                <h3>{journeyContext?.name || feeling || "Your journey"}</h3>
                 <p>{journeyContext ? `${journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}${journeyContext.destination}` : "Your curator will use these answers to shape the destination, pace and experience."}</p>
                 <dl><div><dt>Feeling</dt><dd>{feeling || "Not selected"}</dd></div><div><dt>Travellers</dt><dd>{people || "Not selected"}</dd></div><div><dt>Window</dt><dd>{travelMonth && travelYear ? `${travelMonth} ${travelYear}` : "Not selected"}</dd></div>{budget ? <div><dt>Investment</dt><dd>{budget}</dd></div> : null}</dl>
                 {journeyContext ? <a href={`/journeys/${journeyContext.slug}`}>Review selected journey ↗</a> : null}
