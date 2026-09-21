@@ -80,10 +80,10 @@ export default function RequestPage() {
     const journeyFeeling = feelings.some(([name]) => name === requestedFeeling)
       ? requestedFeeling
       : arcToFeeling[selectedJourney?.arc || params.get("arc")];
-    const name = params.get("name") || selectedJourney?.title || (params.get("arc") ? params.get("name") : "");
+    const name = params.get("name") || params.get("interest") || selectedJourney?.title || (params.get("arc") ? params.get("name") : "");
     if (slug || name) {
       setJourneyContext({
-        slug: slug || params.get("arc") || "bespoke",
+        slug: selectedJourney?.slug || "",
         name: name || "Bespoke journey",
         destination: params.get("destination") || selectedJourney?.destination || "To be shaped with your curator",
         nights: params.get("nights") || (selectedJourney?.nights ? String(selectedJourney.nights) : ""),
@@ -305,7 +305,7 @@ export default function RequestPage() {
                 <h3>{journeyContext?.name || feeling || "Your journey"}</h3>
                 <p>{journeyContext ? `${journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}${journeyContext.destination}` : "Your curator will use these answers to shape the destination, pace and experience."}</p>
                 <dl><div><dt>Feeling</dt><dd>{feeling || "Not selected"}</dd></div><div><dt>Travellers</dt><dd>{people || "Not selected"}</dd></div><div><dt>Window</dt><dd>{travelMonth && travelYear ? `${travelMonth} ${travelYear}` : "Not selected"}</dd></div>{budget ? <div><dt>Investment</dt><dd>{budget}</dd></div> : null}</dl>
-                {journeyContext ? <a href={`/journeys/${journeyContext.slug}`}>Review selected journey ↗</a> : null}
+                {journeyContext?.slug ? <a href={`/journeys/${journeyContext.slug}`}>Review selected journey ↗</a> : null}
                 <div className="progressive-team-note"><strong>A curator team, not an algorithm.</strong><p>Every completed request is reviewed personally by the Ryravel curator team. You will receive a considered response within one business day.</p></div>
                 <div className="progressive-next-summary"><strong>What happens next</strong><ol><li>Personal review by the curator team.</li><li>One private conversation.</li><li>A considered journey direction and proposal.</li></ol></div>
                 <small>Nothing is booked until you are ready. Turnstile appears only at final submission.</small>

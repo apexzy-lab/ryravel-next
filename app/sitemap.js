@@ -17,6 +17,12 @@ const staticRoutes = [
   ["/sustainability", "monthly", 0.65],
   ["/reviews", "monthly", 0.65],
   ["/request", "monthly", 0.85],
+  ["/travel-styles", "monthly", 0.9],
+  ["/luxury-travel-planning", "monthly", 0.9],
+  ["/luxury-family-travel", "monthly", 0.85],
+  ["/luxury-honeymoons", "monthly", 0.85],
+  ["/luxury-wellness-retreats", "monthly", 0.85],
+  ["/luxury-corporate-retreats", "monthly", 0.8],
 ];
 
 export default function sitemap() {

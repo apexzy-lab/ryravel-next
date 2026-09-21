@@ -870,3 +870,68 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
   .progressive-feeling-icon { height: 14px; width: 14px; }
   .progressive-summary-journey-image { height: 180px; margin: -26px -22px 24px; }
 }
+
+/* Worldwide commercial-intent pages */
+.commercial-hero { background: radial-gradient(circle at 78% 28%,#263b2c 0,#111711 26%,#070806 68%); color:#fff; min-height:640px; padding:150px max(9vw,48px) 90px; display:flex; align-items:flex-end; }
+.commercial-hero > div { max-width:980px; }
+.commercial-hero nav { color:rgba(255,255,255,.36); display:flex; gap:10px; font-size:9px; letter-spacing:.14em; margin-bottom:70px; text-transform:uppercase; }
+.commercial-hero h1 { font-size:clamp(52px,7vw,100px); letter-spacing:-.055em; line-height:.93; max-width:1050px; }
+.commercial-hero p { color:rgba(255,255,255,.58); font-size:16px; line-height:1.85; margin:30px 0; max-width:720px; }
+.commercial-hero > div > div { display:flex; flex-wrap:wrap; gap:12px; }
+.commercial-definition { padding:110px max(9vw,48px); }
+.commercial-definition > h2,.commercial-arrangements h2,.commercial-proof h2,.commercial-faq h2 { font-size:clamp(38px,5vw,72px); letter-spacing:-.045em; line-height:1; }
+.commercial-pillars { border-top:1px solid var(--paper-line); display:grid; grid-template-columns:repeat(3,1fr); margin-top:70px; }
+.commercial-pillars article { border-right:1px solid var(--paper-line); padding:36px; }
+.commercial-pillars article:first-child { padding-left:0; }
+.commercial-pillars article:last-child { border-right:0; }
+.commercial-pillars span { color:var(--red); font-size:10px; font-weight:800; letter-spacing:.16em; }
+.commercial-pillars h3 { font-size:25px; margin:18px 0 10px; }
+.commercial-pillars p { color:var(--ink-muted); line-height:1.8; }
+.commercial-arrangements { background:var(--bg); display:grid; gap:90px; grid-template-columns:1fr 1fr; padding:110px max(9vw,48px); }
+.commercial-arrangements > div > p { color:var(--muted); line-height:1.85; margin-top:28px; max-width:600px; }
+.commercial-arrangements ul { border-top:1px solid var(--line); list-style:none; }
+.commercial-arrangements li { border-bottom:1px solid var(--line); font-family:var(--font-serif); font-size:clamp(20px,2vw,30px); padding:20px 4px; }
+.commercial-proof { border-bottom:1px solid var(--paper-line); padding:100px max(16vw,48px); }
+.commercial-proof h2 { margin-bottom:34px; max-width:1050px; }
+.commercial-faq { display:grid; gap:90px; grid-template-columns:.8fr 1.2fr; padding:100px max(9vw,48px); }
+.commercial-faq details { border-top:1px solid var(--paper-line); }
+.commercial-faq details:last-child { border-bottom:1px solid var(--paper-line); }
+.commercial-faq summary { cursor:pointer; font-family:var(--font-serif); font-size:22px; list-style:none; padding:24px 36px 24px 0; position:relative; }
+.commercial-faq summary::after { color:var(--red); content:"+"; position:absolute; right:4px; }
+.commercial-faq details[open] summary::after { content:"−"; }
+.commercial-faq details p { color:var(--ink-muted); line-height:1.8; padding:0 42px 26px 0; }
+.commercial-related { border-top:1px solid var(--paper-line); padding:80px max(9vw,48px); }
+.commercial-related > div { display:grid; grid-template-columns:repeat(3,1fr); }
+.commercial-related a { border:1px solid var(--paper-line); display:flex; flex-direction:column; min-height:210px; padding:28px; }
+.commercial-related small { color:var(--ink-muted); font-size:9px; letter-spacing:.13em; text-transform:uppercase; }
+.commercial-related strong { font-family:var(--font-serif); font-size:28px; margin:24px 0 auto; }
+.commercial-related a > span { color:var(--red); font-size:9px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+.travel-style-grid { display:grid; grid-template-columns:repeat(2,1fr); padding:80px max(8vw,48px) 110px; }
+.travel-style-grid a { border:1px solid var(--paper-line); min-height:350px; padding:42px; }
+.travel-style-grid > a:first-child { grid-column:1 / -1; }
+.travel-style-grid a > span { color:var(--red); font-size:10px; font-weight:800; letter-spacing:.16em; }
+.travel-style-grid small { color:var(--ink-muted); display:block; font-size:9px; letter-spacing:.15em; margin-top:42px; text-transform:uppercase; }
+.travel-style-grid h2 { font-size:clamp(30px,3vw,48px); margin:12px 0; }
+.travel-style-grid p { color:var(--ink-muted); line-height:1.8; max-width:720px; }
+.travel-style-grid b { color:var(--red); display:block; font-size:9px; letter-spacing:.14em; margin-top:28px; text-transform:uppercase; }
+.home-travel-styles { background:var(--paper-2); color:var(--ink); display:grid; gap:90px; grid-template-columns:.85fr 1.15fr; padding:100px max(7vw,42px); }
+.home-travel-styles h2 { font-size:clamp(38px,5vw,70px); letter-spacing:-.045em; line-height:1; }
+.home-travel-styles > div > p { color:var(--ink-muted); line-height:1.85; margin:28px 0; max-width:560px; }
+.home-travel-styles nav { border-top:1px solid var(--paper-line); }
+.home-travel-styles nav a { align-items:center; border-bottom:1px solid var(--paper-line); display:grid; gap:18px; grid-template-columns:44px 1fr auto; padding:20px 4px; }
+.home-travel-styles nav span { color:var(--red); font-size:9px; font-weight:800; letter-spacing:.12em; }
+.home-travel-styles nav strong { font-family:var(--font-serif); font-size:23px; }
+.home-travel-styles nav i { color:var(--ink-muted); font-size:9px; font-style:normal; letter-spacing:.12em; text-transform:uppercase; }
+
+@media (max-width: 800px) {
+  .commercial-hero { min-height:620px; padding:125px 24px 70px; }
+  .commercial-hero nav { margin-bottom:48px; }
+  .commercial-pillars,.commercial-related > div,.travel-style-grid { grid-template-columns:1fr; }
+  .commercial-pillars article,.commercial-pillars article:first-child { border-bottom:1px solid var(--paper-line); border-right:0; padding:28px 0; }
+  .commercial-arrangements,.commercial-faq,.home-travel-styles { gap:55px; grid-template-columns:1fr; padding:80px 24px; }
+  .commercial-definition,.commercial-proof,.commercial-related { padding:80px 24px; }
+  .commercial-related a { min-height:175px; }
+  .travel-style-grid { padding:60px 24px 80px; }
+  .travel-style-grid a { min-height:280px; padding:30px; }
+  .travel-style-grid > a:first-child { grid-column:auto; }
+}

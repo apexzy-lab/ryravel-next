@@ -59,6 +59,11 @@ export const organizationJsonLd = {
     itemListElement: [
       ["Bespoke private travel", "/private-bespoke"],
       ["Worldwide emotion-led journeys", "/journeys"],
+      ["Worldwide luxury travel planning", "/luxury-travel-planning"],
+      ["Luxury family travel", "/luxury-family-travel"],
+      ["Bespoke luxury honeymoons", "/luxury-honeymoons"],
+      ["Private luxury wellness retreats", "/luxury-wellness-retreats"],
+      ["Luxury corporate retreats", "/luxury-corporate-retreats"],
       ["Private Tanzania safaris", "/destinations/tanzania"],
       ["Luxury Zanzibar journeys", "/destinations/zanzibar"],
     ].map(([name, path]) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, url: absoluteUrl(path) } })),

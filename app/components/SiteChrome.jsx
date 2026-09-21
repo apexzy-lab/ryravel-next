@@ -77,7 +77,7 @@ export default function SiteChrome({ children }) {
       <footer className="site-footer">
         <div className="footer-grid">
           <div><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p></div>
-          <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/journeys/stillness">Stillness Collection</Link><Link href="/case-studies">Traveller case studies</Link><Link href="/private-bespoke">Private & bespoke</Link><Link href="/gifting">Gifting</Link></div>
+          <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/travel-styles">By travel style</Link><Link href="/luxury-travel-planning">Worldwide private travel</Link><Link href="/luxury-family-travel">Family travel</Link><Link href="/luxury-honeymoons">Honeymoons</Link><Link href="/luxury-wellness-retreats">Wellness retreats</Link><Link href="/luxury-corporate-retreats">Corporate retreats</Link><Link href="/journeys/stillness">Stillness Collection</Link></div>
           <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/case-studies">Case studies</Link><Link href="/sustainability">Sustainability</Link></div>
           <div><b>Begin</b><Link href="/request">Start the conversation</Link><Link href="/request?conversation=private-call">Request a private call</Link><a href="mailto:curator@ryravel.com">Contact a curator</a><a href="tel:+17605140361">+1 760 514 0361</a></div>
         </div>

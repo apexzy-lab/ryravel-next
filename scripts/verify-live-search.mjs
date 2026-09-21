@@ -13,6 +13,12 @@ const tests = [
   ["stillness-legacy-url", `${base}/tours/stillness`, "OAI-SearchBot", ["/images/stillness-collection-forest.jpg", "Stillness"]],
   ["case-studies", `${base}/case-studies`, "OAI-SearchBot", ["Case Studies"]],
   ["private-bespoke", `${base}/private-bespoke`, "Googlebot", ["Service"]],
+  ["travel-styles", `${base}/travel-styles`, "OAI-SearchBot", ["CollectionPage", "Worldwide Luxury Travel Planning", "Luxury Family Travel", "Luxury Honeymoons", "Luxury Wellness Retreats", "Luxury Corporate Retreats"]],
+  ["luxury-travel-planning", `${base}/luxury-travel-planning`, "Googlebot", ["Worldwide Luxury Travel Planner", '"@type":"Service"', '"@type":"FAQPage"', '"name":"Worldwide"', "/request?interest=Worldwide%20Luxury%20Travel%20Planning"]],
+  ["luxury-family-travel", `${base}/luxury-family-travel`, "OAI-SearchBot", ["Luxury Family Travel Planner Worldwide", '"@type":"Service"', "multigenerational", "/case-studies/family-journey-egypt-morocco"]],
+  ["luxury-honeymoons", `${base}/luxury-honeymoons`, "Googlebot", ["Bespoke Luxury Honeymoon Planner Worldwide", '"@type":"Service"', "Honeymoons &amp; journeys for two"]],
+  ["luxury-wellness-retreats", `${base}/luxury-wellness-retreats`, "OAI-SearchBot", ["Private Luxury Wellness Retreat Planner", '"@type":"Service"', "never substitutes travel for medical care"]],
+  ["luxury-corporate-retreats", `${base}/luxury-corporate-retreats`, "bingbot", ["Luxury Corporate Retreat &amp; Incentive Travel", '"@type":"Service"', "leadership teams"]],
   ["the-return", `${base}/the-return`, "Googlebot", ["/images/the-return-river.jpg", "The person who had been circling a decision for eight months.", "Every journey is designed directly by the founder."]],
 ];
 

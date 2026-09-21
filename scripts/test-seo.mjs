@@ -3,11 +3,13 @@ import { join } from "node:path";
 import legacyRedirects from "../legacy-redirects/worker.js";
 import { caseStudies } from "../app/case-studies/caseStudies.js";
 import { arcs, journeys } from "../app/data.js";
+import { commercialServiceOrder, commercialServices } from "../app/commercialServices.js";
 
 const root = process.cwd();
 const read = (path) => readFileSync(join(root, path), "utf8");
 const assertions = [];
 const check = (condition, message) => assertions.push({ condition, message });
+const requestPage = read("app/request/page.jsx");
 
 check(!existsSync(join(root, "app", "journal")), "Journal route directory is removed");
 check(!existsSync(join(root, "public", "journal")), "Journal asset directory is removed");
@@ -28,8 +30,20 @@ check(read("app/seo.js").includes('alternateName: "Ryravel Travel"'), "WebSite s
 check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begins with the Ryravel brand exactly");
 check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around How You Feel"), "Homepage title uses the broad feeling-led Ryravel positioning");
 check(read("app/seo.js").includes("bespoke luxury journeys worldwide") && read("app/seo.js").includes('areaServed: ["Worldwide"'), "Global metadata and organization schema position Ryravel as worldwide");
+check(commercialServiceOrder.length === 5 && commercialServiceOrder.every((slug) => Boolean(commercialServices[slug])), "Worldwide commercial travel service catalogue is complete");
+for (const slug of commercialServiceOrder) {
+  const pagePath = `app/${slug}/page.jsx`;
+  check(existsSync(join(root, pagePath)), `${slug} commercial landing page exists`);
+  check(read("app/sitemap.js").includes(`/${slug}`), `${slug} is discoverable through the sitemap`);
+  check(read("app/components/SiteChrome.jsx").includes(`/${slug}`), `${slug} is internally linked from the site footer`);
+}
+const commercialPage = read("app/components/CommercialServicePage.jsx");
+check(commercialPage.includes('"@type": "Service"') && commercialPage.includes('"@type": "FAQPage"') && commercialPage.includes('"@type": "BreadcrumbList"'), "Commercial pages publish Service, FAQ and breadcrumb structured data");
+check(commercialPage.includes("areaServed") && commercialPage.includes('name: "Worldwide"'), "Commercial service schema declares worldwide coverage");
+check(commercialPage.includes("/request?interest=") && requestPage.includes('params.get("interest")'), "Commercial intent is preserved into the progressive request form");
+check(existsSync(join(root, "app", "travel-styles", "page.jsx")) && read("app/travel-styles/page.jsx").includes('"@type": "CollectionPage"') && read("app/travel-styles/page.jsx").includes('"@type": "ItemList"'), "Travel styles hub publishes a crawlable commercial collection");
+check(read("app/components/HomepageExperience.jsx").includes('className="home-travel-styles"') && read("app/components/HomepageExperience.jsx").includes("Worldwide journey design"), "Homepage links into the worldwide commercial search architecture");
 check(read("app/request/layout.jsx").includes('path: "/request"'), "Request page has canonical metadata");
-const requestPage = read("app/request/page.jsx");
 check(requestPage.includes('["US / Canada", "+1"]') && requestPage.includes('["United Kingdom", "+44"]') && requestPage.includes('["Australia", "+61"]') && requestPage.includes('["Singapore", "+65"]'), "Request page supports an international client base");
 check(read("app/journeys/page.jsx").includes("Bespoke Luxury Journeys Worldwide") && !read("app/journeys/page.jsx").includes("Tanzania collection"), "Journey index presents the current collection without defining Ryravel by one country");
 check(read("app/private-bespoke/page.jsx").includes('name: "Worldwide"') && read("app/private-bespoke/page.jsx").includes("anywhere in the world"), "Private bespoke service explicitly serves worldwide journeys");
