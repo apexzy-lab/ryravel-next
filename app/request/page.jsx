@@ -22,6 +22,22 @@ const countryCodes = [
   ["UAE", "+971"], ["Qatar", "+974"], ["Europe", "+33"],
 ];
 
+function FeelingIcon({ name }) {
+  const common = { fill: "none", stroke: "currentColor", strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "1.5" };
+  const icons = {
+    Exhausted: <><path {...common} d="M15.6 3.2a7 7 0 1 0 5.2 10.9A8.2 8.2 0 0 1 15.6 3.2Z" /><path {...common} d="M6.5 5.5h.01M4.5 8h.01" /></>,
+    Restless: <><path {...common} d="M4 18 10.2 5.5 14 14l2.1-4L20 18" /><path {...common} d="M7 18h10" /></>,
+    Disconnected: <><path {...common} d="m8.7 15.3-1.4 1.4a3.5 3.5 0 0 1-5-5l3-3a3.5 3.5 0 0 1 4.9 0" /><path {...common} d="m15.3 8.7 1.4-1.4a3.5 3.5 0 0 1 5 5l-3 3a3.5 3.5 0 0 1-4.9 0M8 12h8" /></>,
+    Romantic: <path {...common} d="M20.8 5.8a5 5 0 0 0-7.1 0L12 7.5l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21l8.8-8.1a5 5 0 0 0 0-7.1Z" />,
+    Curious: <><path {...common} d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" /><circle {...common} cx="12" cy="12" r="2.5" /></>,
+    Celebratory: <><path {...common} d="m12 3 1.7 4.8 5.1.2-4 3.2 1.4 4.9-4.2-2.9-4.2 2.9 1.4-4.9-4-3.2 5.1-.2L12 3Z" /><path {...common} d="M19 3v2M20 4h-2" /></>,
+    Purposeful: <><circle {...common} cx="12" cy="12" r="8.5" /><circle {...common} cx="12" cy="12" r="4" /><path {...common} d="M12 3.5V7M20.5 12H17M12 20.5V17M3.5 12H7" /></>,
+    Open: <><path {...common} d="M3 15.5c2.5-2 5.5-3 9-3s6.5 1 9 3" /><path {...common} d="M6.5 12a5.5 5.5 0 0 1 11 0M12 3v2M4.9 6.2l1.4 1.4M19.1 6.2l-1.4 1.4" /></>,
+  };
+
+  return <svg className="progressive-feeling-icon" viewBox="0 0 24 24" aria-hidden="true">{icons[name]}</svg>;
+}
+
 export default function RequestPage() {
   const [step, setStep] = useState(1);
   const [feeling, setFeeling] = useState("");
@@ -55,6 +71,8 @@ export default function RequestPage() {
         destination: params.get("destination") || selectedJourney?.destination || "To be shaped with your curator",
         nights: params.get("nights") || (selectedJourney?.nights ? String(selectedJourney.nights) : ""),
         price: params.get("price") || selectedJourney?.price || "",
+        image: params.get("image") || selectedJourney?.image || "",
+        imageAlt: params.get("image-alt") || selectedJourney?.imageAlt || `${name || "Selected journey"} landscape`,
       });
     }
     if (params.get("conversation") === "private-call") setContactPreference("private-call");
@@ -215,18 +233,18 @@ export default function RequestPage() {
           <form className="progressive-form" id="journey-request" ref={formRef} onSubmit={submit} noValidate>
             <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
             <div className="progressive-workspace">
-              <div className="progressive-stage-card">
-                <section className="progressive-stage" hidden={step !== 1} aria-labelledby="feeling-stage-title">
+              <div className={`progressive-stage-card progressive-stage-card-step-${step}`}>
+                <section className="progressive-stage progressive-feeling-stage" hidden={step !== 1} aria-labelledby="feeling-stage-title">
                   <div className="progressive-stage-heading"><div><span className="kicker">01 · How you feel</span><h2 id="feeling-stage-title">Right now, honestly—<br />how are you?</h2></div><small>Step 1 of 3 · about 30 seconds</small></div>
                   <p className="progressive-intro">Choose the feeling closest to where you are. This shapes what comes next.</p>
                   <div className="progressive-feelings">
-                    {feelings.map(([name, title], index) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { setFeeling(name); setFieldErrors({}); }} aria-pressed={feeling === name}><span className="progressive-feeling-mark" aria-hidden="true">{feeling === name ? "✓" : String(index + 1).padStart(2, "0")}</span><em>{name}</em><strong>{title}</strong></button>)}
+                    {feelings.map(([name, title]) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { setFeeling(name); setFieldErrors({}); }} aria-pressed={feeling === name}><span className="progressive-feeling-mark" aria-hidden="true"><FeelingIcon name={name} />{feeling === name ? <span className="progressive-feeling-check">✓</span> : null}</span><em>{name}</em><strong>{title}</strong></button>)}
                   </div>
                   <input type="hidden" name="feeling" value={feeling} />
                   {fieldErrors.feeling ? <p className="progressive-field-error" role="alert">{fieldErrors.feeling}</p> : null}
                 </section>
 
-                <section className="progressive-stage" hidden={step !== 2} aria-labelledby="journey-stage-title">
+                <section className="progressive-stage progressive-journey-stage" hidden={step !== 2} aria-labelledby="journey-stage-title">
                   <div className="progressive-stage-heading"><div><span className="kicker">02 · Your journey</span><h2 id="journey-stage-title">What shape should<br />this journey take?</h2></div><small>Step 2 of 3 · about 1 minute</small></div>
                   <div className="progressive-fields">
                     <label>Travel month <b>*</b><select name="month" value={travelMonth} onChange={(event) => { setTravelMonth(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select month</option>{["January","February","March","April","May","June","July","August","September","October","November","December"].map((month) => <option key={month}>{month}</option>)}</select>{fieldErrors.month ? <small role="alert">{fieldErrors.month}</small> : null}</label>
@@ -261,6 +279,7 @@ export default function RequestPage() {
               </div>
 
               <aside className="progressive-summary">
+                {journeyContext?.image ? <figure className="progressive-summary-journey-image"><img src={journeyContext.image} alt={journeyContext.imageAlt} /></figure> : null}
                 <span className="kicker">Your direction so far</span>
                 <h3>{journeyContext?.name || feeling || "Your journey"}</h3>
                 <p>{journeyContext ? `${journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}${journeyContext.destination}` : "Your curator will use these answers to shape the destination, pace and experience."}</p>
