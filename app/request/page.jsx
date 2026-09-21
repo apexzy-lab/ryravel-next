@@ -16,6 +16,15 @@ const feelings = [
 
 const budgets = ["$5,000 – $7,000", "$7,000 – $12,000", "$12,000 – $20,000", "$20,000 – $30,000", "$30,000+"];
 
+const arcToFeeling = {
+  exhausted: "Exhausted",
+  romantic: "Romantic",
+  adventurous: "Restless",
+  social: "Celebratory",
+  stillness: "Exhausted",
+  disconnected: "Disconnected",
+};
+
 const countryCodes = [
   ["US / Canada", "+1"], ["United Kingdom", "+44"], ["Nigeria", "+234"],
   ["South Africa", "+27"], ["Tanzania", "+255"], ["Kenya", "+254"],
@@ -63,6 +72,10 @@ export default function RequestPage() {
     const params = new URLSearchParams(window.location.search);
     const slug = params.get("journey");
     const selectedJourney = journeys.find((journey) => journey.slug === slug);
+    const requestedFeeling = params.get("feeling");
+    const journeyFeeling = feelings.some(([name]) => name === requestedFeeling)
+      ? requestedFeeling
+      : arcToFeeling[selectedJourney?.arc || params.get("arc")];
     const name = params.get("name") || selectedJourney?.title || (params.get("arc") ? params.get("name") : "");
     if (slug || name) {
       setJourneyContext({
@@ -74,6 +87,10 @@ export default function RequestPage() {
         image: params.get("image") || selectedJourney?.image || "",
         imageAlt: params.get("image-alt") || selectedJourney?.imageAlt || `${name || "Selected journey"} landscape`,
       });
+    }
+    if (selectedJourney && journeyFeeling) {
+      setFeeling(journeyFeeling);
+      setStep(2);
     }
     if (params.get("conversation") === "private-call") setContactPreference("private-call");
     const startDate = params.get("start-date");
@@ -256,7 +273,7 @@ export default function RequestPage() {
                   <label className="progressive-message">Anything else that matters<textarea name="message" rows="4" placeholder="A milestone, a pace you need, or something you want the curator team to understand…" /></label>
                 </section>
 
-                <section className="progressive-stage" hidden={step !== 3} aria-labelledby="details-stage-title">
+                <section className="progressive-stage progressive-details-stage" hidden={step !== 3} aria-labelledby="details-stage-title">
                   <div className="progressive-stage-heading"><div><span className="kicker">03 · Your details</span><h2 id="details-stage-title">Where should the<br />conversation begin?</h2></div><small>Final step · about 45 seconds</small></div>
                   <div className="progressive-contact-choice" aria-label="Conversation preference"><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => setContactPreference("written-enquiry")}><strong>Written journey request</strong><small>The curator team replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => setContactPreference("private-call")}><strong>Private curator call</strong><small>We contact you to arrange a private conversation.</small></button></div>
                   <div className="progressive-fields progressive-details">
