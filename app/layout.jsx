@@ -13,7 +13,7 @@ export const metadata = {
   applicationName: SITE_NAME,
   creator: SITE_NAME,
   publisher: SITE_NAME,
-  keywords: ["bespoke luxury travel", "luxury travel designed around how you feel", "private African journeys", "Tanzania luxury travel", "private Zanzibar journeys", "Serengeti journeys", "emotion-led travel"],
+  keywords: ["bespoke luxury travel", "worldwide luxury travel", "private international journeys", "luxury travel designed around how you feel", "emotion-led travel", "private safaris", "luxury island escapes", "Tanzania luxury travel", "private Zanzibar journeys"],
   robots: {
     index: true,
     follow: true,

@@ -27,8 +27,12 @@ const arcToFeeling = {
 
 const countryCodes = [
   ["US / Canada", "+1"], ["United Kingdom", "+44"], ["Nigeria", "+234"],
-  ["South Africa", "+27"], ["Tanzania", "+255"], ["Kenya", "+254"],
-  ["UAE", "+971"], ["Qatar", "+974"], ["Europe", "+33"],
+  ["UAE", "+971"], ["Qatar", "+974"], ["Saudi Arabia", "+966"],
+  ["South Africa", "+27"], ["Kenya", "+254"], ["Tanzania", "+255"],
+  ["Australia", "+61"], ["New Zealand", "+64"], ["Singapore", "+65"],
+  ["Hong Kong", "+852"], ["India", "+91"], ["France", "+33"],
+  ["Germany", "+49"], ["Italy", "+39"], ["Spain", "+34"],
+  ["Netherlands", "+31"], ["Switzerland", "+41"],
 ];
 
 function FeelingIcon({ name }) {

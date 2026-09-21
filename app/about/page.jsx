@@ -1,7 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
 import { buildMetadata } from "../seo";
 
-export const metadata = buildMetadata({ title: "About Ryravel", description: "The story behind Ryravel and our emotion-led approach to bespoke travel in Tanzania and Zanzibar.", path: "/about" });
+export const metadata = buildMetadata({ title: "About Ryravel", description: "The story behind Ryravel and our emotion-led approach to designing private, bespoke luxury journeys worldwide.", path: "/about" });
 
 export default function AboutPage() {
   return (
@@ -10,7 +10,7 @@ export default function AboutPage() {
         kicker="Our story"
         title="Ryravel began"
         emphasis="with the trip that did not work"
-        copy="A beautiful destination is not enough. A journey has to understand who you are when you leave—and what you need to return to."
+        copy="A beautiful destination is not enough. Anywhere in the world, a journey has to understand who you are when you leave—and what you need to return to."
       />
 
       <article className="founder-story paper-section">
@@ -57,7 +57,7 @@ export default function AboutPage() {
       <section className="editorial paper-section">
         <span className="kicker">Not thread count. Intention.</span>
         <h2>Travel designed backwards from <em>The Return.</em></h2>
-        <p className="lead">Most travel begins with a map. Ours begins with a person. We listen for what your life has been asking of you, then design the destination, rhythm, people and pauses around the answer.</p>
+        <p className="lead">Most travel begins with a map. Ours begins with a person. We design worldwide, choosing the destination, rhythm, people and pauses only after we understand what your life has been asking of you.</p>
         <div className="principle-grid">{[
           ["Begin with a feeling", "Before dates or destinations, we ask what needs to change."],
           ["Design the emotional arc", "Arrival, opening, transformation and return each receive their own pace."],

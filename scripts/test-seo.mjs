@@ -27,10 +27,12 @@ check(read("app/page.jsx").includes("websiteJsonLd"), "WebSite structured data i
 check(read("app/seo.js").includes('alternateName: "Ryravel Travel"'), "WebSite structured data supplies a stable alternate name");
 check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begins with the Ryravel brand exactly");
 check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around How You Feel"), "Homepage title uses the broad feeling-led Ryravel positioning");
-check(read("app/seo.js").includes("private Tanzania safaris and Zanzibar escapes to Africa and beyond"), "Global description retains destination keywords without narrowing the brand");
+check(read("app/seo.js").includes("bespoke luxury journeys worldwide") && read("app/seo.js").includes('areaServed: ["Worldwide"'), "Global metadata and organization schema position Ryravel as worldwide");
 check(read("app/request/layout.jsx").includes('path: "/request"'), "Request page has canonical metadata");
 const requestPage = read("app/request/page.jsx");
-check(requestPage.includes("Private journeys across Africa and beyond") && requestPage.includes('["US / Canada", "+1"]') && requestPage.includes('["United Kingdom", "+44"]'), "Request page reflects Ryravel's international positioning");
+check(requestPage.includes('["US / Canada", "+1"]') && requestPage.includes('["United Kingdom", "+44"]') && requestPage.includes('["Australia", "+61"]') && requestPage.includes('["Singapore", "+65"]'), "Request page supports an international client base");
+check(read("app/journeys/page.jsx").includes("Bespoke Luxury Journeys Worldwide") && !read("app/journeys/page.jsx").includes("Tanzania collection"), "Journey index presents the current collection without defining Ryravel by one country");
+check(read("app/private-bespoke/page.jsx").includes('name: "Worldwide"') && read("app/private-bespoke/page.jsx").includes("anywhere in the world"), "Private bespoke service explicitly serves worldwide journeys");
 check(!requestPage.includes('defaultValue="+234"'), "Request page does not assume a Nigerian calling code");
 check(requestPage.includes("progressive-summary") && requestPage.includes("journeyContext") && requestPage.includes("preferredCallTime"), "Request page preserves journey and private-call context");
 check(requestPage.includes("What happens next") && requestPage.includes("journey direction and proposal"), "Request page explains the post-enquiry process");

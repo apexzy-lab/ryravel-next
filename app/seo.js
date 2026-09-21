@@ -1,6 +1,6 @@
 export const SITE_URL = "https://ryravel.com";
 export const SITE_NAME = "Ryravel";
-export const DEFAULT_DESCRIPTION = "Bespoke luxury journeys designed around how you want to feel, from private Tanzania safaris and Zanzibar escapes to Africa and beyond.";
+export const DEFAULT_DESCRIPTION = "Ryravel designs private, bespoke luxury journeys worldwide around how you want to feel—from restorative retreats and safaris to islands and cultural journeys.";
 
 export function absoluteUrl(path = "/") {
   return new URL(path, SITE_URL).toString();
@@ -44,8 +44,8 @@ export const organizationJsonLd = {
   telephone: "+1-760-514-0361",
   email: "curator@ryravel.com",
   description: DEFAULT_DESCRIPTION,
-  areaServed: ["Africa", "Tanzania", "Zanzibar", "Kenya", "Egypt", "Morocco", "Seychelles", "Qatar"],
-  knowsAbout: ["Bespoke luxury travel", "Private African journeys", "Private Tanzania safaris", "Luxury Zanzibar journeys", "Serengeti travel", "Ngorongoro travel", "Kilimanjaro journeys", "Emotion-led travel design"],
+  areaServed: ["Worldwide", "Africa", "Europe", "Asia", "Middle East", "Indian Ocean", "North America", "South America", "Oceania"],
+  knowsAbout: ["Bespoke luxury travel", "Worldwide private journeys", "Emotion-led travel design", "Luxury retreats", "Private safaris", "Island escapes", "Cultural journeys", "Celebration travel", "Family travel", "Private group travel"],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+1-760-514-0361",
@@ -57,10 +57,10 @@ export const organizationJsonLd = {
     "@type": "OfferCatalog",
     name: "Ryravel private journey collections",
     itemListElement: [
+      ["Bespoke private travel", "/private-bespoke"],
+      ["Worldwide emotion-led journeys", "/journeys"],
       ["Private Tanzania safaris", "/destinations/tanzania"],
       ["Luxury Zanzibar journeys", "/destinations/zanzibar"],
-      ["Bespoke private travel", "/private-bespoke"],
-      ["Emotion-led journeys", "/journeys"],
     ].map(([name, path]) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, url: absoluteUrl(path) } })),
   },
   sameAs: ["https://www.linkedin.com/company/ryravel"],
