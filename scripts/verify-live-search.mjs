@@ -4,7 +4,7 @@ const tests = [
   ["robots", `${base}/robots.txt`, "Codex live verifier", ["OAI-SearchBot", "Googlebot", "Bingbot"]],
   ["key", `${base}/626d871d-6631-466f-ae78-7efafa06cb1e.txt`, "Codex live verifier", ["626d871d-6631-466f-ae78-7efafa06cb1e"]],
   ["sitemap", `${base}/sitemap.xml`, "Codex live verifier", ["<loc>"]],
-  ["homepage", `${base}/`, "OAI-SearchBot", ["Ryravel | Bespoke Travel Designed Around How You Feel", "Bespoke travel designed"]],
+  ["homepage", `${base}/`, "OAI-SearchBot", ["Ryravel | Bespoke Travel Designed Around How You Feel", "Worldwide journey design"]],
   ["journeys", `${base}/journeys`, "Googlebot", ["ItemList"]],
   ["journey-ex9", `${base}/journeys/ex9`, "bingbot", ["TouristTrip"]],
   ["journey-kimbilio", `${base}/journeys/kimbilio`, "Googlebot", ["Kimbilio: Private Luxury Katavi Safari", "TouristTrip", "FAQPage", "katavi-sunset.jpg", "katavi-floodplain.jpg", "Usiku · The Night Drive", "$5,500", "When would you disappear?", "Request a private call", "What remained after the journey"]],
