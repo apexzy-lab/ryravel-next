@@ -24,10 +24,12 @@ const tests = [
 
 let failed = false;
 const retiredJourneySlugs = ["rn5", "rn7", "ro6", "ro8", "ro11", "adv7", "adv9", "adv11", "so6", "so8", "so11", "dc6", "dc7", "dc9", "dr6"];
+const liveBodies = new Map();
 
 for (const [name, url, userAgent, markers] of tests) {
   const response = await fetch(url, { headers: { "user-agent": userAgent } });
   const body = await response.text();
+  liveBodies.set(name, body);
   const markerResults = markers.map((marker) => body.includes(marker));
   const sitemapCount = name === "sitemap" ? (body.match(/<loc>/g) || []).length : null;
 
@@ -43,5 +45,9 @@ for (const slug of retiredJourneySlugs) {
   if (response.status !== 404 && response.status !== 410) failed = true;
   console.log(`retired-${slug}: status=${response.status}`);
 }
+
+const retiredReferenceFound = retiredJourneySlugs.some((slug) => ["homepage", "journeys", "sitemap"].some((name) => liveBodies.get(name)?.includes(`/journeys/${slug}`)));
+if (retiredReferenceFound) failed = true;
+console.log(`retired-references-absent: ${!retiredReferenceFound}`);
 
 if (failed) process.exitCode = 1;
