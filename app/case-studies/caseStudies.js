@@ -170,7 +170,7 @@ export const caseStudies = [
     dates: "12–16 June · Solo",
     returnLabel: "Curiosity without extraction",
     theme: "dusk",
-    relatedJourney: "/journeys/adventurous",
+    relatedJourney: "/luxury-travel-planning",
     relatedLabel: "Explore restless journeys",
     intro: "Every trip had become reconnaissance disguised as travel. Doha gave Richard enough scale to see that speed was not the only thing worth studying.",
     designedAround: "Unscripted walking. The city as witness, not textbook. Space for curiosity without a pitch, playbook or landing page.",

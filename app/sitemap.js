@@ -27,7 +27,7 @@ const staticRoutes = [
 
 export default function sitemap() {
   const publicJourneys = [
-    ...arcs.map((arc) => `/journeys/${arc.id}`),
+    ...arcs.filter((arc) => journeys.some((journey) => journey.arc === arc.id)).map((arc) => `/journeys/${arc.id}`),
     ...journeys.map((journey) => `/journeys/${journey.slug}`),
   ];
   const publicCaseStudies = caseStudies.map((study) => `/case-studies/${study.slug}`);

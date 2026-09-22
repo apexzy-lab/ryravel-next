@@ -25,16 +25,13 @@ function requestHrefFor(journey) {
 }
 
 export function generateStaticParams() {
-  return [...arcs.map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
+  return [...arcs.filter((arc) => journeys.some((journey) => journey.arc === arc.id)).map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
 }
 
 const aliases = {
   "renewed": "exhausted",
   "ex11": "ex6",
   "yakushima-silence": "ex6",
-  "saharan-stars": "ro6",
-  "patagonia-edge": "adv9",
-  "amalfi-slow": "ro8",
 };
 
 export async function generateMetadata({ params }) {
@@ -199,6 +196,6 @@ export default async function JourneyRoute({ params }) {
     return <StructuredJourney journey={journey}>{content}</StructuredJourney>;
   }
   const arc = arcFor(slug);
-  if (arc) return <StructuredArc arc={arc}><ArcPage arc={arc} /></StructuredArc>;
+  if (arc && journeys.some((journey) => journey.arc === arc.id)) return <StructuredArc arc={arc}><ArcPage arc={arc} /></StructuredArc>;
   notFound();
 }

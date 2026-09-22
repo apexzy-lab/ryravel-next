@@ -23,6 +23,7 @@ const tests = [
 ];
 
 let failed = false;
+const retiredJourneySlugs = ["rn5", "rn7", "ro6", "ro8", "ro11", "adv7", "adv9", "adv11", "so6", "so8", "so11", "dc6", "dc7", "dc9", "dr6"];
 
 for (const [name, url, userAgent, markers] of tests) {
   const response = await fetch(url, { headers: { "user-agent": userAgent } });
@@ -35,6 +36,12 @@ for (const [name, url, userAgent, markers] of tests) {
     `${name}: status=${response.status}; markers=${markerResults.join(",")}` +
       (sitemapCount === null ? "" : `; urls=${sitemapCount}`),
   );
+}
+
+for (const slug of retiredJourneySlugs) {
+  const response = await fetch(`${base}/journeys/${slug}`, { headers: { "user-agent": "Googlebot" }, redirect: "manual" });
+  if (response.status !== 404 && response.status !== 410) failed = true;
+  console.log(`retired-${slug}: status=${response.status}`);
 }
 
 if (failed) process.exitCode = 1;

@@ -21,16 +21,17 @@ const journeyCollectionJsonLd = {
 };
 
 export default function JourneysPage() {
-  const arcCount = arcs.length;
+  const activeArcs = arcs.filter((arc) => journeys.some((journey) => journey.arc === arc.id));
+  const arcCount = activeArcs.length;
   const journeyCount = journeys.length;
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(journeyCollectionJsonLd) }} />
       <PageHero kicker="Private journeys · worldwide" title="Crafted for the way" emphasis="you want to arrive." copy={`${arcCount} emotional arcs. ${journeyCount} current journeys, with bespoke destinations designed worldwide. Every one begins with a feeling.`} />
-      <nav className="filter-nav"><a href="#all">All journeys</a>{arcs.map((arc) => <a href={`#${arc.id}`} key={arc.id}>{arc.shortTitle} arc</a>)}<Link href="/private-bespoke">Private & bespoke</Link><Link href="/gifting">Gifting</Link></nav>
+      <nav className="filter-nav"><a href="#all">All journeys</a>{activeArcs.map((arc) => <a href={`#${arc.id}`} key={arc.id}>{arc.shortTitle} arc</a>)}<Link href="/private-bespoke">Private & bespoke</Link><Link href="/gifting">Gifting</Link></nav>
       <section className="catalogue paper-section" id="all">
         <div className="catalogue-heading"><span className="kicker">Curated journeys · {arcCount} arcs</span><span>{journeyCount} current journeys · worldwide bespoke design</span></div>
-        {arcs.map((arc) => (
+        {activeArcs.map((arc) => (
           <div className="arc-row" id={arc.id} key={arc.id}>
             <div className="arc-row-heading"><div><span>{arc.label}</span><p>{arc.intro}</p></div><Link href={`/journeys/${arc.id}`}>Explore the arc →</Link></div>
             <div className="journey-cards">{journeys.filter((journey) => journey.arc === arc.id).map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div>

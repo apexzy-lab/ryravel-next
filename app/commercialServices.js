@@ -63,7 +63,7 @@ export const commercialServices = {
       ["No planning hangover", "Transfers, timing, room categories and special moments are settled before departure so the honeymoon does not become another project."],
     ],
     arrangements: ["Private villas, suites and hideaways", "Multi-stop and multi-country routing", "Private transfers and guides", "Dining and celebration moments", "Restorative time after the wedding", "24/7 support during travel"],
-    proof: { href: "/journeys/romantic", label: "Explore journeys for two", title: "Start with the Romantic, The Reawakening arc." },
+    proof: { href: "/case-studies", label: "Read traveller case studies", title: "See how considered travel changes the way people return." },
     faq: [
       ["Does Ryravel offer honeymoon packages?", "We design bespoke honeymoons rather than fixed packages. Published journeys can be a starting point, but the final route, stays and pace are built around the couple."],
       ["Can you combine more than one destination?", "Yes. We often use contrast deliberately, such as culture followed by coast or wilderness followed by an island. The route must earn its complexity rather than adding movement for its own sake."],

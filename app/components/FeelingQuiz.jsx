@@ -11,10 +11,10 @@ const steps = [
 ];
 
 const directions = {
-  "Deep stillness": ["exhausted", "Exhausted - The Restoration"],
-  "Raw aliveness": ["adventurous", "Restless - The Unleashing"],
-  "Real connection": ["social", "Isolated - The Gathering"],
-  "A clearer sense of self": ["exhausted", "Exhausted - The Restoration"],
+  "Deep stillness": ["/journeys/exhausted", "Exhausted - The Restoration"],
+  "Raw aliveness": ["/luxury-travel-planning", "A private journey shaped around challenge"],
+  "Real connection": ["/luxury-family-travel", "A private journey shaped around connection"],
+  "A clearer sense of self": ["/journeys/exhausted", "Exhausted - The Restoration"],
 };
 
 export default function FeelingQuiz() {
@@ -35,7 +35,7 @@ export default function FeelingQuiz() {
     else setStep(step + 1);
   }
 
-  const direction = directions[answers[1]] || ["romantic", "A journey designed around you"];
+  const direction = directions[answers[1]] || ["/luxury-travel-planning", "A journey designed around you"];
 
   return (
     <section className="quiz-section" id="feeling-quiz">
@@ -60,7 +60,7 @@ export default function FeelingQuiz() {
           <span className="kicker">Your direction</span>
           <h3>{direction[1]}</h3>
           <p>Your answers point toward a journey that creates {answers[1]?.toLowerCase()}, at a pace that feels {answers[2]?.toLowerCase()}.</p>
-          <div><Link className="button button-red" href={`/journeys/${direction[0]}`}>Explore this arc</Link><Link className="button button-outline" href="/request">Speak to a curator</Link></div>
+          <div><Link className="button button-red" href={direction[0]}>Explore this direction</Link><Link className="button button-outline" href="/request">Speak to a curator</Link></div>
           <button className="text-button" onClick={() => { setDone(false); setStep(0); setAnswers([]); }}>Start again</button>
         </div>
       )}

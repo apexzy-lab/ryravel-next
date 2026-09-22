@@ -10,6 +10,7 @@ const read = (path) => readFileSync(join(root, path), "utf8");
 const assertions = [];
 const check = (condition, message) => assertions.push({ condition, message });
 const requestPage = read("app/request/page.jsx");
+const retiredJourneySlugs = ["rn5", "rn7", "ro6", "ro8", "ro11", "adv7", "adv9", "adv11", "so6", "so8", "so11", "dc6", "dc7", "dc9", "dr6"];
 
 check(!existsSync(join(root, "app", "journal")), "Journal route directory is removed");
 check(!existsSync(join(root, "public", "journal")), "Journal asset directory is removed");
@@ -30,6 +31,10 @@ check(read("app/seo.js").includes('alternateName: "Ryravel Travel"'), "WebSite s
 check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begins with the Ryravel brand exactly");
 check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around How You Feel"), "Homepage title uses the broad feeling-led Ryravel positioning");
 check(read("app/seo.js").includes("bespoke luxury journeys worldwide") && read("app/seo.js").includes('areaServed: ["Worldwide"'), "Global metadata and organization schema position Ryravel as worldwide");
+check(retiredJourneySlugs.every((slug) => !journeys.some((journey) => journey.slug === slug)), "All requested journey records are removed from the catalogue");
+check(retiredJourneySlugs.every((slug) => !read("app/components/HomepageExperience.jsx").includes(`/journeys/${slug}`)), "Homepage contains no links to retired journeys");
+check(read("app/journeys/page.jsx").includes("activeArcs") && read("app/sitemap.js").includes("journeys.some"), "Empty journey arcs are omitted from the catalogue and sitemap");
+check(!read("app/journeys/[slug]/page.jsx").includes('"saharan-stars": "ro6"') && !read("app/journeys/[slug]/page.jsx").includes('"patagonia-edge": "adv9"') && !read("app/journeys/[slug]/page.jsx").includes('"amalfi-slow": "ro8"'), "Legacy aliases no longer redirect to retired journeys");
 check(commercialServiceOrder.length === 5 && commercialServiceOrder.every((slug) => Boolean(commercialServices[slug])), "Worldwide commercial travel service catalogue is complete");
 for (const slug of commercialServiceOrder) {
   const pagePath = `app/${slug}/page.jsx`;
