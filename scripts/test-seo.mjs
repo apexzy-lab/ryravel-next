@@ -101,7 +101,13 @@ check(read("app/journeys/[slug]/page.jsx").includes('"@type": "TouristTrip"'), "
 const kimbilio = journeys.find((journey) => journey.slug === "kimbilio");
 const stillness = arcs.find((arc) => arc.id === "stillness");
 check(Boolean(kimbilio) && kimbilio.arc === "stillness" && kimbilio.nights === 4, "Kimbilio is a first-class Stillness Collection journey");
-check(stillness?.intro.startsWith("Seven wilderness journeys"), "Stillness Collection count includes Kimbilio, Kimya, Kupona, Runyararo and Utalala");
+check(stillness?.intro.startsWith("Eight wilderness journeys"), "Stillness Collection introduction matches its eight journeys");
+const calvingSeason = journeys.find((journey) => journey.slug === "calving-season");
+check(Boolean(calvingSeason) && calvingSeason.arc === "stillness" && calvingSeason.nights === 6 && calvingSeason.days === 7, "Calving Season is a first-class six-night Stillness journey");
+check(existsSync(join(root, "public", "journeys", "calving-season", "southern-serengeti-aerial.webp")) && existsSync(join(root, "public", "journeys", "calving-season", "camp-hospitality.webp")), "Both supplied Calving Season images are deployable");
+const calvingPage = read("app/journeys/[slug]/CalvingSeasonJourney.jsx");
+for (const passage of ["The World Falls Away", "The Plains in Full Life", "Ndutu, the Heart of the Calving", "The Hunt and the Birth", "The Morning You Don't Expect", "A woman with a camera", "The Crater", "Last Morning. The Return.", "I've spent years making everything lighter"]) check(calvingPage.includes(passage), `Calving Season retains supplied copy: ${passage}`);
+check(calvingSeason.faqs.length >= 4 && calvingPage.includes("JourneyAvailability") && calvingPage.includes("JourneyProofSection") && calvingPage.includes("StillnessAlternatives") && calvingPage.includes("Request a private call"), "Calving Season has current journey planning, proof, FAQ and related-journey parity");
 check(existsSync(join(root, "public", "journeys", "kimbilio", "katavi-sunset.jpg")) && existsSync(join(root, "public", "journeys", "kimbilio", "katavi-floodplain.jpg")), "Both supplied Katavi images are deployable");
 const kimbilioPage = read("app/journeys/[slug]/KimbilioJourney.jsx");
 for (const passage of ["Nobody has said no to me in about a decade.", "The box arrived", "The Signature Moment", "Usiku · The Night Drive", "You never have to", "One camp. No alternative offered, on purpose.", "Thirty days", "June through October.", "One decision that", "I did not come here to be found."]) check(kimbilioPage.includes(passage), `Kimbilio retains supplied copy: ${passage}`);
