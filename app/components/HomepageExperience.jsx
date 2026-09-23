@@ -6,13 +6,13 @@ import HeroVideo from "./HeroVideo";
 
 const arcs = {
   exhausted: { label: "Exhausted, The Restoration", name: <>The <em>Restoration</em></>, desc: "Your arc begins with permission to stop. Six, nine, or eleven nights of coast, stillness, and the kind of sleep that actual rest produces. We take care of everything so you do not have to think.", url: "/journeys/ex6" },
-  romantic: { label: "Romantic, The Reawakening", name: <>The <em>Reawakening</em></>, desc: "Your arc begins with presence. Privacy, unhurried time and a journey designed for two people who want to choose each other again.", url: "/luxury-honeymoons" },
-  restless: { label: "Restless, The Unleashing", name: <>The <em>Unleashing</em></>, desc: "Your arc begins with challenge. The destination follows the kind of movement, discovery and transformation you are ready to meet.", url: "/luxury-travel-planning" },
-  curious: { label: "Curious, The Awakening", name: <>The <em>Awakening</em></>, desc: "Your arc begins with witness. Conservation field work, community immersion, a landscape that teaches differently from anything a library offers. We put you in rooms where the conversation changes you.", url: "/journeys" },
-  disconnected: { label: "Disconnected, The Return", name: <>The <em>Return</em></>, desc: "Your arc begins with surrender. No schedule. The silence that only comes when you have genuinely stopped. We design for the quiet, not around it.", url: "/journeys/stillness" },
-  celebratory: { label: "Celebratory, The Milestone", name: <>The <em>Milestone</em></>, desc: "Your arc begins with ritual. A milestone this significant deserves a setting that holds its full weight. We design peak joy as ceremony, not indulgence.", url: "/luxury-travel-planning" },
-  purposeful: { label: "Purposeful, The Alignment", name: <>The <em>Alignment</em></>, desc: "Your arc begins with witness. Conservation field work, a landscape that asks something of you. The purposeful journey is not comfortable. It is clarifying.", url: "/journeys" },
-  isolated: { label: "Isolated, The Gathering", name: <>The <em>Gathering</em></>, desc: "Your arc begins with belonging. We design for collective joy, shared memory and the kind of laughter that still echoes two years later.", url: "/luxury-family-travel" },
+  romantic: { label: "Romantic, The Reawakening", name: <>The <em>Reawakening</em></>, desc: "Your arc begins with presence. Privacy, unhurried time and a journey designed for two people who want to choose each other again.", waitlist: true },
+  restless: { label: "Restless, The Unleashing", name: <>The <em>Unleashing</em></>, desc: "Your arc begins with challenge. The destination follows the kind of movement, discovery and transformation you are ready to meet.", waitlist: true },
+  curious: { label: "Curious, The Awakening", name: <>The <em>Awakening</em></>, desc: "Your arc begins with witness. People, places and ideas that teach differently from anything a library offers.", waitlist: true },
+  disconnected: { label: "Disconnected, The Return", name: <>The <em>Return</em></>, desc: "Your arc begins with reconnection. A private journey designed around finding your way back to yourself and what matters.", url: "/journeys#disconnected" },
+  celebratory: { label: "Celebratory, The Milestone", name: <>The <em>Milestone</em></>, desc: "Your arc begins with ritual. A milestone this significant deserves a setting that holds its full weight. We design peak joy as ceremony, not indulgence.", waitlist: true },
+  purposeful: { label: "Purposeful, The Alignment", name: <>The <em>Alignment</em></>, desc: "Your arc begins with witness. A journey that connects your time away with the life you return to.", waitlist: true },
+  isolated: { label: "Isolated, The Gathering", name: <>The <em>Gathering</em></>, desc: "Your arc begins with belonging. We design for collective joy, shared memory and the kind of laughter that still echoes two years later.", waitlist: true },
 };
 
 const questions = [
@@ -28,7 +28,7 @@ const journeys = [
   { href: "/journeys/kupona", image: "/journeys/kupona/matetsi-river-suite.jpg", arcClass: "arc-st", arc: "Stillness Collection", nights: "4 nights", name: "Kupona", desc: "Unstructured rest beside the Zambezi and the slow restoration of depleted energy.", tags: ["Victoria Falls", "Zambezi", "Restoration"], includes: "River-view suite, meals, private transfers and curator support", price: "$5,750", unit: "/ person sharing" },
 ];
 
-function FeelingQuiz() {
+export function FeelingQuiz() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState([]);
   const [selected, setSelected] = useState(null);
@@ -57,7 +57,7 @@ function FeelingQuiz() {
     <div className="quiz-intro"><span className="kicker">Begin with a feeling</span><h2 className="serif-h2">Find your <em>arc</em></h2><p>Answer a few questions. We will show you where your journey begins.</p></div>
     <div className="quiz-panel"><div className="quiz-bar"><div className="quiz-bar-fill" style={{ width: complete ? "100%" : `${((step + 1) / questions.length) * 100}%` }} /></div>
       {!complete ? <div className="quiz-inner"><p className="quiz-step">Step {step + 1} of {questions.length}</p><h3 className="quiz-q">{questions[step].q}</h3><div className="quiz-opts">{questions[step].opts.map(([text, answer]) => <button type="button" aria-pressed={selected === answer} className={`quiz-opt${selected === answer ? " sel" : ""}`} key={text} onClick={() => setSelected(answer)}>{text}</button>)}</div><div className="quiz-nav"><button type="button" className="quiz-back" onClick={back} disabled={step === 0}>← Back</button><button type="button" className="quiz-fwd" onClick={next} disabled={!selected}>{step === questions.length - 1 ? "See my arc →" : "Next →"}</button></div></div> :
-        <div className="quiz-result show" aria-live="polite"><p className="quiz-res-arc">{winner.label}</p><h3 className="quiz-res-name">{winner.name}</h3><p className="quiz-res-desc">{winner.desc}</p><div className="quiz-res-btns"><Link className="btn-primary" href={winner.url}>Explore this journey</Link><button type="button" className="quiz-restart" onClick={restart}>Start again</button></div></div>}
+        <div className="quiz-result show" aria-live="polite"><p className="quiz-res-arc">{winner.label}{winner.waitlist ? " · Waitlist" : " · Launched"}</p><h3 className="quiz-res-name">{winner.name}</h3><p className="quiz-res-desc">{winner.desc}</p><div className="quiz-res-btns">{winner.waitlist ? <a className="btn-primary" href={`mailto:hello@ryravel.com?subject=${encodeURIComponent(`Waitlist interest: ${winner.label}`)}`}>Ask to be notified</a> : <Link className="btn-primary" href={winner.url}>Explore this arc</Link>}<button type="button" className="quiz-restart" onClick={restart}>Start again</button></div></div>}
     </div>
   </section>;
 }

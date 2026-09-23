@@ -1,0 +1,58 @@
+.journeys-new { --j-cream:#f5f2ee; --j-dim:rgba(245,242,238,.56); --j-line:rgba(245,242,238,.13); --j-red:#e8574a; background:#0a0908; color:var(--j-cream); font-family:var(--font-sans); }
+.jnew-hero { border-bottom:1px solid var(--j-line); padding:clamp(110px,12vw,185px) max(3.5rem,5vw) 80px; }
+.jnew-hero > div { margin:auto; max-width:1400px; }
+.jnew-eyebrow,.jnew-section-heading > span { color:#b8956a; display:block; font-size:10px; letter-spacing:.25em; margin-bottom:25px; text-transform:uppercase; }
+.jnew-hero h1 { font-family:var(--font-serif); font-size:clamp(48px,6vw,84px); font-weight:400; letter-spacing:-.045em; line-height:1.04; max-width:950px; }
+.jnew-hero h1 em { color:var(--j-red); font-style:italic; }
+.jnew-hero p { color:var(--j-dim); font-size:16px; line-height:1.8; margin-top:25px; max-width:590px; }
+.jnew-filter { background:#11100e; border-bottom:1px solid var(--j-line); position:sticky; top:64px; z-index:50; }
+.jnew-filter-inner { align-items:center; display:flex; gap:34px; justify-content:space-between; margin:auto; max-width:1400px; padding:12px 0; width:calc(100% - 7rem); }
+.jnew-tabs { align-items:center; display:flex; gap:4px; }
+.jnew-tabs button { background:none; border:0; border-bottom:1px solid transparent; color:rgba(245,242,238,.5); cursor:pointer; font-family:var(--font-sans); font-size:11px; letter-spacing:.08em; padding:13px 17px; white-space:nowrap; }
+.jnew-tabs button.active,.jnew-tabs button:hover { border-bottom-color:var(--j-red); color:var(--j-cream); }
+.jnew-selects { display:flex; gap:15px; }
+.jnew-selects label { color:rgba(245,242,238,.46); display:grid; font-size:9px; gap:6px; letter-spacing:.16em; text-transform:uppercase; }
+.jnew-selects select { appearance:none; background:#151311; border:1px solid var(--j-line); border-radius:0; color:var(--j-cream); font-family:var(--font-sans); font-size:12px; letter-spacing:0; min-height:38px; min-width:170px; padding:8px 32px 8px 12px; text-transform:none; }
+.jnew-filter button:focus-visible,.jnew-filter select:focus-visible,.journeys-new a:focus-visible,.jnew-who button:focus-visible { outline:2px solid var(--j-red); outline-offset:3px; }
+.jnew-main,.jnew-who { margin:auto; max-width:1512px; padding:0 max(3.5rem,5vw) 125px; }
+.jnew-arc { border-bottom:1px solid var(--j-line); padding:87px 0 98px; scroll-margin-top:160px; }
+.jnew-arc-heading { display:grid; gap:70px; grid-template-columns:1fr .85fr; margin:0 0 40px; }
+.jnew-arc-heading > div:first-child > span,.jnew-section-heading > span { color:var(--j-red); font-size:10px; letter-spacing:.2em; text-transform:uppercase; }
+.jnew-arc-heading h2,.jnew-section-heading h2 { font-family:var(--font-serif); font-size:clamp(44px,5.2vw,70px); font-weight:400; letter-spacing:-.045em; line-height:1.05; margin:14px 0 9px; }
+.jnew-arc-heading h2 em,.jnew-section-heading h2 em { color:var(--j-red); font-style:italic; }
+.jnew-arc-heading small { color:rgba(245,242,238,.4); display:block; font-size:11px; letter-spacing:.13em; text-transform:uppercase; }
+.jnew-arc-heading > div:last-child { align-self:end; }
+.jnew-arc-heading p,.jnew-section-heading p { color:var(--j-dim); font-size:14px; line-height:1.9; max-width:590px; }
+.jnew-arc-heading a { border-bottom:1px solid var(--j-red); color:var(--j-red); display:inline-block; font-size:10px; letter-spacing:.14em; margin-top:22px; padding-bottom:5px; text-transform:uppercase; }
+.jnew-card-row { display:grid; gap:16px; grid-auto-columns:minmax(260px,calc((100% - 48px)/4)); grid-auto-flow:column; overflow-x:auto; padding-bottom:18px; scrollbar-color:#6e3931 transparent; }
+.jnew-card { border:1px solid var(--j-line); display:flex; flex-direction:column; min-width:0; transition:border-color .2s,transform .2s; }
+.jnew-card:hover { border-color:rgba(232,87,74,.8); transform:translateY(-3px); }
+.jnew-card-image { aspect-ratio:4/3; background:#282820; overflow:hidden; }
+.jnew-card-image img { height:100%; object-fit:cover; width:100%; }
+.jnew-card-body { display:flex; flex:1; flex-direction:column; padding:20px; }
+.jnew-card-meta { color:#b8956a; display:flex; flex-wrap:wrap; gap:8px 12px; font-size:9px; letter-spacing:.11em; text-transform:uppercase; }
+.jnew-card h3 { font-family:var(--font-serif); font-size:clamp(24px,2.2vw,32px); font-weight:400; letter-spacing:-.03em; line-height:1.15; margin:22px 0 12px; }
+.jnew-card p { color:var(--j-dim); font-size:12px; line-height:1.75; margin:0 0 24px; }
+.jnew-card-footer { align-items:end; border-top:1px solid var(--j-line); display:flex; gap:15px; justify-content:space-between; margin-top:auto; padding-top:15px; }
+.jnew-card-footer span { color:rgba(245,242,238,.53); font-size:10px; }
+.jnew-card-footer strong { color:var(--j-cream); font-family:var(--font-serif); font-size:21px; font-weight:400; }
+.jnew-card-footer b { color:var(--j-red); font-size:10px; font-weight:500; letter-spacing:.1em; white-space:nowrap; }
+.jnew-disconnected { background:linear-gradient(120deg,#10201a,#0b110e 65%); margin-inline:calc(-1 * max(3.5rem,5vw)); padding-inline:max(3.5rem,5vw); }
+.jnew-arc-note { border-left:1px solid #5a7a6a; max-width:710px; padding:10px 0 10px 26px; }
+.jnew-arc-note p { color:rgba(245,242,238,.68); font-size:14px; line-height:1.85; }
+.jnew-arc-note a { color:var(--j-cream); text-decoration:underline; text-underline-offset:3px; }
+.jnew-waitlist,.jnew-who { padding-top:90px; }
+.jnew-section-heading { margin-bottom:45px; }
+.jnew-section-heading h2 { font-size:clamp(40px,4.5vw,64px); }
+.jnew-waitlist-grid { border-top:1px solid var(--j-line); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }
+.jnew-waitlist-grid article { border-bottom:1px solid var(--j-line); border-right:1px solid var(--j-line); display:flex; flex-direction:column; min-height:310px; padding:30px; }
+.jnew-waitlist-grid article:nth-child(3n) { border-right:0; }
+.jnew-waitlist-grid article > span { color:#b8956a; font-size:9px; letter-spacing:.16em; text-transform:uppercase; }
+.jnew-waitlist-grid h3 { font-family:var(--font-serif); font-size:clamp(26px,2.5vw,37px); font-weight:400; line-height:1.18; margin:35px 0 14px; }
+.jnew-waitlist-grid h3 em { color:var(--j-red); font-style:italic; }
+.jnew-waitlist-grid p { color:var(--j-dim); font-size:13px; line-height:1.7; margin:0 0 26px; }
+.jnew-waitlist-grid a,.jnew-waitlist-grid button { align-self:start; background:none; border:0; border-bottom:1px solid var(--j-red); color:var(--j-red); cursor:pointer; font-family:var(--font-sans); font-size:10px; letter-spacing:.1em; margin-top:auto; padding:0 0 5px; text-transform:uppercase; }
+.jnew-empty { color:var(--j-dim); font-size:14px; padding:38px 0; }
+.jnew-quiz .quiz-section { min-height:760px; }
+@media(max-width:1000px) { .jnew-filter-inner { align-items:flex-start; flex-direction:column; gap:12px; padding:9px 0 16px; } .jnew-filter { top:64px; } .jnew-arc-heading { gap:35px; } .jnew-card-row { grid-auto-columns:minmax(270px,42%); } .jnew-waitlist-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .jnew-waitlist-grid article:nth-child(3n) { border-right:1px solid var(--j-line); } .jnew-waitlist-grid article:nth-child(2n) { border-right:0; } }
+@media(max-width:680px) { .jnew-hero { padding:115px 24px 65px; } .jnew-hero h1 { font-size:clamp(45px,11vw,62px); } .jnew-hero p { font-size:14px; } .jnew-filter { position:static; } .jnew-filter-inner { width:calc(100% - 32px); } .jnew-tabs { width:100%; } .jnew-tabs button { flex:1; font-size:10px; padding:12px 4px; } .jnew-selects { display:grid; grid-template-columns:1fr 1fr; width:100%; } .jnew-selects select { min-width:0; width:100%; } .jnew-main,.jnew-who { padding:0 24px 75px; } .jnew-arc { padding:65px 0 75px; } .jnew-arc-heading { display:block; } .jnew-arc-heading > div:last-child { margin-top:28px; } .jnew-arc-heading h2 { font-size:47px; } .jnew-card-row { grid-auto-columns:minmax(265px,80%); } .jnew-disconnected { margin-inline:-24px; padding-inline:24px; } .jnew-waitlist,.jnew-who { padding-top:70px; } .jnew-waitlist-grid { grid-template-columns:1fr; } .jnew-waitlist-grid article,.jnew-waitlist-grid article:nth-child(2n),.jnew-waitlist-grid article:nth-child(3n) { border-right:0; min-height:250px; padding:27px 0; } }

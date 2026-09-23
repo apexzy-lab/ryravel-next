@@ -33,7 +33,10 @@ check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around Ho
 check(read("app/seo.js").includes("bespoke luxury journeys worldwide") && read("app/seo.js").includes('areaServed: ["Worldwide"'), "Global metadata and organization schema position Ryravel as worldwide");
 check(retiredJourneySlugs.every((slug) => !journeys.some((journey) => journey.slug === slug)), "All requested journey records are removed from the catalogue");
 check(retiredJourneySlugs.every((slug) => !read("app/components/HomepageExperience.jsx").includes(`/journeys/${slug}`)), "Homepage contains no links to retired journeys");
-check(read("app/journeys/page.jsx").includes("activeArcs") && read("app/sitemap.js").includes("journeys.some"), "Empty journey arcs are omitted from the catalogue and sitemap");
+check(read("app/journeys/page.jsx").includes('journey.arc !== "stillness"') && read("app/sitemap.js").includes("journeys.some"), "Journey catalogue excludes Stillness tours while collection routes remain discoverable");
+check(read("app/journeys/JourneysExperience.jsx").includes('status: "Launched"') && read("app/journeys/JourneysExperience.jsx").includes('status: "Waitlist"'), "Journey experience distinguishes launched and waitlist arcs");
+check(read("app/journeys/JourneysExperience.jsx").includes("<FeelingQuiz />") && read("app/components/HomepageExperience.jsx").includes("export function FeelingQuiz()"), "Journey page reuses the homepage feeling quiz");
+check(read("app/journeys/[slug]/KimbilioJourney.module.css").includes("clamp(27px,3.1vw,44px)"), "Shared trip closing quote scale is aligned with the site typography");
 check(!read("app/journeys/[slug]/page.jsx").includes('"saharan-stars": "ro6"') && !read("app/journeys/[slug]/page.jsx").includes('"patagonia-edge": "adv9"') && !read("app/journeys/[slug]/page.jsx").includes('"amalfi-slow": "ro8"'), "Legacy aliases no longer redirect to retired journeys");
 check(commercialServiceOrder.length === 5 && commercialServiceOrder.every((slug) => Boolean(commercialServices[slug])), "Worldwide commercial travel service catalogue is complete");
 for (const slug of commercialServiceOrder) {
