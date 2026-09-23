@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const nav = [
   ["Journeys", "/journeys"],
@@ -10,18 +10,7 @@ const nav = [
   ["Case studies", "/case-studies"],
 ];
 
-const linkedInPartnerScript = `_linkedin_partner_id = "10765993";
-window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
-window._linkedin_data_partner_ids.push(_linkedin_partner_id);`;
-
-const linkedInLoaderScript = `(function(l) {
-if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};
-window.lintrk.q=[]}
-var s = document.getElementsByTagName("script")[0];
-var b = document.createElement("script");
-b.type = "text/javascript";b.async = true;
-b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
-s.parentNode.insertBefore(b, s);})(window.lintrk);`;
+const consentKey = "ryravel-cookie-choice-v1";
 
 export function Logo({ forceLight = false }) {
   return (
@@ -35,6 +24,9 @@ export function Logo({ forceLight = false }) {
 export default function SiteChrome({ children }) {
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [marketingConsent, setMarketingConsent] = useState(undefined);
+  const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
+  const linkedInLoaded = useRef(false);
 
   useEffect(() => {
     const saved = window.localStorage.getItem("ryravel-theme");
@@ -42,6 +34,41 @@ export default function SiteChrome({ children }) {
     setLight(nextLight);
     document.documentElement.dataset.theme = nextLight ? "light" : "dark";
   }, []);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(consentKey);
+      setMarketingConsent(saved === "accept" ? true : saved === "reject" ? false : null);
+    } catch {
+      setMarketingConsent(null);
+    }
+    const openSettings = () => setCookieSettingsOpen(true);
+    window.addEventListener("ryravel:cookie-settings", openSettings);
+    return () => window.removeEventListener("ryravel:cookie-settings", openSettings);
+  }, []);
+
+  useEffect(() => {
+    if (marketingConsent !== true || linkedInLoaded.current) return;
+    linkedInLoaded.current = true;
+    window._linkedin_partner_id = "10765993";
+    window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+    window._linkedin_data_partner_ids.push(window._linkedin_partner_id);
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+    script.dataset.ryravelMarketing = "linkedin";
+    document.head.appendChild(script);
+  }, [marketingConsent]);
+
+  function chooseMarketing(allowed) {
+    try { window.localStorage.setItem(consentKey, allowed ? "accept" : "reject"); } catch { /* Browsing can continue without storage. */ }
+    setCookieSettingsOpen(false);
+    if (!allowed && linkedInLoaded.current) {
+      window.location.reload();
+      return;
+    }
+    setMarketingConsent(allowed);
+  }
 
   function toggleTheme() {
     const next = !light;
@@ -79,13 +106,11 @@ export default function SiteChrome({ children }) {
           <div><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p></div>
           <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/travel-styles">By travel style</Link><Link href="/luxury-travel-planning">Worldwide private travel</Link><Link href="/luxury-family-travel">Family travel</Link><Link href="/luxury-honeymoons">Honeymoons</Link><Link href="/luxury-wellness-retreats">Wellness retreats</Link><Link href="/luxury-corporate-retreats">Corporate retreats</Link><Link href="/journeys/stillness">Stillness Collection</Link></div>
           <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/case-studies">Case studies</Link><Link href="/sustainability">Sustainability</Link></div>
-          <div><b>Begin</b><Link href="/request">Start the conversation</Link><Link href="/request?conversation=private-call">Request a private call</Link><a href="mailto:curator@ryravel.com">Contact a curator</a><a href="tel:+17605140361">+1 760 514 0361</a></div>
+          <div><b>Begin</b><Link href="/request">Start the conversation</Link><Link href="/request?conversation=private-call">Request a private call</Link><a href="mailto:hello@ryravel.com">Contact the team</a><a href="tel:+17605140361">+1 760 514 0361</a><b className="footer-subheading">Booking & care</b><Link href="/policies">Policy overview</Link><Link href="/terms">Booking terms</Link><Link href="/cancellations">Cancellations & refunds</Link><Link href="/travel-information">Before you travel</Link></div>
         </div>
-        <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · Cookie policy</span></div>
-        <script type="text/javascript" dangerouslySetInnerHTML={{ __html: linkedInPartnerScript }} />
-        <script type="text/javascript" dangerouslySetInnerHTML={{ __html: linkedInLoaderScript }} />
-        <noscript><img height="1" width="1" style={{ display: "none" }} alt="" src="https://px.ads.linkedin.com/collect/?pid=10765993&fmt=gif" /></noscript>
+        <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => setCookieSettingsOpen(true)}>Cookie settings</button></span></div>
       </footer>
+      {(marketingConsent === null || cookieSettingsOpen) && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>We use essential storage for site preferences and enquiry security. With your permission, we also use LinkedIn’s marketing tag. You can change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseMarketing(false)}>Reject marketing</button><button type="button" onClick={() => chooseMarketing(true)}>Allow marketing</button>{cookieSettingsOpen && marketingConsent !== null && <button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button>}</div></div>}
     </>
   );
 }

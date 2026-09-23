@@ -176,6 +176,13 @@ check(existsSync(join(root, "public", "626d871d-6631-466f-ae78-7efafa06cb1e.txt"
 check(existsSync(join(root, "app", "destinations", "tanzania", "page.jsx")), "Tanzania destination landing page exists");
 check(existsSync(join(root, "app", "destinations", "zanzibar", "page.jsx")), "Zanzibar destination landing page exists");
 check(read("app/sitemap.js").includes("/destinations/tanzania") && read("app/sitemap.js").includes("/destinations/zanzibar"), "Destination landing pages are in the sitemap");
+for (const route of ["policies", "terms", "cancellations", "travel-information", "privacy", "cookies"]) {
+  check(existsSync(join(root, "app", route, "page.jsx")) && read("app/sitemap.js").includes(`"/${route}"`), `${route} policy page is published and discoverable`);
+}
+check(read("app/terms/page.jsx").includes("50%") && read("app/terms/page.jsx").includes("Tourvana Inc") && read("app/cancellations/page.jsx").includes("30–44"), "Booking terms reflect operator, deposit and cancellation schedule");
+check(read("app/components/SiteChrome.jsx").includes("marketingConsent !== true") && !read("app/components/SiteChrome.jsx").includes("<noscript>"), "Marketing tag waits for consent and has no unconditional fallback");
+check(read("app/components/SiteChrome.jsx").includes('href="/policies"') && requestPage.includes('href="/privacy"') && read("app/journeys/[slug]/page.jsx").includes("journey-booking-note"), "Booking reassurance is linked from footer, request and journey pricing");
+check(!/student visa|study abroad|work permit|airline ticket/i.test(["app/components/SiteChrome.jsx", "app/policies/page.jsx", "app/terms/page.jsx", "app/travel-information/page.jsx"].map(read).join("\n")), "Current booking pages do not promote retired service lines");
 check(!read("app/data.js").includes('slug: "ex11"'), "Duplicate eleven-night journey record is removed");
 for (const legacyPath of ["/contact", "/contact-us", "/forms", "/services", "/about-us"]) {
   check(read("next.config.mjs").includes(`source: "${legacyPath}"`), `Legacy root URL ${legacyPath} has a permanent redirect`);

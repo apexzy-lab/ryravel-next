@@ -288,6 +288,7 @@ export default function RequestPage() {
                     <label>How did you hear about us?<select name="referral" defaultValue=""><option value="" disabled>Select</option><option>Recommendation</option><option>Google</option><option>Instagram</option><option>Press</option><option>Other</option></select></label>
                   </div>
                   <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>Send me occasional traveller case studies and carefully chosen journey notes from Ryravel.</span></label>
+                  <p className="progressive-policy-note">Sending an enquiry does not book a journey or require payment. We will share a written proposal before you decide. <a href="/privacy">Privacy</a> · <a href="/terms">Booking terms</a> · <a href="/cancellations">Cancellations</a></p>
                   {turnstileEnabled ? <div className="request-turnstile"><div ref={turnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}
                   {fieldErrors.turnstile ? <p className="progressive-field-error" role="alert">{fieldErrors.turnstile}</p> : null}
                   {error ? <p className="request-error" role="alert">{error}</p> : null}
