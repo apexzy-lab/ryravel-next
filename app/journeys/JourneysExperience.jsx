@@ -18,6 +18,25 @@ const arcProfiles = [
 
 const waitlistHref = (arc) => `mailto:hello@ryravel.com?subject=${encodeURIComponent(`Waitlist interest: ${arc.feeling}, ${arc.name}`)}`;
 
+// Preserve the supplied catalogue's country choices. Countries without a
+// published journey show an honest empty state and a bespoke-travel route.
+const countryOptions = [
+  ["botswana", "Botswana"], ["egypt", "Egypt"], ["ethiopia", "Ethiopia"],
+  ["ghana", "Ghana"], ["kenya", "Kenya"], ["malawi", "Malawi"],
+  ["morocco", "Morocco"], ["mozambique", "Mozambique"], ["namibia", "Namibia"],
+  ["rwanda", "Rwanda"], ["senegal", "Senegal"], ["southafrica", "South Africa"],
+  ["tanzania", "Tanzania"], ["uganda", "Uganda"], ["zambia", "Zambia"],
+  ["zanzibar", "Zanzibar"], ["zimbabwe", "Zimbabwe"],
+];
+
+function matchesCountry(journey, country) {
+  if (country === "all") return true;
+  const destination = journey.destination.toLowerCase();
+  if (country === "tanzania") return /tanzania|zanzibar|serengeti|ngorongoro|ndutu|grumeti|tarangire/.test(destination);
+  if (country === "southafrica") return destination.includes("south africa");
+  return destination.includes(country);
+}
+
 function JourneyCard({ journey }) {
   const cardTitle = { "the-reset": "The Reset", ex6: "The Complete Restoration", ex9: "Pure Decompression", rn9: "Beach, Then Wilderness" }[journey.slug] || journey.title;
   return <Link className="jnew-card" href={`/journeys/${journey.slug}`}>
@@ -26,26 +45,60 @@ function JourneyCard({ journey }) {
   </Link>;
 }
 
+function StillnessCard({ journey }) {
+  return <Link className="jnew-native-card" href={`/journeys/${journey.slug}`}>
+    <div className="jnew-native-image">{journey.image && <img src={journey.image} alt={journey.imageAlt || journey.title} loading="lazy" />}</div>
+    <div className="jnew-native-body"><h3>{journey.title}</h3><span>{journey.nights} nights · {journey.destination}</span><p>{journey.description}</p><div className="jnew-native-foot"><span>From <strong>{journey.price}</strong> / person</span><b>Explore →</b></div></div>
+  </Link>;
+}
+
+function StillnessFlagship({ journey }) {
+  return <Link className="jnew-flagship" href={`/journeys/${journey.slug}`}>
+    <span className="jnew-flagship-meta">{journey.nights} nights · {journey.destination}</span>
+    <h3>{journey.title}</h3><p>{journey.description}</p>
+    <div className="jnew-flagship-tags">{journey.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+    <div className="jnew-native-foot"><span>From <strong>{journey.price}</strong> / person</span><b>Explore →</b></div>
+  </Link>;
+}
+
 export default function JourneysExperience({ journeys }) {
   const [view, setView] = useState("journeys");
   const [arcFilter, setArcFilter] = useState("all");
   const [countryFilter, setCountryFilter] = useState("all");
-  const exhaustedJourneys = journeys.filter((journey) => journey.arc === "exhausted" && (countryFilter === "all" || journey.destination.toLowerCase().includes(countryFilter)));
-  const disconnectedJourneys = journeys.filter((journey) => journey.arc === "disconnected" && (countryFilter === "all" || journey.destination.toLowerCase().includes(countryFilter)));
-  const showExhausted = arcFilter === "all" || arcFilter === "exhausted";
-  const showDisconnected = arcFilter === "all" || arcFilter === "disconnected";
-  const waitlistArcs = arcProfiles.filter((arc) => arc.status === "Waitlist" && (arcFilter === "all" || arcFilter === arc.id));
+  const [collectionFilter, setCollectionFilter] = useState("all");
+  const exhaustedJourneys = journeys.filter((journey) => journey.arc === "exhausted" && matchesCountry(journey, countryFilter));
+  const disconnectedJourneys = journeys.filter((journey) => journey.arc === "disconnected" && matchesCountry(journey, countryFilter));
+  const stillnessJourneys = journeys.filter((journey) => journey.arc === "stillness" && matchesCountry(journey, countryFilter));
+  const showExhausted = collectionFilter !== "stillness" && (arcFilter === "all" || arcFilter === "exhausted");
+  const showDisconnected = collectionFilter !== "stillness" && (arcFilter === "all" || arcFilter === "disconnected");
+  const showStillness = collectionFilter !== "emotional" && (arcFilter === "all" || arcFilter === "stillness");
+  const waitlistArcs = countryFilter === "all" && collectionFilter !== "stillness" ? arcProfiles.filter((arc) => arc.status === "Waitlist" && (arcFilter === "all" || arcFilter === arc.id)) : [];
+  const hasMatchingJourney = (showExhausted && exhaustedJourneys.length > 0) || (showDisconnected && disconnectedJourneys.length > 0) || (showStillness && stillnessJourneys.length > 0);
+  const selectedCountry = countryOptions.find(([value]) => value === countryFilter)?.[1];
+
+  function selectArc(value) {
+    setArcFilter(value);
+    if (value === "stillness") setCollectionFilter("stillness");
+    else if (value !== "all") setCollectionFilter("emotional");
+  }
+
+  function selectCollection(value) {
+    setCollectionFilter(value);
+    if (value === "stillness" && arcFilter !== "stillness") setArcFilter("all");
+    if (value === "emotional" && arcFilter === "stillness") setArcFilter("all");
+  }
 
   return <main className="journeys-new">
     <header className="jnew-hero"><div><span className="jnew-eyebrow">The collection · worldwide private travel</span><h1>Crafted for the way<br />you want <em>to arrive.</em></h1><p>Every journey begins with a feeling, not a destination. Explore the arcs open now, or tell us which future arc you want to hear about.</p></div></header>
-    <div className="jnew-filter"><div className="jnew-filter-inner"><div className="jnew-tabs" role="tablist" aria-label="Explore journeys">{[["journeys","Journeys"],["who","Who it’s for"],["quiz","Feeling quiz"]].map(([key,label]) => <button key={key} type="button" role="tab" aria-selected={view === key} className={view === key ? "active" : ""} onClick={() => setView(key)}>{label}</button>)}</div>{view === "journeys" && <div className="jnew-selects"><label>Emotional arc<select value={arcFilter} onChange={(event) => setArcFilter(event.target.value)}><option value="all">All arcs</option>{arcProfiles.map((arc) => <option key={arc.id} value={arc.id}>{arc.feeling} · {arc.name}</option>)}</select></label><label>Country<select value={countryFilter} onChange={(event) => setCountryFilter(event.target.value)}><option value="all">All countries</option><option value="tanzania">Tanzania</option><option value="zanzibar">Zanzibar</option></select></label></div>}</div></div>
+    <div className="jnew-filter"><div className="jnew-filter-inner"><div className="jnew-tabs" role="tablist" aria-label="Explore journeys">{[["journeys","Journeys"],["who","Who it’s for"],["quiz","Feeling quiz"]].map(([key,label]) => <button key={key} type="button" role="tab" aria-selected={view === key} className={view === key ? "active" : ""} onClick={() => setView(key)}>{label}</button>)}</div>{view === "journeys" && <div className="jnew-selects"><label>Emotional arc<select value={arcFilter} onChange={(event) => selectArc(event.target.value)}><option value="all">All arcs</option>{arcProfiles.map((arc) => <option key={arc.id} value={arc.id}>{arc.feeling} · {arc.name}</option>)}<option value="stillness">Stillness Collection</option></select></label><label>Country / region<select value={countryFilter} onChange={(event) => setCountryFilter(event.target.value)}><option value="all">All countries</option>{countryOptions.map(([value,label]) => <option key={value} value={value}>{label}</option>)}</select></label><label>Collection<select value={collectionFilter} onChange={(event) => selectCollection(event.target.value)}><option value="all">All collections</option><option value="emotional">Emotional arcs</option><option value="stillness">Stillness Collection</option></select></label></div>}</div></div>
     {view === "journeys" && <div className="jnew-main">
-      {showExhausted && <section className="jnew-arc" id="exhausted"><div className="jnew-arc-heading"><div><span>01 · Exhausted · Launched</span><h2>The <em>Restoration</em></h2><small>{exhaustedJourneys.length} journeys · physical renewal</small></div><div><p>{arcProfiles[0].copy}</p><Link href="/journeys/exhausted">Explore the arc →</Link></div></div>{exhaustedJourneys.length ? <div className="jnew-card-row">{exhaustedJourneys.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div> : <p className="jnew-empty">No current Restoration journeys match that country. Try All countries.</p>}</section>}
-      {showDisconnected && <section className="jnew-arc jnew-disconnected" id="disconnected"><div className="jnew-arc-heading"><div><span>02 · Disconnected · Launched</span><h2>The <em>Return</em></h2><small>{disconnectedJourneys.length} {disconnectedJourneys.length === 1 ? "journey" : "journeys"} · spiritual homecoming</small></div><div><p>{arcProfiles[1].copy}</p><Link href="/journeys/disconnected">Explore the arc →</Link></div></div>{disconnectedJourneys.length ? <div className="jnew-card-row">{disconnectedJourneys.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div> : <p className="jnew-empty">No current Return journeys match that country. Try All countries.</p>}</section>}
+      {showExhausted && exhaustedJourneys.length > 0 && <section className="jnew-arc" id="exhausted"><div className="jnew-arc-heading"><div><span>01 · Exhausted · Launched</span><h2>The <em>Restoration</em></h2><small>{exhaustedJourneys.length} {exhaustedJourneys.length === 1 ? "journey" : "journeys"} · physical renewal</small></div><div><p>{arcProfiles[0].copy}</p><Link href="/journeys/exhausted">Explore the arc →</Link></div></div><div className="jnew-card-row">{exhaustedJourneys.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>}
+      {showDisconnected && disconnectedJourneys.length > 0 && <section className="jnew-arc jnew-disconnected" id="disconnected"><div className="jnew-arc-heading"><div><span>02 · Disconnected · Launched</span><h2>The <em>Return</em></h2><small>{disconnectedJourneys.length} {disconnectedJourneys.length === 1 ? "journey" : "journeys"} · spiritual homecoming</small></div><div><p>{arcProfiles[1].copy}</p><Link href="/journeys/disconnected">Explore the arc →</Link></div></div><div className="jnew-card-row">{disconnectedJourneys.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>}
+      {showStillness && stillnessJourneys.length > 0 && <section className="jnew-arc jnew-stillness" id="stillness"><div className="jnew-arc-heading"><div><span>The Stillness Collection</span><h2>Deep presence and<br /><em>wilderness solitude.</em></h2><small>{stillnessJourneys.length} {stillnessJourneys.length === 1 ? "journey" : "journeys"} · {selectedCountry || "Tanzania, Zimbabwe, Zambia"}</small></div><div><p>Wilderness journeys for travellers who are not asking for more to see. They are asking to stop being asked for anything.</p><Link href="/journeys/stillness">Explore the complete collection →</Link></div></div>{stillnessJourneys.some((journey) => !["st6", "st9"].includes(journey.slug)) && <div className="jnew-native-row">{stillnessJourneys.filter((journey) => !["st6", "st9"].includes(journey.slug)).map((journey) => <StillnessCard journey={journey} key={journey.slug} />)}</div>}{stillnessJourneys.some((journey) => ["st6", "st9"].includes(journey.slug)) && <div className="jnew-flagship-row">{stillnessJourneys.filter((journey) => ["st6", "st9"].includes(journey.slug)).map((journey) => <StillnessFlagship journey={journey} key={journey.slug} />)}</div>}</section>}
       {waitlistArcs.length > 0 && <section className="jnew-waitlist" id="waitlist"><div className="jnew-section-heading"><span>What comes next</span><h2>Arcs in <em>development.</em></h2><p>These are not bookable journey packages yet. Tell us which one resonates and we will contact you when it opens.</p></div><div className="jnew-waitlist-grid">{waitlistArcs.map((arc) => <article id={arc.id} key={arc.id}><span>{arc.territory} · Waitlist</span><h3>{arc.feeling}<br /><em>{arc.name}</em></h3><p>{arc.copy}</p><a href={waitlistHref(arc)}>Ask to be notified →</a></article>)}</div></section>}
-      {!showExhausted && !showDisconnected && !waitlistArcs.length && <p className="jnew-empty">No arcs match this filter.</p>}
+      {!hasMatchingJourney && waitlistArcs.length === 0 && <p className="jnew-empty">{selectedCountry ? <>No published journeys in {selectedCountry} match these filters yet. <Link href="/private-bespoke">Ask us to design a private journey →</Link></> : <>No journeys match these filters. Try All arcs or All collections.</>}</p>}
     </div>}
-    {view === "who" && <section className="jnew-who"><div className="jnew-section-heading"><span>Start with yourself</span><h2>Who each arc is <em>for.</em></h2><p>These are not destinations. They are ways of recognising where you are and what you might need next.</p></div><div className="jnew-waitlist-grid">{arcProfiles.map((arc,index) => <article key={arc.id}><span>{String(index + 1).padStart(2,"0")} · {arc.territory} · {arc.status}</span><h3>{arc.feeling}<br /><em>{arc.name}</em></h3><p>{arc.who}</p>{arc.status === "Waitlist" ? <a href={waitlistHref(arc)}>Ask to be notified →</a> : <button type="button" onClick={() => { setArcFilter(arc.id); setCountryFilter("all"); setView("journeys"); }}>Explore the arc →</button>}</article>)}</div></section>}
+    {view === "who" && <section className="jnew-who"><div className="jnew-section-heading"><span>Start with yourself</span><h2>Who each arc is <em>for.</em></h2><p>These are not destinations. They are ways of recognising where you are and what you might need next.</p></div><div className="jnew-waitlist-grid">{arcProfiles.map((arc,index) => <article key={arc.id}><span>{String(index + 1).padStart(2,"0")} · {arc.territory} · {arc.status}</span><h3>{arc.feeling}<br /><em>{arc.name}</em></h3><p>{arc.who}</p>{arc.status === "Waitlist" ? <a href={waitlistHref(arc)}>Ask to be notified →</a> : <button type="button" onClick={() => { selectArc(arc.id); setCountryFilter("all"); setView("journeys"); }}>Explore the arc →</button>}</article>)}</div></section>}
     {view === "quiz" && <div className="new-home jnew-quiz"><FeelingQuiz /></div>}
   </main>;
 }

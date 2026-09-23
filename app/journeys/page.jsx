@@ -3,9 +3,7 @@ import "./journeys.css";
 import { journeys } from "../data";
 import { absoluteUrl, buildMetadata } from "../seo";
 
-const featuredJourneys = journeys.filter((journey) => journey.arc !== "stillness");
-
-export const metadata = buildMetadata({ title: "Bespoke Luxury Journeys Worldwide", description: "Explore Ryravel's launched Exhausted and Disconnected emotional arcs, including four Restoration journeys and six-, seven- and nine-night calving-season journeys. Seven further arcs are open for waitlist interest; Stillness has its own collection.", path: "/journeys" });
+export const metadata = buildMetadata({ title: "Bespoke Luxury Journeys Worldwide", description: "Explore Ryravel's launched Restoration and Return journeys, the seven-journey Stillness Collection, and emotional arcs open for waitlist interest. Private journeys are designed worldwide.", path: "/journeys" });
 
 const journeyCollectionJsonLd = {
   "@context": "https://schema.org",
@@ -15,9 +13,9 @@ const journeyCollectionJsonLd = {
   url: absoluteUrl("/journeys"),
   description: metadata.description,
   isPartOf: { "@id": "https://ryravel.com/#website" },
-  mainEntity: { "@type": "ItemList", numberOfItems: featuredJourneys.length, itemListElement: featuredJourneys.map((journey, index) => ({ "@type": "ListItem", position: index + 1, name: journey.title, url: absoluteUrl(`/journeys/${journey.slug}`) })) },
+  mainEntity: { "@type": "ItemList", numberOfItems: journeys.length, itemListElement: journeys.map((journey, index) => ({ "@type": "ListItem", position: index + 1, name: journey.title, url: absoluteUrl(`/journeys/${journey.slug}`) })) },
 };
 
 export default function JourneysPage() {
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(journeyCollectionJsonLd) }} /><JourneysExperience journeys={featuredJourneys} /></>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(journeyCollectionJsonLd) }} /><JourneysExperience journeys={journeys} /></>;
 }
