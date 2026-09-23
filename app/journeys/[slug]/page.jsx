@@ -68,8 +68,8 @@ function ArcPage({ arc }) {
         <div><Link href="/journeys">← All journeys</Link><span className="kicker">Emotional arc · {arc.label}</span><h1>{arc.title}</h1><em>{arc.subtitle}</em><p>{arc.intro}</p></div>
       </section>
       <section className="arc-story paper-section"><p className="lead">{arc.story}</p><span className="kicker">How the arc works</span><div className="principle-grid">{arc.principles.map(([title, copy], index) => <article key={title}><span>— 0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
-      <section className="arc-journeys paper-section"><div className="section-heading"><div><span className="kicker">Choose your arc</span><h2>{cards.length} journeys. <em>One feeling.</em></h2></div></div><div className="journey-cards">{cards.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>
-      <JourneyProof arc={arc.id} />
+      <section className="arc-journeys paper-section"><div className="section-heading"><div><span className="kicker">Explore the journey</span><h2>{cards.length} {cards.length === 1 ? "journey" : "journeys"}.{" "}<em>One feeling.</em></h2></div></div><div className="journey-cards">{cards.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>
+      {arc.id !== "disconnected" && <JourneyProof arc={arc.id} />}
       <CTA requestHref={`/request?arc=${encodeURIComponent(arc.id)}&name=${encodeURIComponent(arc.title)}`} />
     </main>
   );

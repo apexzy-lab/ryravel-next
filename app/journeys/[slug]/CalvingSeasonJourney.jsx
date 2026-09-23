@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
-import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
+import { JourneyAvailability, JourneyFaqs } from "./JourneyPlanning";
 
 const days = [
   { number: "01", title: "The World Falls Away", route: "Southern Serengeti · Night 1", paragraphs: ["The charter landed us straight onto the southern plains, no town in between to ease into it. The orientation drive put more raw life in front of me than I usually let myself sit with in a whole year, not because I avoid nature, but because I avoid anything that asks me to actually feel something for longer than a sentence. No signal that night, and I noticed the calving season sounds gentler than I expected, less dramatic than I'd braced for, which somehow made it harder to make light of."] },
@@ -24,7 +24,7 @@ export default function CalvingSeasonJourney({ journey }) {
     <section className={styles.hero}>
       <img src={journey.image} alt={journey.imageAlt} width="1920" height="1280" fetchPriority="high" />
       <div className={styles.heroShade} aria-hidden="true" />
-      <div className={styles.heroTop}><Link href="/journeys/stillness">← The Stillness Collection</Link><span>Disconnected · The Return</span></div>
+      <div className={styles.heroTop}><Link href="/journeys/disconnected">← Disconnected · The Return</Link><span>Spiritual homecoming</span></div>
       <div className={styles.heroBody}><p className={styles.eyebrow}>Calving Season · Southern Serengeti · January to March</p><h1>The Calving Season</h1><p className={styles.meaning}>Six nights. Three landscapes. Room for what is real.</p><h2>Nothing to make lighter.</h2></div>
       <dl className={styles.facts}><div><dt>Duration</dt><dd>6 Nights, 7 Days</dd></div><div><dt>Location</dt><dd>Southern Serengeti · Ndutu · Ngorongoro</dd></div><div><dt>From</dt><dd>$11,075 / person</dd></div></dl>
     </section>
@@ -46,10 +46,8 @@ export default function CalvingSeasonJourney({ journey }) {
     <section className={styles.season}><div><span className={styles.sectionLabel}>The calving window</span><h2>January through March.</h2><p>February is the peak calving period in this journey design. The exact movement of wildlife, available camps and departure price are confirmed for your dates; no particular sighting can be promised.</p></div><div className={styles.months} aria-label="Calving Season travel window">{["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map((month, index) => <span className={index < 3 ? styles.openMonth : ""} key={month}>{month}</span>)}<p className={styles.monthLegend}><b>Open</b> January, February and March<br />March departures from $11,075 per person</p></div></section>
     <JourneyAvailability journey={journey} title="When would you meet the calving plains?" copy="Tell us your preferred dates and party. We will confirm the camp, internal flights and exact journey investment with you personally." openMonths={journey.availableMonths} closedNote="This calving-season edition is available January through March only." />
     <section className={styles.investment}><div><span className={styles.sectionLabel}>Investment</span><h2>Six nights.<br /><em>The calving plains.</em><br />Everything included.</h2></div><div className={styles.price}><small>From · March departures</small><strong>$11,075</strong><span>/ person</span><p>International flights are not included. All internal flights, camp transfers, game drives, the senior tracker day, Signature Rituals and Ryravel host support are included. February is peak calving, the highest concentration of births and predator activity. January–March pricing and final inclusions are confirmed in your personal proposal.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div></section>
-    <JourneyProofSection />
     <JourneyFaqs journey={journey} />
     <section className={styles.nextSteps}><div><span className={styles.sectionLabel}>What happens next</span><h2>A private conversation.<br />Then the plains.</h2></div><ol><li><span>01</span><div><h3>Tell us what drew you here</h3><p>Share your preferred month, party and what you hope to make space for.</p></div></li><li><span>02</span><div><h3>Speak with your curator</h3><p>We confirm camp and flight space, pace and exact investment.</p></div></li><li><span>03</span><div><h3>Receive a considered direction</h3><p>One personal journey proposal, with no booking until you are ready.</p></div></li></ol><Link href={requestHref}>Plan The Calving Season privately →</Link></section>
-    <StillnessAlternatives currentSlug={journey.slug} />
-    <section className={styles.closing}><div className={styles.backLinks}><Link href="/journeys">← Back to all journeys</Link><Link href="/journeys/stillness">The Stillness Collection</Link></div><blockquote>“I've spent years making everything lighter than it was. Out there, nothing needed me to. So, for once, I didn't.”</blockquote><p>Ryravel · The Calving Season</p></section>
+    <section className={styles.closing}><div className={styles.backLinks}><Link href="/journeys">← Back to all journeys</Link><Link href="/journeys/disconnected">Disconnected · The Return</Link></div><blockquote>“I've spent years making everything lighter than it was. Out there, nothing needed me to. So, for once, I didn't.”</blockquote><p>Ryravel · The Calving Season</p></section>
   </main>;
 }
