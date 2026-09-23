@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
-import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
+import { JourneyAvailability, JourneyFaqs } from "./JourneyPlanning";
 
 const days = [
   {
@@ -49,7 +49,7 @@ export default function CalvingIsolationJourney({ journey }) {
     <section className={styles.hero}>
       <img src={journey.image} alt={journey.imageAlt} width="1920" height="1280" fetchPriority="high" />
       <div className={styles.heroShade} aria-hidden="true" />
-      <div className={styles.heroTop}><Link href="/journeys/stillness">← The Stillness Collection</Link><span>Disconnected · The Return · Spiritual Homecoming</span></div>
+      <div className={styles.heroTop}><Link href="/journeys/disconnected">← Disconnected · The Return</Link><span>Spiritual homecoming</span></div>
       <div className={styles.heroBody}><p className={styles.eyebrow}>Calving Maximum Isolation · January to March</p><h1>Calving Maximum Isolation</h1><p className={styles.meaning}>Southern Serengeti · Fly Camp · Ndutu Mobile · Ngorongoro</p><h2>Nowhere left to get ahead to.</h2></div>
       <dl className={styles.facts}><div><dt>Duration</dt><dd>7 Nights, 8 Days</dd></div><div><dt>Season</dt><dd>January–March · Calving Plains</dd></div><div><dt>From</dt><dd>$11,814 / person</dd></div></dl>
     </section>
@@ -80,10 +80,8 @@ export default function CalvingIsolationJourney({ journey }) {
     <JourneyAvailability journey={journey} title="When would you step off the grid?" copy="Tell us your preferred dates and party. We will confirm fly-camp and mobile-camp arrangements, internal flights and the exact investment personally." openMonths={journey.availableMonths} closedNote="This calving-season edition is available January through March only." />
     <section className={styles.investment}><div><span className={styles.sectionLabel}>Investment</span><h2>Seven nights.<br /><em>Fly camp. Calving plains.</em><br />Everything included.</h2></div><div className={styles.price}><small>From · March departures</small><strong>$11,814</strong><span>/ person</span><p>International flights not included. Available January through March only. All internal flights, fly camp and mobile camp accommodation, full-day crater descent, the Maasai enkiama visit, Signature Rituals, and Ryravel host support are included. February is peak calving. Exact arrangements and January–March pricing are confirmed in your personal proposal.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div></section>
 
-    <JourneyProofSection />
     <JourneyFaqs journey={journey} />
     <section className={styles.nextSteps}><div><span className={styles.sectionLabel}>What happens next</span><h2>A private conversation.<br />Then a more deliberate way in.</h2></div><ol><li><span>01</span><div><h3>Tell us what drew you here</h3><p>Share your dates, party and whether the fly-camp phase feels right.</p></div></li><li><span>02</span><div><h3>Speak with your curator</h3><p>We explain the facilities, safety arrangements and exact departure options.</p></div></li><li><span>03</span><div><h3>Receive your journey direction</h3><p>One considered proposal, with no booking until you are ready.</p></div></li></ol><Link href={requestHref}>Plan Calving Maximum Isolation privately →</Link></section>
-    <StillnessAlternatives currentSlug={journey.slug} />
-    <section className={styles.closing}><div className={styles.backLinks}><Link href="/journeys">← Back to all journeys</Link><Link href="/journeys/stillness">The Stillness Collection</Link></div><blockquote>“I have spent my life a few steps ahead of wherever I actually was.<br />Standing in the middle of the herd, there was nowhere left to get ahead to.”</blockquote><p>Ryravel · Stillness is the only luxury left.</p></section>
+    <section className={styles.closing}><div className={styles.backLinks}><Link href="/journeys">← Back to all journeys</Link><Link href="/journeys/disconnected">Disconnected · The Return</Link></div><blockquote>“I have spent my life a few steps ahead of wherever I actually was.<br />Standing in the middle of the herd, there was nowhere left to get ahead to.”</blockquote><p>Ryravel · Calving Maximum Isolation</p></section>
   </main>;
 }
