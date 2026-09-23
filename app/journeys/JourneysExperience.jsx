@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FeelingQuiz } from "../components/HomepageExperience";
 
 const arcProfiles = [
@@ -45,47 +46,35 @@ function JourneyCard({ journey }) {
   </Link>;
 }
 
-function StillnessCard({ journey }) {
-  return <Link className="jnew-native-card" href={`/journeys/${journey.slug}`}>
-    <div className="jnew-native-image">{journey.image && <img src={journey.image} alt={journey.imageAlt || journey.title} loading="lazy" />}</div>
-    <div className="jnew-native-body"><h3>{journey.title}</h3><span>{journey.nights} nights · {journey.destination}</span><p>{journey.description}</p><div className="jnew-native-foot"><span>From <strong>{journey.price}</strong> / person</span><b>Explore →</b></div></div>
-  </Link>;
-}
-
-function StillnessFlagship({ journey }) {
-  return <Link className="jnew-flagship" href={`/journeys/${journey.slug}`}>
-    <span className="jnew-flagship-meta">{journey.nights} nights · {journey.destination}</span>
-    <h3>{journey.title}</h3><p>{journey.description}</p>
-    <div className="jnew-flagship-tags">{journey.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-    <div className="jnew-native-foot"><span>From <strong>{journey.price}</strong> / person</span><b>Explore →</b></div>
-  </Link>;
-}
-
 export default function JourneysExperience({ journeys }) {
+  const router = useRouter();
   const [view, setView] = useState("journeys");
   const [arcFilter, setArcFilter] = useState("all");
   const [countryFilter, setCountryFilter] = useState("all");
   const [collectionFilter, setCollectionFilter] = useState("all");
   const exhaustedJourneys = journeys.filter((journey) => journey.arc === "exhausted" && matchesCountry(journey, countryFilter));
   const disconnectedJourneys = journeys.filter((journey) => journey.arc === "disconnected" && matchesCountry(journey, countryFilter));
-  const stillnessJourneys = journeys.filter((journey) => journey.arc === "stillness" && matchesCountry(journey, countryFilter));
   const showExhausted = collectionFilter !== "stillness" && (arcFilter === "all" || arcFilter === "exhausted");
   const showDisconnected = collectionFilter !== "stillness" && (arcFilter === "all" || arcFilter === "disconnected");
-  const showStillness = collectionFilter !== "emotional" && (arcFilter === "all" || arcFilter === "stillness");
   const waitlistArcs = countryFilter === "all" && collectionFilter !== "stillness" ? arcProfiles.filter((arc) => arc.status === "Waitlist" && (arcFilter === "all" || arcFilter === arc.id)) : [];
-  const hasMatchingJourney = (showExhausted && exhaustedJourneys.length > 0) || (showDisconnected && disconnectedJourneys.length > 0) || (showStillness && stillnessJourneys.length > 0);
+  const hasMatchingJourney = (showExhausted && exhaustedJourneys.length > 0) || (showDisconnected && disconnectedJourneys.length > 0);
   const selectedCountry = countryOptions.find(([value]) => value === countryFilter)?.[1];
 
   function selectArc(value) {
+    if (value === "stillness") {
+      router.push("/journeys/stillness");
+      return;
+    }
     setArcFilter(value);
-    if (value === "stillness") setCollectionFilter("stillness");
-    else if (value !== "all") setCollectionFilter("emotional");
+    if (value !== "all") setCollectionFilter("emotional");
   }
 
   function selectCollection(value) {
+    if (value === "stillness") {
+      router.push("/journeys/stillness");
+      return;
+    }
     setCollectionFilter(value);
-    if (value === "stillness" && arcFilter !== "stillness") setArcFilter("all");
-    if (value === "emotional" && arcFilter === "stillness") setArcFilter("all");
   }
 
   return <main className="journeys-new">
@@ -94,7 +83,6 @@ export default function JourneysExperience({ journeys }) {
     {view === "journeys" && <div className="jnew-main">
       {showExhausted && exhaustedJourneys.length > 0 && <section className="jnew-arc" id="exhausted"><div className="jnew-arc-heading"><div><span>01 · Exhausted · Launched</span><h2>The <em>Restoration</em></h2><small>{exhaustedJourneys.length} {exhaustedJourneys.length === 1 ? "journey" : "journeys"} · physical renewal</small></div><div><p>{arcProfiles[0].copy}</p><Link href="/journeys/exhausted">Explore the arc →</Link></div></div><div className="jnew-card-row">{exhaustedJourneys.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>}
       {showDisconnected && disconnectedJourneys.length > 0 && <section className="jnew-arc jnew-disconnected" id="disconnected"><div className="jnew-arc-heading"><div><span>02 · Disconnected · Launched</span><h2>The <em>Return</em></h2><small>{disconnectedJourneys.length} {disconnectedJourneys.length === 1 ? "journey" : "journeys"} · spiritual homecoming</small></div><div><p>{arcProfiles[1].copy}</p><Link href="/journeys/disconnected">Explore the arc →</Link></div></div><div className="jnew-card-row">{disconnectedJourneys.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>}
-      {showStillness && stillnessJourneys.length > 0 && <section className="jnew-arc jnew-stillness" id="stillness"><div className="jnew-arc-heading"><div><span>The Stillness Collection</span><h2>Deep presence and<br /><em>wilderness solitude.</em></h2><small>{stillnessJourneys.length} {stillnessJourneys.length === 1 ? "journey" : "journeys"} · {selectedCountry || "Tanzania, Zimbabwe, Zambia"}</small></div><div><p>Wilderness journeys for travellers who are not asking for more to see. They are asking to stop being asked for anything.</p><Link href="/journeys/stillness">Explore the complete collection →</Link></div></div>{stillnessJourneys.some((journey) => !["st6", "st9"].includes(journey.slug)) && <div className="jnew-native-row">{stillnessJourneys.filter((journey) => !["st6", "st9"].includes(journey.slug)).map((journey) => <StillnessCard journey={journey} key={journey.slug} />)}</div>}{stillnessJourneys.some((journey) => ["st6", "st9"].includes(journey.slug)) && <div className="jnew-flagship-row">{stillnessJourneys.filter((journey) => ["st6", "st9"].includes(journey.slug)).map((journey) => <StillnessFlagship journey={journey} key={journey.slug} />)}</div>}</section>}
       {waitlistArcs.length > 0 && <section className="jnew-waitlist" id="waitlist"><div className="jnew-section-heading"><span>What comes next</span><h2>Arcs in <em>development.</em></h2><p>These are not bookable journey packages yet. Tell us which one resonates and we will contact you when it opens.</p></div><div className="jnew-waitlist-grid">{waitlistArcs.map((arc) => <article id={arc.id} key={arc.id}><span>{arc.territory} · Waitlist</span><h3>{arc.feeling}<br /><em>{arc.name}</em></h3><p>{arc.copy}</p><a href={waitlistHref(arc)}>Ask to be notified →</a></article>)}</div></section>}
       {!hasMatchingJourney && waitlistArcs.length === 0 && <p className="jnew-empty">{selectedCountry ? <>No published journeys in {selectedCountry} match these filters yet. <Link href="/private-bespoke">Ask us to design a private journey →</Link></> : <>No journeys match these filters. Try All arcs or All collections.</>}</p>}
     </div>}

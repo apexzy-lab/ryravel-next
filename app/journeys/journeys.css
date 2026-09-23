@@ -38,30 +38,6 @@
 .jnew-card-footer strong { color:var(--j-cream); font-family:var(--font-serif); font-size:21px; font-weight:400; }
 .jnew-card-footer b { color:var(--j-red); font-size:10px; font-weight:500; letter-spacing:.1em; white-space:nowrap; }
 .jnew-disconnected { background:linear-gradient(120deg,#10201a,#0b110e 65%); margin-inline:calc(-1 * max(3.5rem,5vw)); padding-inline:max(3.5rem,5vw); }
-.jnew-stillness { --j-sage:#98ad98; background:linear-gradient(150deg,#101b16,#0a110e 70%); margin-inline:calc(-1 * max(3.5rem,5vw)); padding-inline:max(3.5rem,5vw); }
-.jnew-stillness .jnew-arc-heading > div:first-child > span,.jnew-stillness .jnew-arc-heading h2 em,.jnew-stillness .jnew-arc-heading a { color:var(--j-sage); }
-.jnew-stillness .jnew-arc-heading a { border-bottom-color:var(--j-sage); }
-.jnew-native-row { display:flex; gap:22px; overflow-x:auto; padding-bottom:24px; scrollbar-color:#708571 transparent; scroll-snap-type:x mandatory; }
-.jnew-native-card { flex:0 0 clamp(230px,21vw,285px); min-width:0; scroll-snap-align:start; }
-.jnew-native-image { aspect-ratio:3/4; background:#1c2b20; overflow:hidden; }
-.jnew-native-image img { height:100%; object-fit:cover; transition:transform .3s; width:100%; }
-.jnew-native-card:hover img { transform:scale(1.04); }
-.jnew-native-body { padding:17px 0 0; }
-.jnew-native-body h3 { color:var(--j-sage); font-family:var(--font-serif); font-size:29px; font-style:italic; font-weight:400; line-height:1.1; }
-.jnew-native-body > span,.jnew-flagship-meta { color:rgba(245,242,238,.55); display:block; font-size:10px; letter-spacing:.11em; line-height:1.5; margin-top:10px; text-transform:uppercase; }
-.jnew-native-body > p { color:var(--j-dim); font-size:12px; line-height:1.7; margin:13px 0 20px; min-height:82px; }
-.jnew-native-foot { align-items:end; border-top:1px solid rgba(152,173,152,.25); display:flex; gap:10px; justify-content:space-between; margin-top:auto; padding-top:13px; }
-.jnew-native-foot > span { color:var(--j-dim); font-size:10px; white-space:nowrap; }
-.jnew-native-foot strong { color:var(--j-cream); font-family:var(--font-serif); font-size:21px; font-weight:400; }
-.jnew-native-foot b { color:var(--j-sage); font-size:10px; font-weight:500; letter-spacing:.1em; white-space:nowrap; }
-.jnew-flagship-row { display:grid; gap:20px; grid-template-columns:repeat(2,minmax(0,1fr)); margin-top:35px; }
-.jnew-flagship { background:#07110b; display:flex; flex-direction:column; min-height:325px; padding:clamp(25px,3vw,48px); transition:background .2s; }
-.jnew-flagship:hover { background:#0d2013; }
-.jnew-flagship-meta { color:var(--j-sage); margin:0; }
-.jnew-flagship h3 { color:var(--j-cream); font-family:var(--font-serif); font-size:clamp(38px,4vw,57px); font-style:italic; font-weight:400; line-height:1.05; margin:23px 0 15px; }
-.jnew-flagship > p { color:var(--j-dim); font-size:14px; line-height:1.8; max-width:470px; }
-.jnew-flagship-tags { color:var(--j-sage); display:flex; flex-wrap:wrap; gap:8px 17px; font-size:10px; letter-spacing:.08em; margin:22px 0 30px; text-transform:uppercase; }
-.jnew-flagship .jnew-native-foot { width:100%; }
 .jnew-arc-note { border-left:1px solid #5a7a6a; max-width:710px; padding:10px 0 10px 26px; }
 .jnew-arc-note p { color:rgba(245,242,238,.68); font-size:14px; line-height:1.85; }
 .jnew-arc-note a { color:var(--j-cream); text-decoration:underline; text-underline-offset:3px; }
@@ -80,4 +56,4 @@
 .jnew-empty a { color:var(--j-red); text-decoration:underline; text-underline-offset:3px; }
 .jnew-quiz .quiz-section { min-height:760px; }
 @media(max-width:1000px) { .jnew-filter-inner { align-items:flex-start; flex-direction:column; gap:12px; padding:9px 0 16px; } .jnew-filter { top:64px; } .jnew-arc-heading { gap:35px; } .jnew-card-row { grid-auto-columns:minmax(270px,42%); } .jnew-waitlist-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .jnew-waitlist-grid article:nth-child(3n) { border-right:1px solid var(--j-line); } .jnew-waitlist-grid article:nth-child(2n) { border-right:0; } }
-@media(max-width:680px) { .jnew-hero { padding:115px 24px 65px; } .jnew-hero h1 { font-size:clamp(45px,11vw,62px); } .jnew-hero p { font-size:14px; } .jnew-filter { position:static; } .jnew-filter-inner { width:calc(100% - 32px); } .jnew-tabs { width:100%; } .jnew-tabs button { flex:1; font-size:10px; padding:12px 4px; } .jnew-selects { display:grid; grid-template-columns:1fr 1fr; width:100%; } .jnew-selects label:last-child { grid-column:1/-1; } .jnew-selects select { min-width:0; width:100%; } .jnew-main,.jnew-who { padding:0 24px 75px; } .jnew-arc { padding:65px 0 75px; } .jnew-arc-heading { display:block; } .jnew-arc-heading > div:last-child { margin-top:28px; } .jnew-arc-heading h2 { font-size:47px; } .jnew-card-row { grid-auto-columns:minmax(265px,80%); } .jnew-disconnected,.jnew-stillness { margin-inline:-24px; padding-inline:24px; } .jnew-native-card { flex-basis:78%; } .jnew-native-body > p { min-height:0; } .jnew-flagship-row { grid-template-columns:1fr; } .jnew-flagship { min-height:0; } .jnew-waitlist,.jnew-who { padding-top:70px; } .jnew-waitlist-grid { grid-template-columns:1fr; } .jnew-waitlist-grid article,.jnew-waitlist-grid article:nth-child(2n),.jnew-waitlist-grid article:nth-child(3n) { border-right:0; min-height:250px; padding:27px 0; } }
+@media(max-width:680px) { .jnew-hero { padding:115px 24px 65px; } .jnew-hero h1 { font-size:clamp(45px,11vw,62px); } .jnew-hero p { font-size:14px; } .jnew-filter { position:static; } .jnew-filter-inner { width:calc(100% - 32px); } .jnew-tabs { width:100%; } .jnew-tabs button { flex:1; font-size:10px; padding:12px 4px; } .jnew-selects { display:grid; grid-template-columns:1fr 1fr; width:100%; } .jnew-selects label:last-child { grid-column:1/-1; } .jnew-selects select { min-width:0; width:100%; } .jnew-main,.jnew-who { padding:0 24px 75px; } .jnew-arc { padding:65px 0 75px; } .jnew-arc-heading { display:block; } .jnew-arc-heading > div:last-child { margin-top:28px; } .jnew-arc-heading h2 { font-size:47px; } .jnew-card-row { grid-auto-columns:minmax(265px,80%); } .jnew-disconnected { margin-inline:-24px; padding-inline:24px; } .jnew-waitlist,.jnew-who { padding-top:70px; } .jnew-waitlist-grid { grid-template-columns:1fr; } .jnew-waitlist-grid article,.jnew-waitlist-grid article:nth-child(2n),.jnew-waitlist-grid article:nth-child(3n) { border-right:0; min-height:250px; padding:27px 0; } }
