@@ -48,7 +48,7 @@ export function JourneyFaqs({ journey }) {
 }
 
 export function StillnessAlternatives({ currentSlug }) {
-  const collection = ["kimbilio", "kimya", "kupona", "runyararo", "utalala", "calving-season", "calving-isolation"];
+  const collection = ["kimbilio", "kimya", "kupona", "runyararo", "utalala", "calving-season", "calving-isolation", "full-calving-arc"];
   const currentIndex = Math.max(collection.indexOf(currentSlug), 0);
   const cards = [...collection.slice(currentIndex + 1), ...collection.slice(0, currentIndex)]
     .map(journeyFor)

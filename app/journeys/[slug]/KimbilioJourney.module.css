@@ -5,6 +5,7 @@
 .utalala { --moss: #5a4934; --sage: #9a8266; }
 .calvingSeason { --moss: #5b553b; --sage: #9b966d; }
 .calvingIsolation { --moss: #364337; --sage: #8b987d; }
+.fullCalvingArc { --moss: #4d493e; --sage: #a49a85; }
 .page p { line-height: 1.82; }
 .hero { color: #fff; min-height: calc(100svh - 72px); overflow: hidden; position: relative; }
 .hero > img { height: 100%; inset: 0; object-fit: cover; position: absolute; width: 100%; }
@@ -90,6 +91,7 @@
 .utalala .availability { background: #211a14; }
 .calvingSeason .availability { background: #25251d; }
 .calvingIsolation .availability { background: #172319; }
+.fullCalvingArc .availability { background: #27251f; }
 .availabilityIntro h2,.faqs h2,.related h2 { font-family: var(--font-serif); font-size: clamp(38px,5vw,66px); font-weight: 400; letter-spacing: -.04em; line-height: 1.05; margin: 0; }
 .availabilityIntro > p { color: rgba(255,255,255,.59); font-size: 14px; margin: 1.6rem 0 0; max-width: 600px; }
 .availability .sectionLabel { color: rgba(255,255,255,.48); }

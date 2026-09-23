@@ -101,7 +101,7 @@ check(read("app/journeys/[slug]/page.jsx").includes('"@type": "TouristTrip"'), "
 const kimbilio = journeys.find((journey) => journey.slug === "kimbilio");
 const stillness = arcs.find((arc) => arc.id === "stillness");
 check(Boolean(kimbilio) && kimbilio.arc === "stillness" && kimbilio.nights === 4, "Kimbilio is a first-class Stillness Collection journey");
-check(stillness?.intro.startsWith("Nine wilderness journeys"), "Stillness Collection introduction matches its nine journeys");
+check(stillness?.intro.startsWith("Ten wilderness journeys"), "Stillness Collection introduction matches its ten journeys");
 const calvingSeason = journeys.find((journey) => journey.slug === "calving-season");
 check(Boolean(calvingSeason) && calvingSeason.arc === "stillness" && calvingSeason.nights === 6 && calvingSeason.days === 7, "Calving Season is a first-class six-night Stillness journey");
 check(existsSync(join(root, "public", "journeys", "calving-season", "southern-serengeti-aerial.webp")) && existsSync(join(root, "public", "journeys", "calving-season", "camp-hospitality.webp")), "Both supplied Calving Season images are deployable");
@@ -114,6 +114,12 @@ check(existsSync(join(root, "public", "journeys", "calving-isolation", "safari-d
 const calvingIsolationPage = read("app/journeys/[slug]/CalvingIsolationJourney.jsx");
 for (const passage of ["I plan. That's the honest version", "Land &amp; Strip Back", "The Full Ecosystem", "The Fly Camp", "On Foot in the Calving Plains", "The Morning After", "Chosen Day", "Close &amp; Carry", "Last Morning. The Return.", "Standing in the middle of the herd"]) check(calvingIsolationPage.includes(passage), `Calving Maximum Isolation retains supplied copy: ${passage}`);
 check(calvingIsolation.faqs.length >= 4 && calvingIsolationPage.includes("JourneyAvailability") && calvingIsolationPage.includes("JourneyProofSection") && calvingIsolationPage.includes("StillnessAlternatives") && calvingIsolationPage.includes("Request a private call"), "Calving Maximum Isolation has season, availability, proof, FAQ and related-journey parity");
+const fullCalvingArc = journeys.find((journey) => journey.slug === "full-calving-arc");
+check(Boolean(fullCalvingArc) && fullCalvingArc.arc === "stillness" && fullCalvingArc.nights === 9 && fullCalvingArc.days === 10, "The Full Calving Arc is a first-class nine-night Stillness journey");
+check(existsSync(join(root, "public", "journeys", "full-calving-arc", "camp-fire-on-plains.webp")) && existsSync(join(root, "public", "journeys", "full-calving-arc", "guided-plains-walk.webp")), "Both supplied Full Calving Arc images are deployable");
+const fullCalvingArcPage = read("app/journeys/[slug]/FullCalvingArcJourney.jsx");
+for (const passage of ["I've been going through the motions", "Land &amp; Open", "The Serengeti Opens", "Ndutu Immersion", "The Migration in Golden Light", "Off the Grid", "Walking into the Birth", "Descend &amp; Reconnect", "Into the Caldera", "The Maasai Morning. The Return.", "Standing inside the herd"]) check(fullCalvingArcPage.includes(passage), `The Full Calving Arc retains supplied copy: ${passage}`);
+check(fullCalvingArc.faqs.length >= 4 && fullCalvingArcPage.includes("JourneyAvailability") && fullCalvingArcPage.includes("JourneyProofSection") && fullCalvingArcPage.includes("StillnessAlternatives") && fullCalvingArcPage.includes("Request a private call"), "The Full Calving Arc has season, availability, proof, FAQ and related-journey parity");
 check(existsSync(join(root, "public", "journeys", "kimbilio", "katavi-sunset.jpg")) && existsSync(join(root, "public", "journeys", "kimbilio", "katavi-floodplain.jpg")), "Both supplied Katavi images are deployable");
 const kimbilioPage = read("app/journeys/[slug]/KimbilioJourney.jsx");
 for (const passage of ["Nobody has said no to me in about a decade.", "The box arrived", "The Signature Moment", "Usiku · The Night Drive", "You never have to", "One camp. No alternative offered, on purpose.", "Thirty days", "June through October.", "One decision that", "I did not come here to be found."]) check(kimbilioPage.includes(passage), `Kimbilio retains supplied copy: ${passage}`);
