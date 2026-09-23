@@ -13,7 +13,7 @@ function hiddenJourneyFields(journey) {
   </>;
 }
 
-export function JourneyAvailability({ journey, title, copy, openMonths, closedNote }) {
+export function JourneyAvailability({ journey, title, copy, openMonths, closedNote, confirmationNote = "We confirm camp and flight space personally before anything is booked." }) {
   return (
     <section className={styles.availability} aria-labelledby={`${journey.slug}-availability`}>
       <div className={styles.availabilityIntro}>
@@ -27,14 +27,14 @@ export function JourneyAvailability({ journey, title, copy, openMonths, closedNo
         <label>Travelling as<select name="party" defaultValue="2 people sharing"><option>2 people sharing</option><option>Solo traveller</option><option>3–4 people</option><option>5–8 people</option><option>9+ people</option></select></label>
         {hiddenJourneyFields(journey)}
         <button type="submit">Check availability →</button>
-        <small>We confirm camp and flight space personally before anything is booked.</small>
+        <small>{confirmationNote}</small>
       </form>
     </section>
   );
 }
 
-export function JourneyProofSection() {
-  return <div className={styles.proof}><JourneyProof arc="stillness" /></div>;
+export function JourneyProofSection({ arc = "stillness" }) {
+  return <div className={styles.proof}><JourneyProof arc={arc} /></div>;
 }
 
 export function JourneyFaqs({ journey }) {
@@ -66,6 +66,29 @@ export function StillnessAlternatives({ currentSlug }) {
         <b>Explore journey →</b>
       </Link>)}</div>
       <Link className={styles.relatedAll} href="/journeys/stillness">Explore the complete Stillness Collection →</Link>
+    </section>
+  );
+}
+
+export function ExhaustedAlternatives({ currentSlug }) {
+  const collection = ["the-reset", "ex6", "ex9", "rn9"];
+  const currentIndex = Math.max(collection.indexOf(currentSlug), 0);
+  const cards = [...collection.slice(currentIndex + 1), ...collection.slice(0, currentIndex)]
+    .map(journeyFor)
+    .filter((journey) => journey?.image)
+    .slice(0, 3);
+  return (
+    <section className={styles.related} aria-labelledby={`${currentSlug}-related`}>
+      <header><span className={styles.sectionLabel}>Continue within Exhausted</span><h2 id={`${currentSlug}-related`}>The same need.<br />A different pace.</h2></header>
+      <div>{cards.map((journey) => <Link className={styles.relatedCard} href={`/journeys/${journey.slug}`} key={journey.slug}>
+        <img src={journey.image} alt={journey.imageAlt} loading="lazy" />
+        <i aria-hidden="true" />
+        <span>{journey.nights} nights · {journey.destination}</span>
+        <h3>{journey.title}</h3>
+        <p>{journey.tagline}</p>
+        <b>Explore journey →</b>
+      </Link>)}</div>
+      <Link className={styles.relatedAll} href="/journeys/exhausted">Explore the complete Exhausted Collection →</Link>
     </section>
   );
 }

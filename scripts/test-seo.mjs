@@ -98,6 +98,15 @@ check(read("app/case-studies/[slug]/page.jsx").includes('"@type": "BreadcrumbLis
 check(read("app/case-studies/page.jsx").includes('"@type": "ItemList"'), "Case study index publishes the complete ItemList");
 check(read("app/journeys/page.jsx").includes('"@type": "ItemList"'), "Journey index publishes a machine-readable ItemList");
 check(read("app/journeys/[slug]/page.jsx").includes('"@type": "TouristTrip"'), "Journey pages publish TouristTrip structured data");
+const reset = journeys.find((journey) => journey.slug === "the-reset");
+const exhausted = arcs.find((arc) => arc.id === "exhausted");
+check(Boolean(reset) && reset.arc === "exhausted" && reset.nights === 5 && reset.days === 6, "The Reset is a first-class five-night Exhausted journey");
+check(exhausted?.intro.startsWith("Four restorative journeys"), "Exhausted Collection introduction matches its four journeys");
+check(existsSync(join(root, "public", "journeys", "the-reset", "zanzibar-beach.jpg")) && existsSync(join(root, "public", "journeys", "the-reset", "wellness-treatment.jpg")), "Both supplied Reset images are deployable");
+const resetPage = read("app/journeys/[slug]/ResetJourney.jsx");
+for (const passage of ["I have never once shown up late", "You Are Here Now", "The Body Remembers", "The Island as Teacher", "Sand, Sky, Nothing Else", "The Morning You Didn't Expect", "Late Checkout. The Return Begins.", "Night 5 · Day 6 departure", "Nobody is grading how well you rest", "I have spent my life trying to be the best student"]) check(resetPage.includes(passage), `The Reset retains supplied copy and accurate duration: ${passage}`);
+check(reset.faqs.length >= 4 && reset.availableMonths.length === 12 && resetPage.includes("JourneyAvailability") && resetPage.includes("JourneyProofSection") && resetPage.includes("ExhaustedAlternatives") && resetPage.includes("Request a private call"), "The Reset has season, availability, proof, FAQ and related-journey parity");
+check(read("app/journeys/[slug]/page.jsx").includes('slug === "the-reset" ? <ResetJourney journey={journey} />'), "The Reset resolves to its complete journey page");
 const kimbilio = journeys.find((journey) => journey.slug === "kimbilio");
 const stillness = arcs.find((arc) => arc.id === "stillness");
 check(Boolean(kimbilio) && kimbilio.arc === "stillness" && kimbilio.nights === 4, "Kimbilio is a first-class Stillness Collection journey");
