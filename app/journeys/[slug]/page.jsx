@@ -16,6 +16,7 @@ import FullCalvingArcJourney from "./FullCalvingArcJourney";
 import ResetJourney from "./ResetJourney";
 import { absoluteUrl, buildMetadata } from "../../seo";
 import JourneyProof from "../../components/JourneyProof";
+import JourneyTrustLayer, { JourneyPricingNote } from "../../components/JourneyTrustLayer";
 
 function requestHrefFor(journey) {
   const query = new URLSearchParams({
@@ -95,7 +96,8 @@ function JourneyPage({ journey }) {
         ))}
       </section>
       <JourneyProof arc={journey.arc} />
-      <section className="investment paper-section"><div><span className="kicker">Investment</span><h2>{journey.nights} nights. Everything included.</h2><p>International flights are not included. Private transfers, experiences, indicated meals, signature rituals and curator support are included.</p>{journey.priceNote && <p className="price-note">{journey.priceNote}</p>}<p className="journey-booking-note">A conversation is not a booking. Your proposal will explain the 50% deposit, balance date and any supplier-specific conditions before you pay. <Link href="/policies">Booking & care →</Link></p></div><div><small>From</small><strong>{journey.price}</strong><span>/ {journey.unit || "person"}</span><Link className="button button-red" href={requestHref}>Begin the conversation →</Link></div></section>
+<section className="investment paper-section"><div><span className="kicker">Investment</span><h2>{journey.nights} nights. Inclusions, clearly stated.</h2><p>International flights are not included. Private transfers, experiences, indicated meals, signature rituals and curator support are included.</p>{journey.priceNote && <p className="price-note">{journey.priceNote}</p>}<p className="journey-booking-note">A conversation is not a booking. Your proposal will explain the 50% deposit, balance date and any supplier-specific conditions before you pay. <Link href="/policies">Booking & care →</Link></p></div><div><small>From</small><strong>{journey.price}</strong><span>/ {journey.unit || "person"}</span><JourneyPricingNote /><Link className="button button-red" href={requestHref}>Begin the conversation →</Link></div></section>
+      <JourneyTrustLayer />
       <section className="related paper-section"><span className="kicker">Continue exploring</span><div className="journey-cards">{journeys.filter((item) => item.arc === journey.arc && item.slug !== journey.slug).map((item) => <JourneyCard journey={item} key={item.slug} />)}</div></section>
       <CTA title={journey.tagline} copy="A curator will adapt every detail to your dates, pace and the feeling you want to carry home." requestHref={requestHref} />
     </main>

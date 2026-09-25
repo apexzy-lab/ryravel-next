@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
+import JourneyTrustLayer, { JourneyPricingNote } from "../../components/JourneyTrustLayer";
 import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
 
 const days = [
@@ -120,9 +121,10 @@ export default function RunyararoJourney({ journey }) {
 
       <section className={styles.investment}>
         <div><span className={styles.sectionLabel}>Investment</span><h2>Four nights.<br /><em>A location the noise can&apos;t reach.</em></h2></div>
-        <div className={styles.price}><small>From</small><strong>$4,950</strong><span>/ person sharing</span><p>International flights, travel insurance, premium spirits, gratuities, and personal purchases are not included. Four nights fully inclusive at Somalisa, including all meals, selected drinks and laundry, game drives, walking safaris, night drives in the private concession, park fees, transfers from Victoria Falls, the Departure Box, and the Ryravel journal are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
+<div className={styles.price}><small>From</small><strong>$4,950</strong><span>/ person sharing</span><JourneyPricingNote /><p>International flights, travel insurance, premium spirits, gratuities, and personal purchases are not included. Four nights fully inclusive at Somalisa, including all meals, selected drinks and laundry, game drives, walking safaris, night drives in the private concession, park fees, transfers from Victoria Falls, the Departure Box, and the Ryravel journal are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
       </section>
 
+      <JourneyTrustLayer />
       <JourneyProofSection />
       <JourneyFaqs journey={journey} />
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import JourneyProof from "../../components/JourneyProof";
+import JourneyTrustLayer, { JourneyPricingNote } from "../../components/JourneyTrustLayer";
 
 const months = [
   ["January", "shoulder"], ["February", "shoulder"], ["March", "low"], ["April", "low"],
@@ -68,7 +69,8 @@ export default function ExhaustedRestorationSix() {
 
       <JourneyProof arc="exhausted" />
 
-      <section className="restoration-price"><div><div><p className="section-label">Investment</p><h2>Six nights. One island. The full exhale.</h2><p>International flights not included. Private transfers, all experiences, meals where indicated, Signature Rituals, and Ryravel host support are included.</p></div><div><small>From</small><strong>$14,033</strong><span>per person · prices vary by season</span><Link className="button button-red" href="/request?journey=ex9&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar&nights=6&price=%2414%2C033">Begin the conversation →</Link><Link className="button button-outline-dark" href="/request?journey=ex9&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar&nights=6&price=%2414%2C033&conversation=private-call">Request a private call</Link></div></div></section>
+<section className="restoration-price"><div><div><p className="section-label">Investment</p><h2>Six nights. One island. The full exhale.</h2><p>International flights not included. Private transfers, all experiences, meals where indicated, Signature Rituals, and Ryravel host support are included.</p></div><div><small>From</small><strong>$14,033</strong><span>per person · prices vary by season</span><JourneyPricingNote /><Link className="button button-red" href="/request?journey=ex9&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar&nights=6&price=%2414%2C033">Begin the conversation →</Link><Link className="button button-outline-dark" href="/request?journey=ex9&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar&nights=6&price=%2414%2C033&conversation=private-call">Request a private call</Link></div></div></section>
+    <JourneyTrustLayer />
 
       <section className="restoration-months"><div><p className="section-label">Prices by Month</p><h2>Exhausted, The Restoration · 6 Nights · Zanzibar Only</h2><p>International flights are not included. Prices are per person based on two people sharing. All 12 months are available. Prices vary by season, not by experience quality.</p><div className="restoration-month-grid">{months.map(([month, season]) => <article className={season} key={month}><span>{month}</span></article>)}</div><p className="restoration-month-legend">High &nbsp;July · August · September · October&nbsp;&nbsp;&nbsp; Shoulder &nbsp;January · February · June · November · December&nbsp;&nbsp;&nbsp; Low &nbsp;March · April · May</p></div></section>
 

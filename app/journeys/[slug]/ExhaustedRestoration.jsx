@@ -1,5 +1,6 @@
 import Link from "next/link";
 import JourneyProof from "../../components/JourneyProof";
+import JourneyTrustLayer, { JourneyPricingNote } from "../../components/JourneyTrustLayer";
 
 const months = [
   ["January", "shoulder"], ["February", "shoulder"], ["March", "low"], ["April", "low"],
@@ -83,7 +84,8 @@ export default function ExhaustedRestoration() {
 
       <JourneyProof arc="exhausted" />
 
-      <section className="restoration-price"><div><div><p className="section-label">Investment</p><h2>Eleven nights. Three worlds. The complete arc.</h2><p>International flights not included. All internal flights between Zanzibar, Serengeti, Ngorongoro and back, all transfers, experiences, meals where indicated, Signature Rituals, and Ryravel host support are included.</p></div><div><small>From</small><strong>$43,500</strong><span>per person · prices vary by season</span><Link className="button button-red" href="/request?journey=ex6&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar%20%C2%B7%20Serengeti%20%C2%B7%20Ngorongoro&nights=11&price=%2443%2C500">Begin the conversation →</Link><Link className="button button-outline-dark" href="/request?journey=ex6&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar%20%C2%B7%20Serengeti%20%C2%B7%20Ngorongoro&nights=11&price=%2443%2C500&conversation=private-call">Request a private call</Link></div></div></section>
+<section className="restoration-price"><div><div><p className="section-label">Investment</p><h2>Eleven nights. Three worlds. The complete arc.</h2><p>International flights not included. All internal flights between Zanzibar, Serengeti, Ngorongoro and back, all transfers, experiences, meals where indicated, Signature Rituals, and Ryravel host support are included.</p></div><div><small>From</small><strong>$43,500</strong><span>per person · prices vary by season</span><JourneyPricingNote /><Link className="button button-red" href="/request?journey=ex6&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar%20%C2%B7%20Serengeti%20%C2%B7%20Ngorongoro&nights=11&price=%2443%2C500">Begin the conversation →</Link><Link className="button button-outline-dark" href="/request?journey=ex6&name=Exhausted%2C%20The%20Restoration&destination=Zanzibar%20%C2%B7%20Serengeti%20%C2%B7%20Ngorongoro&nights=11&price=%2443%2C500&conversation=private-call">Request a private call</Link></div></div></section>
+    <JourneyTrustLayer />
 
       <section className="restoration-months"><div><p className="section-label">Prices by Month</p><h2>Exhausted, The Restoration · 11 Nights · Zanzibar + Serengeti + Ngorongoro</h2><p>International flights are not included. Prices are per person based on two people sharing. All 12 months are available. Prices vary by season, not by experience quality.</p><div className="restoration-month-grid">{months.map(([month, season]) => <article className={season} key={month}><span>{month}</span></article>)}</div><p className="restoration-month-legend">High &nbsp;July · August · September · October&nbsp;&nbsp;&nbsp; Shoulder &nbsp;January · February · June · November · December&nbsp;&nbsp;&nbsp; Low &nbsp;March · April · May</p></div></section>
 

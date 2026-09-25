@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
+import JourneyTrustLayer, { JourneyPricingNote } from "../../components/JourneyTrustLayer";
 import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
 
 const days = [
@@ -121,9 +122,10 @@ export default function KimyaJourney({ journey }) {
 
       <section className={styles.investment}>
         <div><span className={styles.sectionLabel}>Investment</span><h2>Four nights.<br />A silence you don&apos;t<br /><em>have to manufacture.</em></h2></div>
-        <div className={styles.price}><small>From</small><strong>$9,950</strong><span>/ person sharing</span><p>International flights to and from Mwanza not included, along with travel insurance beyond medical evacuation cover, premium spirits, gratuities, and personal purchases. All transfers and internal flights, four nights full board with house drinks, all camp activities, The Listening, the Departure Box, and the Ryravel journal are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
+<div className={styles.price}><small>From</small><strong>$9,950</strong><span>/ person sharing</span><JourneyPricingNote /><p>International flights to and from Mwanza not included, along with travel insurance beyond medical evacuation cover, premium spirits, gratuities, and personal purchases. All transfers and internal flights, four nights full board with house drinks, all camp activities, The Listening, the Departure Box, and the Ryravel journal are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
       </section>
 
+      <JourneyTrustLayer />
       <JourneyProofSection />
       <JourneyFaqs journey={journey} />
 

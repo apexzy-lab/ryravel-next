@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
+import JourneyTrustLayer, { JourneyPricingNote } from "../../components/JourneyTrustLayer";
 import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
 
 const days = [
@@ -142,9 +143,10 @@ export default function KimbilioJourney({ journey }) {
 
       <section className={styles.investment}>
         <div><span className={styles.sectionLabel}>Investment</span><h2>Four nights.<br />One decision that<br /><em>outlasts them.</em></h2></div>
-        <div className={styles.price}><small>From</small><strong>$5,500</strong><span>/ person sharing</span><p>International flights to Arusha not included. Shared charter flights, four nights full board with drinks at meals, two daily game drives, the Usiku night drive, walking safari, park and concession fees, emergency medical evacuation cover, the Departure Box, and the full Return protocol with two curator check-ins are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
+<div className={styles.price}><small>From</small><strong>$5,500</strong><span>/ person sharing</span><JourneyPricingNote /><p>International flights to Arusha not included. Shared charter flights, four nights full board with drinks at meals, two daily game drives, the Usiku night drive, walking safari, park and concession fees, emergency medical evacuation cover, the Departure Box, and the full Return protocol with two curator check-ins are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
       </section>
 
+      <JourneyTrustLayer />
       <JourneyProofSection />
       <JourneyFaqs journey={journey} />
 

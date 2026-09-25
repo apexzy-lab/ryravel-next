@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
+import JourneyTrustLayer, { JourneyPricingNote } from "../../components/JourneyTrustLayer";
 import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
 
 const days = [
@@ -125,9 +126,10 @@ export default function UtalalaJourney({ journey }) {
 
       <section className={styles.investment}>
         <div><span className={styles.sectionLabel}>Investment</span><h2>Four nights.<br /><em>Stillness you earn on foot.</em></h2></div>
-        <div className={styles.price}><small>From</small><strong>$6,250</strong><span>/ person sharing</span><p>International flights to Lusaka, travel insurance, premium spirits, gratuities, and personal purchases are not included. Four nights fully inclusive at Luwi Bush Camp, guided walking safaris and game drives, park fees, return Lusaka–Mfuwe flights, the Departure Box, and the Ryravel journal are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
+<div className={styles.price}><small>From</small><strong>$6,250</strong><span>/ person sharing</span><JourneyPricingNote /><p>International flights to Lusaka, travel insurance, premium spirits, gratuities, and personal purchases are not included. Four nights fully inclusive at Luwi Bush Camp, guided walking safaris and game drives, park fees, return Lusaka–Mfuwe flights, the Departure Box, and the Ryravel journal are included.</p><div className={styles.priceActions}><Link href={requestHref}>Begin the conversation →</Link><Link className={styles.secondaryAction} href={callHref}>Request a private call</Link></div><small className={styles.reassurance}>A curator responds personally within one business day. Nothing is booked until you are ready.</small></div>
       </section>
 
+      <JourneyTrustLayer />
       <JourneyProofSection />
       <JourneyFaqs journey={journey} />
 
