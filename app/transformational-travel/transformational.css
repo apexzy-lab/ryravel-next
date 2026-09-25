@@ -1,0 +1,36 @@
+.feeling-led-page { overflow:hidden; }
+.fl-hero { background:radial-gradient(circle at 82% 24%,#26392d 0,#151d17 28%,#0c0d0a 70%); color:#f8f5ef; min-height:690px; padding:132px max(8vw,48px) 100px; }
+.fl-hero nav { align-items:center; color:rgba(248,245,239,.48); display:flex; flex-wrap:wrap; gap:10px; font-size:10px; letter-spacing:.11em; margin-bottom:90px; text-transform:uppercase; }
+.fl-hero nav a:hover,.fl-text-link:hover { color:var(--red); }
+.fl-hero h1 { font-size:clamp(46px,6.2vw,94px); font-weight:400; letter-spacing:-.055em; line-height:1.02; max-width:1120px; }
+.fl-hero > p { color:rgba(248,245,239,.72); font-size:clamp(17px,1.6vw,21px); line-height:1.7; margin-top:30px; max-width:770px; }
+.fl-hero-actions,.fl-close > div { align-items:center; display:flex; flex-wrap:wrap; gap:26px; margin-top:34px; }
+.fl-text-link { border-bottom:1px solid currentColor; display:inline-flex; gap:12px; padding-bottom:6px; font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; transition:color .2s; }
+.fl-intro,.fl-worldwide { display:grid; gap:clamp(50px,8vw,140px); grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); padding:110px max(8vw,48px); }
+.fl-intro h2,.fl-method h2,.fl-stillness h2,.fl-worldwide h2,.fl-close h2 { font-size:clamp(40px,5vw,72px); font-weight:400; letter-spacing:-.05em; line-height:1.06; }
+.fl-intro h2 em,.fl-method h2 em,.fl-stillness h2 em,.fl-worldwide h2 em,.fl-close h2 em { color:inherit; font-weight:400; }
+.fl-prose p,.fl-stillness-copy p { color:var(--ink-muted); font-size:16px; line-height:1.95; margin-bottom:24px; }
+.fl-prose p:last-child,.fl-stillness-copy p:last-of-type { margin-bottom:0; }
+.fl-prose a { border-bottom:1px solid var(--red); color:var(--ink); }
+.fl-method { background:#151814; color:#f8f5ef; padding:110px max(8vw,48px) 125px; }
+.fl-section-heading { display:grid; gap:0 60px; grid-template-columns:1fr 1fr; max-width:1180px; }
+.fl-section-heading .kicker { grid-column:1/-1; }
+.fl-section-heading > p { align-self:end; color:#b5b7af; font-size:16px; line-height:1.8; max-width:460px; }
+.fl-method-steps { border-top:1px solid rgba(255,255,255,.18); display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:65px; }
+.fl-method-steps article { border-right:1px solid rgba(255,255,255,.18); padding:35px 38px 0; }
+.fl-method-steps article:first-child { padding-left:0; }
+.fl-method-steps article:last-child { border-right:0; padding-right:0; }
+.fl-method-steps article > span { color:var(--red); font-size:10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }
+.fl-method-steps h3 { font-size:clamp(25px,2.4vw,36px); font-weight:400; margin:24px 0 15px; }
+.fl-method-steps p { color:#b5b7af; font-size:14px; line-height:1.85; }
+.fl-stillness { display:grid; grid-template-columns:1fr 1fr; }
+.fl-stillness-image { min-height:650px; overflow:hidden; }
+.fl-stillness-image img { display:block; height:100%; object-fit:cover; width:100%; }
+.fl-stillness-copy { align-self:center; padding:90px clamp(40px,7vw,110px); }
+.fl-stillness-copy h2 { margin-bottom:30px; }
+.fl-stillness-copy .fl-text-link { color:var(--ink); margin-top:35px; }
+.fl-worldwide { background:var(--paper-2); }
+.fl-close { background:var(--bg); color:var(--text); padding:110px max(8vw,48px) 120px; }
+.fl-close p { color:var(--muted); font-size:16px; line-height:1.85; margin-top:25px; max-width:690px; }
+@media(max-width:900px) { .fl-intro,.fl-worldwide { gap:45px; grid-template-columns:1fr; } .fl-stillness { grid-template-columns:1fr; } .fl-stillness-image { height:430px; min-height:0; } .fl-stillness-copy { padding:75px 48px; } .fl-method-steps { grid-template-columns:1fr; } .fl-method-steps article,.fl-method-steps article:first-child,.fl-method-steps article:last-child { border-bottom:1px solid rgba(255,255,255,.18); border-right:0; padding:30px 0; } }
+@media(max-width:600px) { .fl-hero { min-height:0; padding:106px 24px 75px; } .fl-hero nav { margin-bottom:58px; } .fl-hero h1 { font-size:clamp(40px,10vw,60px); } .fl-hero > p { font-size:16px; } .fl-intro,.fl-worldwide,.fl-method,.fl-close { padding:76px 24px; } .fl-section-heading { display:block; } .fl-section-heading > p { margin-top:25px; } .fl-method-steps { margin-top:42px; } .fl-stillness-image { height:320px; } .fl-stillness-copy { padding:72px 24px; } .fl-prose p,.fl-stillness-copy p { font-size:15px; line-height:1.8; } }

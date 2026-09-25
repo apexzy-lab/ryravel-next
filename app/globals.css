@@ -931,8 +931,11 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
 .home-travel-styles > div > p { color:var(--ink-muted); line-height:1.85; margin:28px 0; max-width:560px; }
 .home-travel-styles nav { border-top:1px solid var(--paper-line); }
 .home-travel-styles nav a { align-items:center; border-bottom:1px solid var(--paper-line); display:grid; gap:18px; grid-template-columns:44px 1fr auto; padding:20px 4px; }
-.home-travel-styles nav span { color:var(--red); font-size:9px; font-weight:800; letter-spacing:.12em; }
+.home-travel-styles nav a > span:first-child { color:var(--red); font-size:9px; font-weight:800; letter-spacing:.12em; }
 .home-travel-styles nav strong { font-family:var(--font-serif); font-size:23px; }
+.home-travel-style-copy { color:var(--ink); display:flex; flex-direction:column; gap:4px; }
+.home-travel-styles nav .home-travel-style-copy strong { font-weight:500; }
+.home-travel-styles nav .home-travel-style-copy small { color:var(--ink-muted); font-size:13px; line-height:1.5; max-width:460px; }
 .home-travel-styles nav i { color:var(--ink-muted); font-size:9px; font-style:normal; letter-spacing:.12em; text-transform:uppercase; }
 
 @media (max-width: 800px) {
@@ -941,6 +944,8 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
   .commercial-pillars,.commercial-related > div,.travel-style-grid { grid-template-columns:1fr; }
   .commercial-pillars article,.commercial-pillars article:first-child { border-bottom:1px solid var(--paper-line); border-right:0; padding:28px 0; }
   .commercial-arrangements,.commercial-faq,.home-travel-styles { gap:55px; grid-template-columns:1fr; padding:80px 24px; }
+  .home-travel-styles nav a { gap:10px; grid-template-columns:34px minmax(0,1fr) auto; }
+  .home-travel-styles nav .home-travel-style-copy small { font-size:12px; }
   .commercial-definition,.commercial-proof,.commercial-related { padding:80px 24px; }
   .commercial-related a { min-height:175px; }
   .travel-style-grid { padding:60px 24px 80px; }
