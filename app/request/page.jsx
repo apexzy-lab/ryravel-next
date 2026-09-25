@@ -70,6 +70,7 @@ export default function RequestPage() {
   const [people, setPeople] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const formRef = useRef(null);
+  const founderNoteRef = useRef(null);
   const turnstileMount = useRef(null);
   const turnstileWidget = useRef(null);
   const analyticsStarted = useRef(false);
@@ -207,7 +208,7 @@ export default function RequestPage() {
       if (!/^\S+@\S+\.\S+$/.test(email)) errors.email = "Enter a valid email address.";
       if (!countryCode) errors.countryCode = "Choose a calling code.";
       if (!phone) errors.phone = "Enter your telephone number.";
-      if (contactPreference === "private-call" && !preferredCallTime) errors.preferredCallTime = "Choose when the curator team should contact you.";
+      if (contactPreference === "private-call" && !preferredCallTime) errors.preferredCallTime = "Choose when Ryravel should contact you.";
       if (turnstileEnabled && !turnstileToken) errors.turnstile = "Complete the security check before submitting.";
     }
     setFieldErrors(errors);
@@ -278,8 +279,8 @@ export default function RequestPage() {
           <span>✓</span>
           <p className="kicker">Enquiry received</p>
           <h1>Thank you.<br /><em>The conversation has begun.</em></h1>
-          <p>Your enquiry is safely with our curators. We will respond within one business day.{journeyContext ? <> We have preserved your interest in <strong>{journeyContext.name}</strong>.</> : null}{reference ? <> Your reference is <strong>{reference}</strong>.</> : null}</p>
-          <div className="request-thanks-next"><span>What happens now</span><ol><li>Your curator reviews the feeling and journey details you shared.</li><li>{contactPreference === "private-call" ? "We contact you to arrange the private conversation." : "We reply personally with the next best question."}</li><li>Only then do we shape destinations, pace and an initial investment direction.</li></ol></div>
+          <p>Your enquiry has reached Ryravel. Maryangel reads every request and replies personally within one business day.{journeyContext ? <> We have preserved your interest in <strong>{journeyContext.name}</strong>.</> : null}{reference ? <> Your reference is <strong>{reference}</strong>.</> : null}</p>
+          <div className="request-thanks-next"><span>What happens now</span><ol><li>Maryangel reviews the feeling and journey details you shared.</li><li>{contactPreference === "private-call" ? "We contact you to arrange the private conversation." : "Maryangel replies with a considered next question."}</li><li>Only then do we shape destinations, pace and an initial investment direction.</li></ol></div>
           <button className="button button-red" type="button" onClick={() => { setSent(false); setReference(""); }}>Return to the form</button>
         </section>
       ) : (
@@ -290,6 +291,7 @@ export default function RequestPage() {
               {["How you feel", "Your journey", "Your details"].map((label, index) => <li className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} aria-current={step === index + 1 ? "step" : undefined} key={label}><b>0{index + 1}</b><span>{label}</span></li>)}
             </ol>
           </header>
+          <button className="progressive-founder-mobile" type="button" onClick={() => founderNoteRef.current?.showModal()}><span className="progressive-founder-mark" aria-hidden="true">MA</span><span><strong>A note from Maryangel</strong><small>Founder &amp; Journey Curator · Personal reply within one business day</small></span><span aria-hidden="true">↗</span></button>
 
           <form className="progressive-form" id="journey-request" ref={formRef} onSubmit={submit} onChangeCapture={startForm} noValidate>
             <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
@@ -313,18 +315,18 @@ export default function RequestPage() {
                     <label>Journey length <b>*</b><select name="duration" defaultValue="" onChange={() => setFieldErrors({})}><option value="" disabled>Select duration</option><option>5–6 nights</option><option>7–9 nights</option><option>10–12 nights</option><option>More than 12 nights</option></select>{fieldErrors.duration ? <small role="alert">{fieldErrors.duration}</small> : null}</label>
                     <label>Travelling as <b>*</b><select name="people" value={people} onChange={(event) => { setPeople(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select</option><option>1 person</option><option>2 people</option><option>3–4 people</option><option>5–8 people</option><option>9+ people</option></select>{fieldErrors.people ? <small role="alert">{fieldErrors.people}</small> : null}</label>
                   </div>
-                  <fieldset className="progressive-budget"><legend>Investment per person <b>*</b></legend><p>This gives the curator team a useful direction. It does not commit you to a booking.</p><div>{budgets.map((value) => <button className={budget === value ? "selected" : ""} type="button" key={value} onClick={() => { startForm(); setBudget(value); setFieldErrors({}); }} aria-pressed={budget === value}><strong>{value}</strong><small>per person</small></button>)}</div><input type="hidden" name="budget" value={budget} />{fieldErrors.budget ? <small className="progressive-field-error" role="alert">{fieldErrors.budget}</small> : null}</fieldset>
-                  <label className="progressive-message">Anything else that matters<textarea name="message" rows="4" placeholder="A milestone, a pace you need, or something you want the curator team to understand…" /></label>
+                  <fieldset className="progressive-budget"><legend>Investment per person <b>*</b></legend><p>This gives Maryangel a useful direction. It does not commit you to a booking.</p><div>{budgets.map((value) => <button className={budget === value ? "selected" : ""} type="button" key={value} onClick={() => { startForm(); setBudget(value); setFieldErrors({}); }} aria-pressed={budget === value}><strong>{value}</strong><small>per person</small></button>)}</div><input type="hidden" name="budget" value={budget} />{fieldErrors.budget ? <small className="progressive-field-error" role="alert">{fieldErrors.budget}</small> : null}</fieldset>
+                  <label className="progressive-message">Anything else that matters<textarea name="message" rows="4" placeholder="A milestone, a pace you need, or something you want Maryangel to understand…" /></label>
                 </section>
 
                 <section className="progressive-stage progressive-details-stage" hidden={step !== 3} aria-labelledby="details-stage-title">
                   <div className="progressive-stage-heading"><div><span className="kicker">03 · Your details</span><h2 id="details-stage-title">Where should the<br />conversation begin?</h2></div><small>Final step · about 45 seconds</small></div>
-                  <div className="progressive-contact-choice" aria-label="Conversation preference"><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => { startForm(); setContactPreference("written-enquiry"); }}><strong>Written journey request</strong><small>The curator team replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => { startForm(); setContactPreference("private-call"); }}><strong>Private curator call</strong><small>We contact you to arrange a private conversation.</small></button></div>
+                  <div className="progressive-contact-choice" aria-label="Conversation preference"><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => { startForm(); setContactPreference("written-enquiry"); }}><strong>Written journey request</strong><small>Maryangel replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => { startForm(); setContactPreference("private-call"); }}><strong>Private curator call</strong><small>We contact you to arrange a private conversation.</small></button></div>
                   <div className="progressive-fields progressive-details">
                     <label>Your name <b>*</b><input name="name" placeholder="Full name" autoComplete="name" onChange={() => setFieldErrors({})} />{fieldErrors.name ? <small role="alert">{fieldErrors.name}</small> : null}</label>
                     <label>Email address <b>*</b><input name="email" type="email" placeholder="your@email.com" autoComplete="email" onChange={() => setFieldErrors({})} />{fieldErrors.email ? <small role="alert">{fieldErrors.email}</small> : null}</label>
                     <label className="wide">Telephone <b>*</b><span className="phone-field"><select name="country-code" defaultValue="" aria-label="Country calling code" onChange={() => setFieldErrors({})}><option value="" disabled>Code</option>{countryCodes.map(([country, code]) => <option value={code} key={`${country}-${code}`}>{country} {code}</option>)}</select><input name="phone" type="tel" placeholder="Phone number" autoComplete="tel-national" onChange={() => setFieldErrors({})} /></span>{fieldErrors.countryCode || fieldErrors.phone ? <small role="alert">{fieldErrors.countryCode || fieldErrors.phone}</small> : null}</label>
-                    {contactPreference === "private-call" ? <label className="wide">Best contact time <b>*</b><select name="preferred-call-time" value={preferredCallTime} onChange={(event) => { setPreferredCallTime(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select a window</option><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option><option>Let the curator team propose a time by email</option></select>{fieldErrors.preferredCallTime ? <small role="alert">{fieldErrors.preferredCallTime}</small> : null}</label> : null}
+                    {contactPreference === "private-call" ? <label className="wide">Best contact time <b>*</b><select name="preferred-call-time" value={preferredCallTime} onChange={(event) => { setPreferredCallTime(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select a window</option><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option><option>Let Ryravel propose a time by email</option></select>{fieldErrors.preferredCallTime ? <small role="alert">{fieldErrors.preferredCallTime}</small> : null}</label> : null}
                     <label>How did you hear about us?<select name="referral" defaultValue=""><option value="" disabled>Select</option><option>Recommendation</option><option>Google</option><option>Instagram</option><option>Press</option><option>Other</option></select></label>
                   </div>
                   <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>Send me occasional traveller case studies and carefully chosen journey notes from Ryravel.</span></label>
@@ -344,15 +346,24 @@ export default function RequestPage() {
                 {journeyContext?.image ? <figure className="progressive-summary-journey-image"><img src={journeyContext.image} alt={journeyContext.imageAlt} /></figure> : null}
                 <span className="kicker">Your direction so far</span>
                 <h3>{journeyContext?.name || feeling || "Your journey"}</h3>
-                <p>{journeyContext ? `${journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}${journeyContext.destination}` : "Your curator will use these answers to shape the destination, pace and experience."}</p>
+                <p>{journeyContext ? `${journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}${journeyContext.destination}` : "Maryangel will use these answers to shape the destination, pace and experience."}</p>
                 <dl><div><dt>Feeling</dt><dd>{feeling || "Not selected"}</dd></div><div><dt>Travellers</dt><dd>{people || "Not selected"}</dd></div><div><dt>Window</dt><dd>{travelMonth && travelYear ? `${travelMonth} ${travelYear}` : "Not selected"}</dd></div>{budget ? <div><dt>Investment</dt><dd>{budget}</dd></div> : null}</dl>
                 {journeyContext?.slug ? <a href={`/journeys/${journeyContext.slug}`}>Review selected journey ↗</a> : null}
-                <div className="progressive-team-note"><strong>A curator team, not an algorithm.</strong><p>Every completed request is reviewed personally by the Ryravel curator team. You will receive a considered response within one business day.</p></div>
-                <div className="progressive-next-summary"><strong>What happens next</strong><ol><li>Personal review by the curator team.</li><li>One private conversation.</li><li>A considered journey direction and proposal.</li></ol></div>
-                <small>Nothing is booked until you are ready. Turnstile appears only at final submission.</small>
+                <div className="progressive-founder-note">
+                  <span className="progressive-founder-mark" aria-hidden="true">MA</span>
+                  <div><span className="progressive-founder-kicker">A note from Maryangel</span><p>“I read every request myself. Tell me where you are; I’ll reply with real thoughts, not a brochure.”</p><strong>Maryangel Ajuzieogu</strong><small>Founder &amp; Journey Curator · Replies within one business day</small><button type="button" onClick={() => founderNoteRef.current?.showModal()}>Read her note <span aria-hidden="true">↗</span></button></div>
+                </div>
+                <small>Nothing is booked until you are ready.</small>
               </aside>
             </div>
           </form>
+          <dialog className="progressive-founder-dialog" ref={founderNoteRef} aria-labelledby="founder-note-title" aria-describedby="founder-note-body">
+            <button className="progressive-founder-close" type="button" onClick={() => founderNoteRef.current?.close()} aria-label="Close Maryangel's note">×</button>
+            <span className="kicker">A note from Maryangel</span>
+            <h2 id="founder-note-title">The conversation begins with you.</h2>
+            <div id="founder-note-body"><p>Hi, I’m Maryangel. I founded Ryravel, and I still read every journey request that comes through this page myself.</p><p>When you tell me you’re exhausted and haven’t stopped in two years, I don’t see a form field. I see the beginning of a real conversation.</p><p>The brief is everything. An itinerary can be assembled from preferences. A journey worth taking starts with understanding where you are now and how you hope to feel when you come home.</p><p>Tell me where you are. You may receive an automatic confirmation that your request arrived; the considered reply comes from me within one business day, with real thoughts, not a brochure.</p></div>
+            <p className="progressive-founder-signature"><strong>Maryangel Ajuzieogu</strong><span>Founder &amp; Journey Curator, Ryravel</span></p>
+          </dialog>
         </section>
       )}
     </main>
