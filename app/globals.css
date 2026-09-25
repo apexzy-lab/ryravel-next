@@ -1042,3 +1042,57 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
 .journey-booking-note a { color:var(--red); text-decoration:underline; text-underline-offset:3px; }
 .footer-subheading { margin-top:21px; }
 @media (max-width:800px) { .policy-hero { padding:116px 24px 64px; } .policy-layout { display:block; padding:40px 24px 80px; } .policy-nav { display:flex; gap:10px; margin-bottom:48px; overflow-x:auto; position:static; white-space:nowrap; } .policy-nav > span { display:none; } .policy-nav a { border:0; padding:12px 8px; } .policy-cards { grid-template-columns:1fr; } .policy-cards > a { min-height:180px; } .policy-table > div { gap:12px; grid-template-columns:1fr; } }
+
+/* Official social-account notice */
+.account-notice { background:#f8f5f0; color:#171511; }
+.account-notice-hero { background:radial-gradient(circle at 74% 22%,#292b23 0,#171713 34%,#10100e 78%); color:#f8f5ef; overflow:hidden; padding:clamp(92px,11vw,150px) max(5vw,30px) clamp(72px,8vw,112px); position:relative; }
+.account-notice-hero::before { border:1px solid rgba(255,255,255,.045); border-radius:50%; content:""; height:min(72vw,900px); position:absolute; right:-13vw; top:-25vw; width:min(72vw,900px); }
+.account-notice-hero-inner,.account-notice-body-inner,.account-notice-verify-inner { margin:auto; max-width:1440px; position:relative; }
+.account-notice-hero-inner { align-items:end; display:grid; gap:clamp(45px,7vw,110px); grid-template-columns:minmax(0,1.25fr) minmax(300px,.65fr); }
+.account-notice-intro .kicker { margin-bottom:32px; }
+.account-notice-intro h1 { font-size:clamp(54px,6.2vw,102px); font-weight:400; letter-spacing:-.055em; line-height:.99; max-width:1000px; }
+.account-notice-intro h1 em { color:#b6bdad; font-weight:400; }
+.account-notice-intro > p { color:#b5afa5; font-size:clamp(16px,1.45vw,20px); line-height:1.65; margin-top:31px; max-width:620px; }
+.account-notice-date { align-items:center; border-top:1px solid rgba(255,255,255,.14); color:#a9a398; display:flex; font-size:10px; gap:22px; letter-spacing:.12em; margin-top:clamp(45px,6vw,78px); padding-top:18px; text-transform:uppercase; }
+.account-notice-date span { color:var(--red); font-weight:700; }
+.account-notice-profile { background:#ece6dc; border-top:3px solid var(--red); color:#181611; min-height:360px; padding:clamp(28px,3.2vw,48px); }
+.account-notice-profile-label { color:#876e63; font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+.account-notice-profile-mark { align-items:center; border:1px solid #cbbeb2; border-radius:50%; color:var(--red-dark); display:flex; font-family:var(--font-serif); font-size:54px; height:94px; justify-content:center; margin:32px 0 28px; width:94px; }
+.account-notice-profile strong { display:block; font-family:var(--font-serif); font-size:clamp(35px,3vw,47px); font-weight:400; letter-spacing:-.05em; overflow-wrap:anywhere; }
+.account-notice-profile p { color:#70675e; font-size:13px; line-height:1.55; margin:10px 0 30px; }
+.account-notice-profile a { border-bottom:1px solid var(--red-dark); color:var(--red-dark); display:inline-flex; font-size:10px; font-weight:750; gap:12px; letter-spacing:.12em; padding-bottom:6px; text-transform:uppercase; }
+.account-notice-body { padding:clamp(76px,9vw,138px) max(5vw,30px); }
+.account-notice-body-inner { display:grid; gap:clamp(45px,7vw,115px); grid-template-columns:minmax(180px,.4fr) minmax(0,1fr); }
+.account-notice-rail { border-top:1px solid #cfc6bb; padding-top:18px; }
+.account-notice-rail span { color:var(--red-dark); font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+.account-notice-rail p { color:#7d746a; font-size:13px; line-height:1.6; margin-top:13px; }
+.account-notice-statement { border-top:1px solid #cfc6bb; max-width:900px; padding-top:27px; }
+.account-notice-statement h2 { font-size:clamp(36px,4vw,59px); font-weight:400; letter-spacing:-.045em; line-height:1.1; margin-bottom:35px; }
+.account-notice-statement > p { color:#4c4741; font-size:clamp(16px,1.3vw,19px); line-height:1.8; margin-bottom:25px; max-width:810px; }
+.account-notice-statement strong { color:#181611; font-weight:650; }
+.account-notice-statement a,.account-notice-checks a { color:#b83832; text-decoration:underline; text-underline-offset:4px; }
+.account-notice-signoff { border-top:1px solid #d6cec3; display:flex; flex-direction:column; gap:4px; margin-top:45px; padding-top:23px; }
+.account-notice-signoff span { font-family:var(--font-serif); font-size:28px; }
+.account-notice-signoff small { color:#82796e; font-size:11px; }
+.account-notice-verify { background:#e9e5dc; padding:clamp(70px,8vw,120px) max(5vw,30px); }
+.account-notice-verify-inner { display:grid; gap:clamp(50px,7vw,110px); grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr); }
+.account-notice-verify h2 { font-size:clamp(40px,4.4vw,69px); font-weight:400; letter-spacing:-.05em; line-height:1.04; }
+.account-notice-verify h2 em { color:#6c7768; }
+.account-notice-checks { border-top:1px solid #c9c1b6; }
+.account-notice-checks > div { align-items:baseline; border-bottom:1px solid #c9c1b6; display:grid; gap:22px; grid-template-columns:40px minmax(0,1fr); padding:23px 0; }
+.account-notice-checks span { color:var(--red-dark); font-size:10px; font-weight:750; letter-spacing:.13em; }
+.account-notice-checks p { color:#48423b; font-size:16px; line-height:1.55; }
+.account-notice-contact { background:#1a1915; color:#f8f5ef; padding:clamp(75px,8vw,112px) 30px; text-align:center; }
+.account-notice-contact > span { color:var(--red); font-size:10px; font-weight:750; letter-spacing:.2em; text-transform:uppercase; }
+.account-notice-contact h2 { font-size:clamp(36px,4vw,60px); font-weight:400; letter-spacing:-.04em; margin:15px 0 25px; }
+.account-notice-contact a { border-bottom:1px solid var(--red); color:#f8f5ef; display:inline-flex; font-size:clamp(15px,1.5vw,20px); gap:13px; padding-bottom:7px; }
+.account-notice a:focus-visible { outline:2px solid var(--red); outline-offset:4px; }
+@media (max-width:800px) {
+  .account-notice-hero { padding:104px 24px 70px; }
+  .account-notice-hero-inner,.account-notice-body-inner,.account-notice-verify-inner { grid-template-columns:1fr; }
+  .account-notice-profile { min-height:0; }
+  .account-notice-body,.account-notice-verify { padding:72px 24px; }
+  .account-notice-body-inner,.account-notice-verify-inner { gap:35px; }
+  .account-notice-rail p { margin-top:6px; }
+  .account-notice-statement h2 { margin-bottom:24px; }
+}

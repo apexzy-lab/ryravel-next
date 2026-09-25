@@ -31,6 +31,11 @@ check(read("app/seo.js").includes('alternateName: "Ryravel Travel"'), "WebSite s
 check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begins with the Ryravel brand exactly");
 check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around How You Feel"), "Homepage title uses the broad feeling-led Ryravel positioning");
 check(read("app/seo.js").includes("bespoke luxury journeys worldwide") && read("app/seo.js").includes('areaServed: ["Worldwide"'), "Global metadata and organization schema position Ryravel as worldwide");
+const accountNotice = read("app/official-instagram/page.jsx");
+check(accountNotice.includes("@ryravels") && accountNotice.includes("@journeybyry") && accountNotice.includes("second quarter of 2026"), "Official Instagram notice identifies the former and current accounts without speculating on cause");
+check(accountNotice.includes("hello@ryravel.com") && accountNotice.includes("payment instruction"), "Official Instagram notice gives travellers a direct verification path");
+check(read("app/components/SiteChrome.jsx").includes('href="/official-instagram"') && read("app/components/SiteChrome.jsx").includes("https://www.instagram.com/journeybyry/") && read("app/sitemap.js").includes('"/official-instagram"'), "Official Instagram notice and current handle are discoverable across the site");
+check(read("app/seo.js").includes("https://www.instagram.com/journeybyry/") && !read("app/seo.js").includes("instagram.com/ryravels"), "Organization identity links only to the current official Instagram account");
 check(retiredJourneySlugs.every((slug) => !journeys.some((journey) => journey.slug === slug)), "All requested journey records are removed from the catalogue");
 check(retiredJourneySlugs.every((slug) => !read("app/components/HomepageExperience.jsx").includes(`/journeys/${slug}`)), "Homepage contains no links to retired journeys");
 check(read("app/journeys/page.jsx").includes('journey.arc !== "stillness"') && read("app/sitemap.js").includes("journeys.some"), "Journey catalogue excludes Stillness tours while their dedicated collection routes remain discoverable");

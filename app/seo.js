@@ -68,7 +68,7 @@ export const organizationJsonLd = {
       ["Luxury Zanzibar journeys", "/destinations/zanzibar"],
     ].map(([name, path]) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name, url: absoluteUrl(path) } })),
   },
-  sameAs: ["https://www.linkedin.com/company/ryravel"],
+  sameAs: ["https://www.linkedin.com/company/ryravel", "https://www.instagram.com/journeybyry/"],
 };
 
 export const websiteJsonLd = {
