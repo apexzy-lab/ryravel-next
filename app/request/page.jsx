@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { journeys } from "../data";
+import { trackFunnel } from "../lib/funnel";
 
 const feelings = [
   ["Exhausted", "I need to stop", "Running on empty. I need silence more than scenery and permission to be completely still."],
@@ -71,11 +72,42 @@ export default function RequestPage() {
   const formRef = useRef(null);
   const turnstileMount = useRef(null);
   const turnstileWidget = useRef(null);
+  const analyticsStarted = useRef(false);
+  const analyticsSubmitted = useRef(false);
+  const analyticsAbandoned = useRef(false);
+  const analyticsJourneySlug = useRef("");
+
+  function analyticsContext() {
+    return analyticsJourneySlug.current ? { journey_slug: analyticsJourneySlug.current } : {};
+  }
+
+  function startForm() {
+    if (analyticsStarted.current) return;
+    analyticsStarted.current = true;
+    trackFunnel("form_started", analyticsContext());
+  }
+
+  useEffect(() => {
+    const onLeave = () => {
+      if (!analyticsStarted.current || analyticsSubmitted.current || analyticsAbandoned.current) return;
+      analyticsAbandoned.current = true;
+      trackFunnel("form_abandoned", analyticsContext());
+    };
+    const onNavigation = (event) => {
+      const link = event.target.closest?.("a[href]");
+      if (link && new URL(link.href).pathname !== "/request") onLeave();
+    };
+    window.addEventListener("pagehide", onLeave);
+    window.addEventListener("popstate", onLeave);
+    document.addEventListener("click", onNavigation, true);
+    return () => { window.removeEventListener("pagehide", onLeave); window.removeEventListener("popstate", onLeave); document.removeEventListener("click", onNavigation, true); };
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const slug = params.get("journey");
     const selectedJourney = journeys.find((journey) => journey.slug === slug);
+    analyticsJourneySlug.current = selectedJourney?.slug || "";
     const requestedFeeling = params.get("feeling");
     const journeyFeeling = feelings.some(([name]) => name === requestedFeeling)
       ? requestedFeeling
@@ -179,6 +211,7 @@ export default function RequestPage() {
       if (turnstileEnabled && !turnstileToken) errors.turnstile = "Complete the security check before submitting.";
     }
     setFieldErrors(errors);
+    if (Object.keys(errors).length) trackFunnel("validation_error", { ...analyticsContext(), step: activeStep, error_fields: Object.keys(errors) });
     return Object.keys(errors).length === 0;
   }
 
@@ -192,6 +225,7 @@ export default function RequestPage() {
   }
 
   function continueRequest() {
+    startForm();
     if (validateStep(step)) changeStep(Math.min(step + 1, 3));
   }
 
@@ -216,7 +250,13 @@ export default function RequestPage() {
         body: JSON.stringify(payload),
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Your enquiry could not be sent.");
+      if (!response.ok) {
+        if ([400, 422].includes(response.status)) trackFunnel("validation_error", { ...analyticsContext(), step: 3, error_fields: ["submission"] });
+        throw new Error(result.error || "Your enquiry could not be sent.");
+      }
+      analyticsSubmitted.current = true;
+      trackFunnel("enquiry_submitted", analyticsContext());
+      if (contactPreference === "private-call") trackFunnel("private_call_requested", analyticsContext());
       setReference(result.reference || "");
       setSent(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -251,7 +291,7 @@ export default function RequestPage() {
             </ol>
           </header>
 
-          <form className="progressive-form" id="journey-request" ref={formRef} onSubmit={submit} noValidate>
+          <form className="progressive-form" id="journey-request" ref={formRef} onSubmit={submit} onChangeCapture={startForm} noValidate>
             <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
             <div className="progressive-workspace">
               <div className={`progressive-stage-card progressive-stage-card-step-${step}`}>
@@ -259,7 +299,7 @@ export default function RequestPage() {
                   <div className="progressive-stage-heading"><div><span className="kicker">01 · How you feel</span><h2 id="feeling-stage-title">Right now, honestly—<br />how are you?</h2></div><small>Step 1 of 3 · about 30 seconds</small></div>
                   <p className="progressive-intro">Choose the feeling closest to where you are. This shapes what comes next.</p>
                   <div className="progressive-feelings">
-                    {feelings.map(([name, title]) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { setFeeling(name); setFieldErrors({}); }} aria-pressed={feeling === name}><span className="progressive-feeling-mark" aria-hidden="true"><FeelingIcon name={name} />{feeling === name ? <span className="progressive-feeling-check">✓</span> : null}</span><em>{name}</em><strong>{title}</strong></button>)}
+                    {feelings.map(([name, title]) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { startForm(); setFeeling(name); setFieldErrors({}); trackFunnel("feeling_selected", { ...analyticsContext(), feeling: name }); }} aria-pressed={feeling === name}><span className="progressive-feeling-mark" aria-hidden="true"><FeelingIcon name={name} />{feeling === name ? <span className="progressive-feeling-check">✓</span> : null}</span><em>{name}</em><strong>{title}</strong></button>)}
                   </div>
                   <input type="hidden" name="feeling" value={feeling} />
                   {fieldErrors.feeling ? <p className="progressive-field-error" role="alert">{fieldErrors.feeling}</p> : null}
@@ -273,13 +313,13 @@ export default function RequestPage() {
                     <label>Journey length <b>*</b><select name="duration" defaultValue="" onChange={() => setFieldErrors({})}><option value="" disabled>Select duration</option><option>5–6 nights</option><option>7–9 nights</option><option>10–12 nights</option><option>More than 12 nights</option></select>{fieldErrors.duration ? <small role="alert">{fieldErrors.duration}</small> : null}</label>
                     <label>Travelling as <b>*</b><select name="people" value={people} onChange={(event) => { setPeople(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select</option><option>1 person</option><option>2 people</option><option>3–4 people</option><option>5–8 people</option><option>9+ people</option></select>{fieldErrors.people ? <small role="alert">{fieldErrors.people}</small> : null}</label>
                   </div>
-                  <fieldset className="progressive-budget"><legend>Investment per person <b>*</b></legend><p>This gives the curator team a useful direction. It does not commit you to a booking.</p><div>{budgets.map((value) => <button className={budget === value ? "selected" : ""} type="button" key={value} onClick={() => { setBudget(value); setFieldErrors({}); }} aria-pressed={budget === value}><strong>{value}</strong><small>per person</small></button>)}</div><input type="hidden" name="budget" value={budget} />{fieldErrors.budget ? <small className="progressive-field-error" role="alert">{fieldErrors.budget}</small> : null}</fieldset>
+                  <fieldset className="progressive-budget"><legend>Investment per person <b>*</b></legend><p>This gives the curator team a useful direction. It does not commit you to a booking.</p><div>{budgets.map((value) => <button className={budget === value ? "selected" : ""} type="button" key={value} onClick={() => { startForm(); setBudget(value); setFieldErrors({}); }} aria-pressed={budget === value}><strong>{value}</strong><small>per person</small></button>)}</div><input type="hidden" name="budget" value={budget} />{fieldErrors.budget ? <small className="progressive-field-error" role="alert">{fieldErrors.budget}</small> : null}</fieldset>
                   <label className="progressive-message">Anything else that matters<textarea name="message" rows="4" placeholder="A milestone, a pace you need, or something you want the curator team to understand…" /></label>
                 </section>
 
                 <section className="progressive-stage progressive-details-stage" hidden={step !== 3} aria-labelledby="details-stage-title">
                   <div className="progressive-stage-heading"><div><span className="kicker">03 · Your details</span><h2 id="details-stage-title">Where should the<br />conversation begin?</h2></div><small>Final step · about 45 seconds</small></div>
-                  <div className="progressive-contact-choice" aria-label="Conversation preference"><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => setContactPreference("written-enquiry")}><strong>Written journey request</strong><small>The curator team replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => setContactPreference("private-call")}><strong>Private curator call</strong><small>We contact you to arrange a private conversation.</small></button></div>
+                  <div className="progressive-contact-choice" aria-label="Conversation preference"><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => { startForm(); setContactPreference("written-enquiry"); }}><strong>Written journey request</strong><small>The curator team replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => { startForm(); setContactPreference("private-call"); }}><strong>Private curator call</strong><small>We contact you to arrange a private conversation.</small></button></div>
                   <div className="progressive-fields progressive-details">
                     <label>Your name <b>*</b><input name="name" placeholder="Full name" autoComplete="name" onChange={() => setFieldErrors({})} />{fieldErrors.name ? <small role="alert">{fieldErrors.name}</small> : null}</label>
                     <label>Email address <b>*</b><input name="email" type="email" placeholder="your@email.com" autoComplete="email" onChange={() => setFieldErrors({})} />{fieldErrors.email ? <small role="alert">{fieldErrors.email}</small> : null}</label>

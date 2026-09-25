@@ -14,6 +14,7 @@
     "deploy:vinext": "vinext-cloudflare deploy --config dist/server/wrangler.json",
     "deploy:legacy-redirects": "wrangler deploy --config legacy-redirects/wrangler.jsonc",
     "test:gtmcr-background": "node scripts/test-gtmcr-background.mjs",
+    "test:funnel": "node scripts/test-funnel.mjs",
     "test:seo": "node scripts/test-seo.mjs",
     "submit:indexnow": "node scripts/submit-indexnow.mjs",
     "verify:search-live": "node scripts/verify-live-search.mjs",

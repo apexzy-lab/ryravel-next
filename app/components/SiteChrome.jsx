@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { clearAnalyticsSession, readTrackingChoice, saveTrackingChoice, trackFunnel } from "../lib/funnel";
 
 const nav = [
   ["Journeys", "/journeys"],
@@ -9,8 +11,6 @@ const nav = [
   ["The Return", "/the-return"],
   ["Case studies", "/case-studies"],
 ];
-
-const consentKey = "ryravel-cookie-choice-v1";
 
 export function Logo({ forceLight = false }) {
   return (
@@ -22,11 +22,14 @@ export function Logo({ forceLight = false }) {
 }
 
 export default function SiteChrome({ children }) {
+  const pathname = usePathname();
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(undefined);
+  const [analyticsConsent, setAnalyticsConsent] = useState(undefined);
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
   const linkedInLoaded = useRef(false);
+  const lastTrackedPath = useRef("");
 
   useEffect(() => {
     const saved = window.localStorage.getItem("ryravel-theme");
@@ -37,10 +40,12 @@ export default function SiteChrome({ children }) {
 
   useEffect(() => {
     try {
-      const saved = window.localStorage.getItem(consentKey);
-      setMarketingConsent(saved === "accept" ? true : saved === "reject" ? false : null);
+      const saved = readTrackingChoice();
+      setMarketingConsent(saved === "all" || saved === "marketing" ? true : saved ? false : null);
+      setAnalyticsConsent(saved === "all" || saved === "analytics" ? true : saved ? false : null);
     } catch {
       setMarketingConsent(null);
+      setAnalyticsConsent(null);
     }
     const openSettings = () => setCookieSettingsOpen(true);
     window.addEventListener("ryravel:cookie-settings", openSettings);
@@ -60,14 +65,37 @@ export default function SiteChrome({ children }) {
     document.head.appendChild(script);
   }, [marketingConsent]);
 
-  function chooseMarketing(allowed) {
-    try { window.localStorage.setItem(consentKey, allowed ? "accept" : "reject"); } catch { /* Browsing can continue without storage. */ }
+  useEffect(() => {
+    if (analyticsConsent !== true || !pathname || lastTrackedPath.current === pathname) return;
+    lastTrackedPath.current = pathname;
+    const journey = /^\/journeys\/([a-z0-9-]+)$/.exec(pathname);
+    const study = /^\/case-studies\/([a-z0-9-]+)$/.exec(pathname);
+    if (journey) trackFunnel("journey_viewed", { journey_slug: journey[1] });
+    if (study) trackFunnel("case_study_opened", { case_study_slug: study[1] });
+  }, [analyticsConsent, pathname]);
+
+  useEffect(() => {
+    if (analyticsConsent !== true) return undefined;
+    const trackRequestLink = (event) => {
+      const link = event.target.closest?.('a[href^="/request"]');
+      if (!link) return;
+      const journeySlug = new URL(link.href).searchParams.get("journey");
+      trackFunnel("plan_journey_clicked", journeySlug && /^[a-z0-9-]{1,80}$/.test(journeySlug) ? { journey_slug: journeySlug } : {});
+    };
+    document.addEventListener("click", trackRequestLink, true);
+    return () => document.removeEventListener("click", trackRequestLink, true);
+  }, [analyticsConsent]);
+
+  function chooseTracking(choice) {
+    saveTrackingChoice(choice);
     setCookieSettingsOpen(false);
-    if (!allowed && linkedInLoaded.current) {
+    if (!["all", "analytics"].includes(choice)) { clearAnalyticsSession(); lastTrackedPath.current = ""; }
+    if (!["all", "marketing"].includes(choice) && linkedInLoaded.current) {
       window.location.reload();
       return;
     }
-    setMarketingConsent(allowed);
+    setMarketingConsent(choice === "all" || choice === "marketing");
+    setAnalyticsConsent(choice === "all" || choice === "analytics");
   }
 
   function toggleTheme() {
@@ -110,7 +138,7 @@ export default function SiteChrome({ children }) {
         </div>
         <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => setCookieSettingsOpen(true)}>Cookie settings</button></span></div>
       </footer>
-      {(marketingConsent === null || cookieSettingsOpen) && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>We use essential storage for site preferences and enquiry security. With your permission, we also use LinkedIn’s marketing tag. You can change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseMarketing(false)}>Reject marketing</button><button type="button" onClick={() => chooseMarketing(true)}>Allow marketing</button>{cookieSettingsOpen && marketingConsent !== null && <button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button>}</div></div>}
+      {(marketingConsent === null || cookieSettingsOpen) && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>Essential site functions always work. With permission, we measure journey and form interactions using a random session ID; you can also allow LinkedIn marketing tracking. Change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseTracking("reject")}>Reject optional</button><button type="button" onClick={() => chooseTracking("analytics")}>Analytics only</button><button type="button" onClick={() => chooseTracking("marketing")}>Marketing only</button><button type="button" onClick={() => chooseTracking("all")}>Allow both</button>{cookieSettingsOpen && marketingConsent !== null && <button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button>}</div></div>}
     </>
   );
 }

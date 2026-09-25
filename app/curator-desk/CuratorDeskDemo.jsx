@@ -257,7 +257,7 @@ export default function CuratorDeskDemo() {
       <div className="command-desk live-command-desk">
         <aside className="command-sidebar">
           <div className="desk-brand"><img src="/brand/ryravel-mark.png" alt="" /><div><strong>Ryravel</strong><span>Curator desk</span></div></div>
-          <nav><button className={view === "active" ? "active" : ""} type="button" onClick={() => changeView("active")}><span>◆</span> Enquiries <b>{counts.active_count || 0}</b></button><button className={view === "trash" ? "active" : ""} type="button" onClick={() => changeView("trash")}><span>♲</span> Trash <b>{counts.deleted_count || 0}</b></button><button type="button" onClick={exportCsv}><span>↧</span> Export CSV</button><a href="/journeys"><span>◫</span> Journeys</a><a href="/"><span>↗</span> View website</a></nav>
+          <nav><button className={view === "active" ? "active" : ""} type="button" onClick={() => changeView("active")}><span>◆</span> Enquiries <b>{counts.active_count || 0}</b></button><button className={view === "trash" ? "active" : ""} type="button" onClick={() => changeView("trash")}><span>♲</span> Trash <b>{counts.deleted_count || 0}</b></button><a href="/curator-desk/funnel"><span>▤</span> Journey funnel</a><button type="button" onClick={exportCsv}><span>↧</span> Export CSV</button><a href="/journeys"><span>◫</span> Journeys</a><a href="/"><span>↗</span> View website</a></nav>
           <div className="desk-user"><span>{initials(overview.actor)}</span><div><b>{overview.actor || "Ryravel curator"}</b><small>Authorised workspace</small></div><button className="desk-logout" type="button" onClick={signOut}>Log out</button></div>
         </aside>
 
