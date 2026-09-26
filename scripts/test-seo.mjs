@@ -225,6 +225,11 @@ check(legacyLuxury.status === 301 && legacyLuxury.headers.get("location") === "h
 const legacyIrrelevant = await legacyRedirects.fetch(new Request("https://blog.ryravel.com/how-to-apply-for-a-netherlands-tourist-visa/"));
 check(legacyIrrelevant.status === 410 && legacyIrrelevant.headers.get("x-robots-tag")?.includes("noindex"), "Irrelevant retired blog content returns 410 and noindex");
 
+check(requestPage.includes('<h1 className="kicker">Plan my journey</h1>'), "Request page retains an accessible H1 without changing the approved layout");
+check(requestPage.includes('if (step < 3) { continueRequest(); return; }'), "Enter advances intermediate form stages instead of submitting prematurely");
+check(requestPage.includes('event?.preventDefault();') && requestPage.includes('key="continue"') && requestPage.includes('key="submit"'), "Continue cannot turn its own click into a final-stage submission");
+check(requestPage.includes('image: selectedJourney?.image || ""'), "Request image comes from the published catalogue, not an arbitrary query URL");
+check(read("app/components/SiteChrome.jsx").includes('inert={!menuOpen}') && read("app/components/SiteChrome.jsx").includes('aria-expanded={menuOpen}'), "Closed mobile navigation is not keyboard focusable and exposes its expanded state");
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);
 if (failures.length) process.exit(1);

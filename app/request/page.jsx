@@ -121,7 +121,7 @@ export default function RequestPage() {
         destination: params.get("destination") || selectedJourney?.destination || "To be shaped with your curator",
         nights: params.get("nights") || (selectedJourney?.nights ? String(selectedJourney.nights) : ""),
         price: params.get("price") || selectedJourney?.price || "",
-        image: params.get("image") || selectedJourney?.image || "",
+        image: selectedJourney?.image || "",
         imageAlt: params.get("image-alt") || selectedJourney?.imageAlt || `${name || "Selected journey"} landscape`,
       });
     }
@@ -131,7 +131,7 @@ export default function RequestPage() {
     }
     if (params.get("conversation") === "private-call") setContactPreference("private-call");
     const startDate = params.get("start-date");
-    if (startDate && /^\d{4}-\d{2}-\d{2}$/.test(startDate)) {
+    if (startDate && /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(startDate)) {
       const [year, month] = startDate.split("-");
       setTravelYear(year);
       setTravelMonth(new Intl.DateTimeFormat("en", { month: "long", timeZone: "UTC" }).format(new Date(`${year}-${month}-01T00:00:00Z`)));
@@ -206,7 +206,7 @@ export default function RequestPage() {
       const phone = formValue("phone");
       if (!name) errors.name = "Enter your name.";
       if (!/^\S+@\S+\.\S+$/.test(email)) errors.email = "Enter a valid email address.";
-      if (!countryCode) errors.countryCode = "Choose a calling code.";
+      if (!/^\+[1-9]\d{0,3}$/.test(countryCode)) errors.countryCode = "Enter a calling code, such as +1 or +44.";
       if (!phone) errors.phone = "Enter your telephone number.";
       if (contactPreference === "private-call" && !preferredCallTime) errors.preferredCallTime = "Choose when Ryravel should contact you.";
       if (turnstileEnabled && !turnstileToken) errors.turnstile = "Complete the security check before submitting.";
@@ -225,13 +225,15 @@ export default function RequestPage() {
     }
   }
 
-  function continueRequest() {
+  function continueRequest(event) {
+    event?.preventDefault();
     startForm();
     if (validateStep(step)) changeStep(Math.min(step + 1, 3));
   }
 
   async function submit(event) {
     event.preventDefault();
+    if (step < 3) { continueRequest(); return; }
     setError("");
     if (!validateStep(3)) return;
     setSending(true);
@@ -286,7 +288,7 @@ export default function RequestPage() {
       ) : (
         <section className="progressive-request" id="request-progress">
           <header className="progressive-request-header">
-            <div className="progressive-request-title"><span className="kicker">Plan my journey</span><p>Private journeys, shaped personally.</p></div>
+            <div className="progressive-request-title"><h1 className="kicker">Plan my journey</h1><p>Private journeys, shaped personally.</p></div>
             <ol className="progressive-stepper" aria-label={`Step ${step} of 3`}>
               {["How you feel", "Your journey", "Your details"].map((label, index) => <li className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} aria-current={step === index + 1 ? "step" : undefined} key={label}><b>0{index + 1}</b><span>{label}</span></li>)}
             </ol>
@@ -325,7 +327,7 @@ export default function RequestPage() {
                   <div className="progressive-fields progressive-details">
                     <label>Your name <b>*</b><input name="name" placeholder="Full name" autoComplete="name" onChange={() => setFieldErrors({})} />{fieldErrors.name ? <small role="alert">{fieldErrors.name}</small> : null}</label>
                     <label>Email address <b>*</b><input name="email" type="email" placeholder="your@email.com" autoComplete="email" onChange={() => setFieldErrors({})} />{fieldErrors.email ? <small role="alert">{fieldErrors.email}</small> : null}</label>
-                    <label className="wide">Telephone <b>*</b><span className="phone-field"><select name="country-code" defaultValue="" aria-label="Country calling code" onChange={() => setFieldErrors({})}><option value="" disabled>Code</option>{countryCodes.map(([country, code]) => <option value={code} key={`${country}-${code}`}>{country} {code}</option>)}</select><input name="phone" type="tel" placeholder="Phone number" autoComplete="tel-national" onChange={() => setFieldErrors({})} /></span>{fieldErrors.countryCode || fieldErrors.phone ? <small role="alert">{fieldErrors.countryCode || fieldErrors.phone}</small> : null}</label>
+                    <label className="wide">Telephone <b>*</b><span className="phone-field"><input className="calling-code" name="country-code" type="tel" list="calling-code-options" placeholder="+Code" aria-label="Country calling code" autoComplete="tel-country-code" onChange={() => setFieldErrors({})} /><datalist id="calling-code-options">{countryCodes.map(([country, code]) => <option value={code} key={`${country}-${code}`}>{country}</option>)}</datalist><input name="phone" type="tel" placeholder="Phone number" autoComplete="tel-national" onChange={() => setFieldErrors({})} /></span>{fieldErrors.countryCode || fieldErrors.phone ? <small role="alert">{fieldErrors.countryCode || fieldErrors.phone}</small> : null}</label>
                     {contactPreference === "private-call" ? <label className="wide">Best contact time <b>*</b><select name="preferred-call-time" value={preferredCallTime} onChange={(event) => { setPreferredCallTime(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select a window</option><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option><option>Let Ryravel propose a time by email</option></select>{fieldErrors.preferredCallTime ? <small role="alert">{fieldErrors.preferredCallTime}</small> : null}</label> : null}
                     <label>How did you hear about us?<select name="referral" defaultValue=""><option value="" disabled>Select</option><option>Recommendation</option><option>Google</option><option>Instagram</option><option>Press</option><option>Other</option></select></label>
                   </div>
@@ -338,7 +340,7 @@ export default function RequestPage() {
 
                 <div className="progressive-actions">
                   {step > 1 ? <button className="progressive-back" type="button" onClick={() => changeStep(step - 1)}>← Back</button> : <span>Your answers are preserved between steps.</span>}
-                  {step < 3 ? <button className="progressive-next" type="button" onClick={continueRequest}>Continue →</button> : <button className="progressive-next" type="submit" disabled={sending}>{sending ? "Sending…" : contactPreference === "private-call" ? "Request private call →" : "Submit journey request →"}</button>}
+                  {step < 3 ? <button key="continue" className="progressive-next" type="button" onClick={continueRequest}>Continue →</button> : <button key="submit" className="progressive-next" type="submit" disabled={sending}>{sending ? "Sending…" : contactPreference === "private-call" ? "Request private call →" : "Submit journey request →"}</button>}
                 </div>
               </div>
 

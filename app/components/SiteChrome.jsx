@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { clearAnalyticsSession, readTrackingChoice, saveTrackingChoice, trackFunnel } from "../lib/funnel";
+import { journeys } from "../data";
 
 const nav = [
   ["Journeys", "/journeys"],
@@ -30,9 +31,21 @@ export default function SiteChrome({ children }) {
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
   const linkedInLoaded = useRef(false);
   const lastTrackedPath = useRef("");
+  const menuButton = useRef(null);
+
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") { setMenuOpen(false); menuButton.current?.focus(); }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [menuOpen]);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("ryravel-theme");
+    let saved;
+    try { saved = window.localStorage.getItem("ryravel-theme"); } catch { /* Theme remains usable when storage is blocked. */ }
     const nextLight = saved === "light";
     setLight(nextLight);
     document.documentElement.dataset.theme = nextLight ? "light" : "dark";
@@ -70,7 +83,7 @@ export default function SiteChrome({ children }) {
     lastTrackedPath.current = pathname;
     const journey = /^\/journeys\/([a-z0-9-]+)$/.exec(pathname);
     const study = /^\/case-studies\/([a-z0-9-]+)$/.exec(pathname);
-    if (journey) trackFunnel("journey_viewed", { journey_slug: journey[1] });
+    if (journey && journeys.some((item) => item.slug === journey[1])) trackFunnel("journey_viewed", { journey_slug: journey[1] });
     if (study) trackFunnel("case_study_opened", { case_study_slug: study[1] });
   }, [analyticsConsent, pathname]);
 
@@ -102,7 +115,7 @@ export default function SiteChrome({ children }) {
     const next = !light;
     setLight(next);
     document.documentElement.dataset.theme = next ? "light" : "dark";
-    window.localStorage.setItem("ryravel-theme", next ? "light" : "dark");
+    try { window.localStorage.setItem("ryravel-theme", next ? "light" : "dark"); } catch { /* Keep the current tab's choice even without persistence. */ }
   }
 
   return (
@@ -121,13 +134,13 @@ export default function SiteChrome({ children }) {
             </button>
           </div>
           <Link className="button button-outline header-cta" href="/request">Plan my journey</Link>
-          <button className={`menu-button ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu"><i /><i /><i /></button>
+          <button ref={menuButton} type="button" className={`menu-button ${menuOpen ? "open" : ""}`} onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-navigation"><i /><i /><i /></button>
         </div>
       </header>
-      <div className={`mobile-nav ${menuOpen ? "open" : ""}`}>
+      <nav id="mobile-navigation" aria-label="Mobile navigation" inert={!menuOpen} className={`mobile-nav ${menuOpen ? "open" : ""}`}>
         {nav.map(([label, href]) => <Link href={href} key={`${label}-${href}`} onClick={() => setMenuOpen(false)}>{label}</Link>)}
         <Link className="button button-red" href="/request" onClick={() => setMenuOpen(false)}>Plan my journey</Link>
-      </div>
+      </nav>
       {children}
       <footer className="site-footer">
         <div className="footer-grid">

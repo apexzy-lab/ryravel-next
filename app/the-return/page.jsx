@@ -3,7 +3,7 @@ import { buildMetadata } from "../seo";
 import styles from "./return.module.css";
 
 export const metadata = buildMetadata({
-  title: "The Return",
+  title: "The Return: Our Travel Philosophy",
   description: "The journey ends. The change does not. Discover how Ryravel designs bespoke luxury travel around who you become when you return.",
   path: "/the-return",
 });
