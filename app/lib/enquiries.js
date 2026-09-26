@@ -38,19 +38,9 @@ export function adminIdentity(request) {
     return { email: "curator@ryravel.com" };
   }
 
-  const oaiEmail = clean(headers.get("oai-authenticated-user-email"), 254).toLowerCase();
-  const accessEmail = headers.get("cf-access-jwt-assertion")
-    ? clean(headers.get("cf-access-authenticated-user-email"), 254).toLowerCase()
-    : "";
-  const email = oaiEmail || accessEmail;
-  if (!email) return { error: jsonError("Sign in through the protected Ryravel workspace.", 401) };
-
-  const allowed = clean(runtimeEnv().ADMIN_EMAILS, 2000)
-    .split(",")
-    .map((entry) => entry.trim().toLowerCase())
-    .filter(Boolean);
-  if (allowed.length && !allowed.includes(email)) return { error: jsonError("This account is not authorised for the curator desk.", 403) };
-  return { email };
+  // Internet-supplied identity headers are not authentication. Keep the existing
+  // access-key login; SSO may be added only with signature, issuer and audience verification.
+  return { error: jsonError("Sign in with the curator access key.", 401) };
 }
 
 export async function getEnquiryDetail(id) {
