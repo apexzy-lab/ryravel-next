@@ -95,15 +95,33 @@ function SelectedJourneys() {
     animation.current = requestAnimationFrame(glide);
   }
 
-  return <section className="journeys" aria-labelledby="selected-journeys-heading" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
-    <div className="journeys-header"><div><span className="kicker">Selected journeys</span><h2 className="serif-h2" id="selected-journeys-heading">Crafted for the way<br /><em>you want to arrive</em></h2></div><div className="jh-right"><Link className="all-link" href="/journeys">All journeys →</Link><p className="includes-note">Private journeys with 24/7 curator support. Your proposal confirms accommodation, experiences and inclusions.</p></div></div>
-    <div className="journey-slider-controls"><p aria-live={playing && !focused ? "off" : "polite"}>Journey {position + 1} of {homepageJourneys.length}</p><div>{!reducedMotion && <button className="journey-autoplay" type="button" aria-label={playing ? "Pause automatic sliding" : "Play automatic sliding"} aria-controls="selected-journeys-track" onClick={() => setPlaying(!playing)}>{playing ? "Ⅱ Pause" : "▷ Play"}</button>}<button type="button" aria-label="Previous journey" aria-controls="selected-journeys-track" onClick={() => move(-1)}>←</button><button type="button" aria-label="Next journey" aria-controls="selected-journeys-track" onClick={() => move(1)}>→</button></div></div>
-    <div className="journey-grid journey-slider" id="selected-journeys-track" ref={track} onScroll={updatePosition} onPointerDown={stopAnimation} tabIndex={0} role="region" aria-roledescription="carousel" aria-label="Selected journeys. Slides automatically; pause or use the arrow buttons to browse.">{[...homepageJourneys, ...homepageJourneys.slice(0, 2)].map((journey, index) => {
-      const clone = index >= homepageJourneys.length;
-      const name = journeyNames[journey.slug] || journey.title;
-      const arc = journey.arc === "exhausted" ? "Exhausted, The Restoration" : "Disconnected, The Return";
-      return <Link className="jcard" href={`/journeys/${journey.slug}`} key={`${journey.slug}-${index}`} aria-hidden={clone || undefined} tabIndex={clone ? -1 : undefined}><div className="jcard-img"><div className="jcard-img-bg" style={{ backgroundImage: `url('${journey.image}')` }} /><div className="jcard-img-ov" /><span className={`arc-pill ${journey.arc === "exhausted" ? "arc-ex" : "arc-di"}`}>{arc}</span><div className="jcard-img-meta"><p className="jcard-nights">{journey.nights} nights · {journey.destination}</p><p className="jcard-img-title">{name}</p></div></div><div className="jcard-body"><p className="jcard-arc">{arc}</p><h3 className="jcard-name">{name}</h3><p className="jcard-desc">{journey.description}</p><div className="jcard-tags">{journey.tags.map((tag) => <span className="jcard-tag" key={tag}>{tag}</span>)}</div><div className="jcard-foot"><div><p className="jcard-from">From</p><p className="jcard-price">{journey.price}<span className="jcard-pp"> / person</span></p></div><span className="jcard-explore">Explore →</span></div></div></Link>;
-    })}</div>
+  return <section className="journeys cinematic-journeys" aria-labelledby="selected-journeys-heading" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
+    <div className="journeys-header"><div><span className="kicker">Selected journeys</span><h2 className="serif-h2" id="selected-journeys-heading">Crafted for the way <em>you want to arrive</em></h2></div><Link className="all-link" href="/journeys">All journeys →</Link></div>
+    <div className="cinematic-stage">
+      <div className="journey-slider cinematic-track" id="selected-journeys-track" ref={track} onScroll={updatePosition} onPointerDown={stopAnimation} tabIndex={0} role="region" aria-roledescription="carousel" aria-label="Selected journeys slideshow">{[...homepageJourneys, homepageJourneys[0]].map((journey, index) => {
+        const clone = index >= homepageJourneys.length;
+        const name = journeyNames[journey.slug] || journey.title;
+        const active = !clone && index === position;
+        return <article className="cinematic-slide" key={index} aria-hidden={!active} inert={!active ? true : undefined} aria-roledescription="slide" aria-label={`${index + 1} of ${homepageJourneys.length}: ${name}`}>
+          <img className="cinematic-photo" src={journey.image} alt="" loading={index < 2 ? "eager" : "lazy"} />
+          <div className="cinematic-shade" />
+          <div className="cinematic-copy">
+            <p className="cinematic-arc">{journey.arc === "exhausted" ? "Exhausted · The Restoration" : "Disconnected · The Return"}</p>
+            <h3>{name}</h3>
+            <p className="cinematic-description">{journey.description}</p>
+            <p className="cinematic-meta"><span>{journey.nights} nights · {journey.destination}</span><span>From {journey.price} / person</span></p>
+            <Link className="cinematic-explore" href={`/journeys/${journey.slug}`} tabIndex={active ? 0 : -1}>Explore journey <span aria-hidden="true">→</span></Link>
+          </div>
+        </article>;
+      })}</div>
+      <div className="cinematic-controls">
+        <p className="cinematic-count" aria-live={playing && !focused ? "off" : "polite"}>{String(position + 1).padStart(2, "0")} <span>/ {String(homepageJourneys.length).padStart(2, "0")}</span></p>
+        <div className="cinematic-progress" aria-label="Choose a journey">{homepageJourneys.map((journey, index) => <button key={journey.slug} type="button" className={index === position ? "active" : ""} aria-label={`Show ${journeyNames[journey.slug] || journey.title}`} aria-current={index === position ? "true" : undefined} onClick={() => { stopAnimation(); track.current.scrollTo({ left: index * track.current.clientWidth, behavior: reducedMotion ? "instant" : "smooth" }); }}><span /></button>)}</div>
+        <div className="cinematic-actions">{!reducedMotion && <button className="cinematic-pause" type="button" aria-label={playing ? "Pause automatic sliding" : "Play automatic sliding"} onClick={() => setPlaying(!playing)}>{playing ? "Ⅱ Pause" : "▷ Play"}</button>}<button type="button" aria-label="Previous journey" onClick={() => move(-1)}>←</button><button type="button" aria-label="Next journey" onClick={() => move(1)}>→</button></div>
+        <p className="cinematic-next"><span>Next journey</span>{journeyNames[homepageJourneys[(position + 1) % homepageJourneys.length].slug] || homepageJourneys[(position + 1) % homepageJourneys.length].title}</p>
+      </div>
+    </div>
+    <p className="cinematic-care">Private journeys · Personally curated · 24/7 support while you travel</p>
   </section>;
 }
 

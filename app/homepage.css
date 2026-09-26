@@ -230,3 +230,54 @@ html:has(.new-home) body { background: #faf8f5; }
 @media (prefers-reduced-motion: reduce) {
   .new-home .ticker-inner { animation: none; }
 }
+
+/* One complete cinematic scene per slide, not a scrollable card catalogue. */
+.new-home .cinematic-journeys { padding: 5rem 0 0; }
+.new-home .cinematic-journeys .journeys-header { border: 0; gap: 2rem; margin: 0; padding: 0 clamp(24px,4vw,72px) 2.5rem; align-items: center; }
+.new-home .cinematic-journeys .serif-h2 { font-size: clamp(30px,3.2vw,48px); max-width: 1000px; }
+.new-home .cinematic-journeys .kicker { font-size: 11px; margin-bottom: 1rem; }
+.new-home .cinematic-stage { position: relative; background: #10120e; color: #fff; }
+.new-home .cinematic-track { display: flex; column-gap: 0px; overflow-x: auto; scrollbar-width: none; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; }
+.new-home .cinematic-track::-webkit-scrollbar { display: none; }
+.new-home .cinematic-slide { flex: 0 0 100%; min-width: 0; position: relative; height: clamp(640px,48vw,800px); scroll-snap-align: start; display: flex; align-items: flex-end; }
+.new-home .cinematic-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }
+.new-home .cinematic-shade { position: absolute; inset: 0; background: linear-gradient(0deg,rgba(6,9,7,.98),rgba(6,9,7,.28) 65%,rgba(6,9,7,.08)),linear-gradient(90deg,rgba(6,9,7,.45),transparent 80%); }
+.new-home .cinematic-copy { position: relative; z-index: 1; padding: 6rem clamp(24px,4vw,72px) 132px; max-width: 960px; }
+.new-home .cinematic-arc { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: #f6ede0; margin-bottom: 1rem; }
+.new-home .cinematic-copy h3 { color: #fff; font-family: var(--font-serif); font-weight: 400; font-size: clamp(36px,4vw,60px); line-height: 1.06; margin: 0 0 1rem; text-wrap: balance; }
+.new-home .cinematic-description { font-size: clamp(16px,1.3vw,19px); line-height: 1.65; color: #f0eee8; max-width: 680px; margin-bottom: 1.4rem; }
+.new-home .cinematic-meta { display: flex; flex-wrap: wrap; gap: .65rem 1.5rem; color: #f0eee8; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; line-height: 1.7; margin-bottom: 1.5rem; }
+.new-home .cinematic-explore { display: inline-flex; align-items: center; justify-content: space-between; gap: 2rem; background: var(--home-red); padding: 17px 26px; color: #fff; font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; transition: background .2s; }
+.new-home .cinematic-explore:hover { background: var(--home-red-deep); }
+.new-home .cinematic-controls { position: absolute; bottom: 0; left: 0; width: 100%; display: flex; align-items: center; gap: 2rem; padding: 24px clamp(24px,4vw,72px) 28px; z-index: 2; }
+.new-home .cinematic-count { white-space: nowrap; font-size: 14px; letter-spacing: .08em; }
+.new-home .cinematic-count span { color: #b5b7af; }
+.new-home .cinematic-progress { display: flex; gap: 8px; flex: 1; }
+.new-home .cinematic-progress button { flex: 1; border: 0; background: transparent; padding: 20px 0; cursor: pointer; min-width: 12px; }
+.new-home .cinematic-progress button span { display: block; height: 3px; background: rgba(255,255,255,.35); transition: background .3s; }
+.new-home .cinematic-progress button.active span { background: var(--home-red); }
+.new-home .cinematic-actions { display: flex; gap: 10px; align-items: center; }
+.new-home .cinematic-actions button { border: 1px solid rgba(255,255,255,.55); color: #fff; background: transparent; min-width: 48px; height: 48px; cursor: pointer; font-size: 22px; transition: background .2s; }
+.new-home .cinematic-actions button:hover { background: rgba(255,255,255,.15); }
+.new-home .cinematic-actions .cinematic-pause { border: 0; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; padding: 0 10px; white-space: nowrap; }
+.new-home .cinematic-next { border-left: 1px solid rgba(255,255,255,.3); padding-left: 1.5rem; max-width: 230px; font-size: 12px; letter-spacing: .06em; line-height: 1.5; }
+.new-home .cinematic-next span { display: block; color: #b5b7af; font-size: 10px; text-transform: uppercase; margin-bottom: 4px; }
+.new-home .cinematic-care { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; text-align: center; padding: 22px 24px; color: var(--home-muted); line-height: 1.8; }
+@media (max-width:960px) {
+  .new-home .cinematic-journeys { padding-left: 0; padding-right: 0; }
+  .new-home .cinematic-next { display: none; }
+}
+@media (max-width:600px) {
+  .new-home .cinematic-journeys { padding-top: 3.5rem; }
+  .new-home .cinematic-journeys .journeys-header { gap: 1.25rem; padding-bottom: 2rem; }
+  .new-home .cinematic-slide { height: 760px; }
+  .new-home .cinematic-copy { padding-bottom: 156px; }
+  .new-home .cinematic-copy h3 { font-size: 38px; }
+  .new-home .cinematic-description { font-size: 16px; line-height: 1.55; }
+  .new-home .cinematic-arc { font-size: 10px; line-height: 1.7; }
+  .new-home .cinematic-meta { font-size: 11px; }
+  .new-home .cinematic-controls { flex-wrap: wrap; gap: 8px 16px; padding-bottom: 22px; }
+  .new-home .cinematic-progress { flex: 1 0 calc(100% - 100px); }
+  .new-home .cinematic-actions { margin-left: auto; }
+  .new-home .cinematic-photo { object-position: 55% center; }
+}
