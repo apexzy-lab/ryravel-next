@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import HeroVideo from "./HeroVideo";
 import { journeys as journeyCatalogue } from "../data";
 import { caseStudies } from "../case-studies/caseStudies";
@@ -29,31 +29,80 @@ const homepageStories = caseStudies.slice(0, 3);
 
 function SelectedJourneys() {
   const track = useRef(null);
+  const animation = useRef(null);
   const [position, setPosition] = useState(0);
-  const [atEnd, setAtEnd] = useState(false);
+  const [playing, setPlaying] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(preference.matches);
+    update();
+    preference.addEventListener("change", update);
+    const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.25 });
+    observer.observe(track.current);
+    return () => { preference.removeEventListener("change", update); observer.disconnect(); cancelAnimationFrame(animation.current); };
+  }, []);
+
+  useEffect(() => {
+    if (!playing || hovered || focused || !visible || reducedMotion) return;
+    const timer = setInterval(() => { if (!document.hidden) move(1); }, 6000);
+    return () => clearInterval(timer);
+  }, [playing, hovered, focused, visible, reducedMotion]);
 
   function updatePosition() {
     const element = track.current;
     const card = element.firstElementChild;
     const stride = card.getBoundingClientRect().width + parseFloat(getComputedStyle(element).columnGap);
-    setPosition(Math.round(element.scrollLeft / stride));
-    setAtEnd(element.scrollLeft + element.clientWidth >= element.scrollWidth - 4);
+    setPosition(Math.round(element.scrollLeft / stride) % homepageJourneys.length);
+    if (animation.current === null && element.scrollLeft >= homepageJourneys.length * stride - 2) element.scrollLeft = 0;
+  }
+
+  function stopAnimation() {
+    cancelAnimationFrame(animation.current);
+    animation.current = null;
+    track.current.style.scrollSnapType = "";
   }
 
   function move(direction) {
     const element = track.current;
+    stopAnimation();
     const card = element.firstElementChild;
     const stride = card.getBoundingClientRect().width + parseFloat(getComputedStyle(element).columnGap);
-    element.scrollBy({ left: direction * stride, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    let current = Math.round(element.scrollLeft / stride);
+    element.style.scrollSnapType = "none";
+    if (current >= homepageJourneys.length) { element.scrollLeft = 0; current = 0; }
+    if (current === 0 && direction < 0) { element.scrollLeft = homepageJourneys.length * stride; current = homepageJourneys.length; }
+    const start = element.scrollLeft;
+    const destination = (current + direction) * stride;
+    const duration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 1000;
+    const started = performance.now();
+    function glide(now) {
+      const progress = duration ? Math.min((now - started) / duration, 1) : 1;
+      const easing = progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
+      element.scrollLeft = start + (destination - start) * easing;
+      if (progress < 1) animation.current = requestAnimationFrame(glide);
+      else {
+        if (current + direction >= homepageJourneys.length) element.scrollLeft = 0;
+        animation.current = null;
+        element.style.scrollSnapType = "";
+        updatePosition();
+      }
+    }
+    animation.current = requestAnimationFrame(glide);
   }
 
-  return <section className="journeys" aria-labelledby="selected-journeys-heading">
+  return <section className="journeys" aria-labelledby="selected-journeys-heading" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
     <div className="journeys-header"><div><span className="kicker">Selected journeys</span><h2 className="serif-h2" id="selected-journeys-heading">Crafted for the way<br /><em>you want to arrive</em></h2></div><div className="jh-right"><Link className="all-link" href="/journeys">All journeys →</Link><p className="includes-note">Private journeys with 24/7 curator support. Your proposal confirms accommodation, experiences and inclusions.</p></div></div>
-    <div className="journey-slider-controls"><p aria-live="polite">Journey {position + 1} of {homepageJourneys.length}</p><div><button type="button" aria-label="Previous journey" aria-controls="selected-journeys-track" onClick={() => move(-1)} disabled={position === 0}>←</button><button type="button" aria-label="Next journey" aria-controls="selected-journeys-track" onClick={() => move(1)} disabled={atEnd}>→</button></div></div>
-    <div className="journey-grid journey-slider" id="selected-journeys-track" ref={track} onScroll={updatePosition} tabIndex={0} role="region" aria-label="Selected journeys. Swipe or use the arrow buttons to browse.">{homepageJourneys.map((journey) => {
+    <div className="journey-slider-controls"><p aria-live={playing && !focused ? "off" : "polite"}>Journey {position + 1} of {homepageJourneys.length}</p><div>{!reducedMotion && <button className="journey-autoplay" type="button" aria-label={playing ? "Pause automatic sliding" : "Play automatic sliding"} aria-controls="selected-journeys-track" onClick={() => setPlaying(!playing)}>{playing ? "Ⅱ Pause" : "▷ Play"}</button>}<button type="button" aria-label="Previous journey" aria-controls="selected-journeys-track" onClick={() => move(-1)}>←</button><button type="button" aria-label="Next journey" aria-controls="selected-journeys-track" onClick={() => move(1)}>→</button></div></div>
+    <div className="journey-grid journey-slider" id="selected-journeys-track" ref={track} onScroll={updatePosition} onPointerDown={stopAnimation} tabIndex={0} role="region" aria-roledescription="carousel" aria-label="Selected journeys. Slides automatically; pause or use the arrow buttons to browse.">{[...homepageJourneys, ...homepageJourneys.slice(0, 2)].map((journey, index) => {
+      const clone = index >= homepageJourneys.length;
       const name = journeyNames[journey.slug] || journey.title;
       const arc = journey.arc === "exhausted" ? "Exhausted, The Restoration" : "Disconnected, The Return";
-      return <Link className="jcard" href={`/journeys/${journey.slug}`} key={journey.slug}><div className="jcard-img"><div className="jcard-img-bg" style={{ backgroundImage: `url('${journey.image}')` }} /><div className="jcard-img-ov" /><span className={`arc-pill ${journey.arc === "exhausted" ? "arc-ex" : "arc-di"}`}>{arc}</span><div className="jcard-img-meta"><p className="jcard-nights">{journey.nights} nights · {journey.destination}</p><p className="jcard-img-title">{name}</p></div></div><div className="jcard-body"><p className="jcard-arc">{arc}</p><h3 className="jcard-name">{name}</h3><p className="jcard-desc">{journey.description}</p><div className="jcard-tags">{journey.tags.map((tag) => <span className="jcard-tag" key={tag}>{tag}</span>)}</div><div className="jcard-foot"><div><p className="jcard-from">From</p><p className="jcard-price">{journey.price}<span className="jcard-pp"> / person</span></p></div><span className="jcard-explore">Explore →</span></div></div></Link>;
+      return <Link className="jcard" href={`/journeys/${journey.slug}`} key={`${journey.slug}-${index}`} aria-hidden={clone || undefined} tabIndex={clone ? -1 : undefined}><div className="jcard-img"><div className="jcard-img-bg" style={{ backgroundImage: `url('${journey.image}')` }} /><div className="jcard-img-ov" /><span className={`arc-pill ${journey.arc === "exhausted" ? "arc-ex" : "arc-di"}`}>{arc}</span><div className="jcard-img-meta"><p className="jcard-nights">{journey.nights} nights · {journey.destination}</p><p className="jcard-img-title">{name}</p></div></div><div className="jcard-body"><p className="jcard-arc">{arc}</p><h3 className="jcard-name">{name}</h3><p className="jcard-desc">{journey.description}</p><div className="jcard-tags">{journey.tags.map((tag) => <span className="jcard-tag" key={tag}>{tag}</span>)}</div><div className="jcard-foot"><div><p className="jcard-from">From</p><p className="jcard-price">{journey.price}<span className="jcard-pp"> / person</span></p></div><span className="jcard-explore">Explore →</span></div></div></Link>;
     })}</div>
   </section>;
 }
