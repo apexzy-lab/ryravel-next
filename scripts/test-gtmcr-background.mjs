@@ -87,6 +87,7 @@ const mock = createServer((request, response) => {
 try {
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0000_famous_blockbuster.sql"]);
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0002_certain_cannonball.sql"]);
+  runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0004_delivery_outbox.sql"]);
 
   await new Promise((resolve) => mock.listen(0, "127.0.0.1", resolve));
   const mockPort = mock.address().port;
@@ -99,6 +100,8 @@ try {
     "--persist-to", persistence,
     "--port", String(workerPort),
     "--var", "GTMCR_SIGNAL_TOKEN:test-token",
+    "--var", "ADMIN_API_TOKEN:test-only-admin-key",
+    "--var", "GTMCR_TRANSACTIONAL_CONTACTS_READY:true",
     "--var", `GTMCR_SIGNALS_API_URL:http://127.0.0.1:${mockPort}/api/v1/events`,
     "--var", "RESEND_API_KEY:test-resend-token",
     "--var", `RESEND_API_URL:http://127.0.0.1:${mockPort}/emails`,
@@ -106,6 +109,19 @@ try {
   worker.stdout.on("data", (chunk) => { workerOutput += chunk; });
   worker.stderr.on("data", (chunk) => { workerOutput += chunk; });
   await waitForWorker(() => workerOutput);
+  const base = `http://127.0.0.1:${workerPort}`;
+  const forged = await fetch(base + "/api/admin/enquiries", { headers: { "oai-authenticated-user-email": "fake@example.test", "cf-access-authenticated-user-email": "fake@example.test", "cf-access-jwt-assertion": "fake" } });
+  if (forged.status !== 401) throw new Error("Forged identity headers were accepted");
+  const login = await fetch(base + "/api/admin/session", { method: "POST", headers: { Origin: base, "Content-Type": "application/json" }, body: JSON.stringify({ accessKey: "test-only-admin-key" }) });
+  const cookie = login.headers.get("set-cookie");
+  if (!login.ok || !cookie?.includes("HttpOnly") || !cookie.includes("SameSite=Strict")) throw new Error("Secure browser session could not be issued");
+  const headers = { Cookie: cookie.split(";")[0] };
+  const overview = await fetch(base + "/api/admin/enquiries", { headers });
+  if (!overview.ok) throw new Error("Signed session could not read the desk");
+  const health = await fetch(base + "/api/admin/operations", { headers });
+  if (!health.ok) throw new Error("Operating health could not be read");
+  const csrf = await fetch(base + "/api/admin/operations", { method: "POST", headers: { ...headers, Origin: "https://evil.example", "Content-Type": "application/json" }, body: JSON.stringify({ action: "retry-failed" }) });
+  if (csrf.status !== 403) throw new Error("Cross-origin admin mutation was accepted");
 
   const slowSubmission = await submit("slow-signal@example.test");
   const delivered = await Promise.race([
@@ -120,6 +136,7 @@ try {
     throw new Error(`GTMCR properties are incomplete: ${JSON.stringify(delivered.payload.properties)}`);
   }
   if ("message" in delivered.payload.properties) throw new Error("Sensitive enquiry message was sent to GTMCR");
+  if (delivered.payload.contact?.email !== "slow-signal@example.test" || delivered.payload.properties.marketing_consent !== false) throw new Error("Identified consent-safe contract was not preserved");
   const confirmation = await Promise.race([
     confirmationSignal,
     new Promise((_, reject) => setTimeout(() => reject(new Error(`Guest confirmation did not finish.\n${workerOutput}`)), slowDelayMs + 3000)),

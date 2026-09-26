@@ -11,7 +11,10 @@ export function turnstileConfig() {
 
 export async function verifyTurnstile(request, token, expectedAction = "journey_request") {
   const config = turnstileConfig();
-  if (!config.enabled) return { success: true, configured: false };
+  if (!config.enabled) {
+    const local = ["localhost", "127.0.0.1", "[::1]"].includes(new URL(request.url).hostname);
+    return local ? { success: true, configured: false } : { success: false, configured: false, error: "The security check is temporarily unavailable. Please try again later." };
+  }
   if (!clean(token, 2048)) return { success: false, configured: true, error: "Please complete the security check." };
 
   const body = new FormData();
@@ -22,7 +25,7 @@ export async function verifyTurnstile(request, token, expectedAction = "journey_
   if (remoteIp) body.set("remoteip", remoteIp);
 
   try {
-    const response = await fetch(VERIFY_URL, { method: "POST", body });
+    const response = await fetch(VERIFY_URL, { method: "POST", body, signal: AbortSignal.timeout(8000) });
     const result = await response.json();
     const expectedHostname = new URL(request.url).hostname;
     if (!response.ok || result.success !== true || result.action !== expectedAction || result.hostname !== expectedHostname) {

@@ -16,11 +16,9 @@ export default function FunnelReport() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = window.sessionStorage.getItem("ryravel-curator-key");
-    if (!token) { setError("Open the curator desk and sign in before viewing the funnel."); setLoading(false); return; }
     let active = true;
     setLoading(true);
-    fetch(`/api/admin/funnel?days=${days}`, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" })
+    fetch(`/api/admin/funnel?days=${days}`, { cache: "no-store" })
       .then(async (response) => { const data = await response.json(); if (!response.ok) throw new Error(data.error || "The report could not be loaded."); return data; })
       .then((data) => { if (active) { setReport(data); setError(""); } })
       .catch((failure) => { if (active) setError(failure.message); })

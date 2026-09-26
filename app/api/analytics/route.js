@@ -1,5 +1,6 @@
 import { getD1 } from "../../../db/index";
 import { FUNNEL_EVENTS } from "../../lib/funnel";
+import { rateLimit } from "../../lib/rate-limit";
 
 const allowedEvents = new Set(FUNNEL_EVENTS);
 const feelings = new Set(["Exhausted", "Restless", "Disconnected", "Romantic", "Curious", "Celebratory", "Purposeful", "Open"]);
@@ -10,6 +11,7 @@ const slug = /^[a-z0-9-]{1,80}$/;
 export async function POST(request) {
   const origin = request.headers.get("origin");
   if (!origin || origin !== new URL(request.url).origin) return new Response(null, { status: 403 });
+  if (!(await rateLimit(request, "analytics", 240))) return new Response(null, { status: 429 });
   if (Number(request.headers.get("content-length") || 0) > 2048) return new Response(null, { status: 413 });
   let value;
   try {

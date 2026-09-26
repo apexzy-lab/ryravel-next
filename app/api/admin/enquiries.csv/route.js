@@ -1,8 +1,9 @@
 import { getD1 } from "../../../../db/index";
 import { adminIdentity, jsonError } from "../../../lib/enquiries";
+import { spreadsheetCell } from "../../../lib/security";
 
 function csvCell(value) {
-  return `"${String(value ?? "").replaceAll('"', '""')}"`;
+  return spreadsheetCell(value);
 }
 
 export async function GET(request) {

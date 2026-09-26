@@ -1,0 +1,15 @@
+import assert from "node:assert/strict";
+import { issueSession, verifySession, sessionCookie, spreadsheetCell, SESSION_SECONDS } from "../app/lib/security.js";
+const now = Date.now(), secret = "test-only-never-production";
+const token = issueSession(secret, now);
+assert(verifySession(token, secret, now));
+assert(!verifySession(token, "wrong", now));
+assert(!verifySession(token, secret, now + SESSION_SECONDS * 1000));
+assert(!verifySession(token + "x", secret, now));
+assert(!verifySession("", secret, now));
+assert.match(sessionCookie(token), /HttpOnly; SameSite=Strict/);
+assert.match(sessionCookie(token), /Secure/);
+assert.match(sessionCookie("", true, true), /Max-Age=0/);
+for (const dangerous of ["=cmd()", "+SUM(1)", "-1+2", "@evil", "\t=evil", "  =evil"]) assert(spreadsheetCell(dangerous).startsWith('"\t'));
+assert.equal(spreadsheetCell('hello "world"'), '"hello ""world"""');
+console.log("Security unit checks passed: signed sessions, expiry, tampering, cookie flags, CSV formulas.");

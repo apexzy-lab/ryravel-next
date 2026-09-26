@@ -1,4 +1,5 @@
 import { getD1, runtimeEnv } from "../../db/index";
+import { SESSION_COOKIE, verifySession } from "./security";
 
 export const STATUSES = ["new", "qualified", "discovery", "shaping", "proposal", "won", "declined", "closed"];
 export const PRIORITIES = ["normal", "high", "urgent"];
@@ -35,6 +36,11 @@ export function adminIdentity(request) {
   const authorization = headers.get("authorization") || "";
   const suppliedToken = authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
   if (configuredToken && secureEqual(suppliedToken, configuredToken)) {
+    return { email: "curator@ryravel.com" };
+  }
+  const cookie = (headers.get("cookie") || "").split(";").map((part) => part.trim()).find((part) => part.startsWith(`${SESSION_COOKIE}=`))?.slice(SESSION_COOKIE.length + 1);
+  if (verifySession(cookie, configuredToken)) {
+    if (request.method && !["GET", "HEAD"].includes(request.method) && headers.get("origin") !== new URL(request.url).origin) return { error: jsonError("This request origin is not allowed.", 403) };
     return { email: "curator@ryravel.com" };
   }
 

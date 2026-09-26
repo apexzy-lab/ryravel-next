@@ -1,15 +1,7 @@
-packages:
-  - "."
-
 allowBuilds:
   esbuild: true
-  sharp: true
   workerd: true
-
-minimumReleaseAgeExclude:
-  - '@vitejs/plugin-rsc@0.5.30'
-
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
-  - workerd
+overrides:
+  postcss: 8.5.28
+  sharp: 0.35.4
+  nanoid@<3.3.19: 3.3.19

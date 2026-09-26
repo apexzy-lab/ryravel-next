@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import "./workspace.css";
 
 const stages = ["new", "qualified", "discovery", "shaping", "proposal", "won", "declined", "closed"];
 const curatorEmail = "curator@ryravel.com";
@@ -32,6 +33,8 @@ export default function CuratorDeskDemo() {
   const [filter, setFilter] = useState("all");
   const [view, setView] = useState("active");
   const [query, setQuery] = useState("");
+  const [oldestFirst, setOldestFirst] = useState(false);
+  const [operations, setOperations] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -48,11 +51,10 @@ export default function CuratorDeskDemo() {
   const loginTurnstileWidget = useRef(null);
 
   useEffect(() => {
-    const storedKey = window.sessionStorage.getItem("ryravel-curator-key") || "";
-    setAccessKey(storedKey);
-    setNeedsAccess(!storedKey);
-    setLoading(Boolean(storedKey));
-    setCheckingAccess(Boolean(storedKey));
+    try { window.sessionStorage.removeItem("ryravel-curator-key"); } catch {}
+    setAccessKey("session");
+    setLoading(true);
+    setCheckingAccess(true);
     setAuthReady(true);
   }, []);
 
@@ -100,7 +102,6 @@ export default function CuratorDeskDemo() {
 
   const authHeaders = useCallback((json = false) => ({
     ...(json ? { "Content-Type": "application/json" } : {}),
-    ...(accessKey ? { Authorization: `Bearer ${accessKey}` } : {}),
   }), [accessKey]);
 
   const loadOverview = useCallback(async () => {
@@ -108,13 +109,14 @@ export default function CuratorDeskDemo() {
     const response = await fetch(`/api/admin/enquiries?view=${view}`, { cache: "no-store", headers: authHeaders() });
     const result = await response.json();
     if (response.status === 401) {
-      window.sessionStorage.removeItem("ryravel-curator-key");
       setAccessKey("");
       setNeedsAccess(true);
     }
     if (!response.ok) throw new Error(result.error || "The curator desk could not be loaded.");
     setNeedsAccess(false);
     setOverview(result);
+    const operatingResponse = await fetch("/api/admin/operations", { cache: "no-store" });
+    if (operatingResponse.ok) setOperations(await operatingResponse.json());
     setSelectedId((current) => result.enquiries?.some((record) => record.id === current) ? current : result.enquiries?.[0]?.id || "");
   }, [authHeaders, view]);
 
@@ -139,7 +141,7 @@ export default function CuratorDeskDemo() {
     const matchesFilter = filter === "all" || record.status === filter;
     const haystack = `${record.reference} ${record.name} ${record.email} ${record.feeling}`.toLowerCase();
     return matchesFilter && haystack.includes(query.toLowerCase());
-  }), [overview.enquiries, filter, query]);
+  }).sort((a, b) => (oldestFirst ? 1 : -1) * (Date.parse(a.created_at) - Date.parse(b.created_at))), [overview.enquiries, filter, query, oldestFirst]);
 
   async function update(fields, successMessage = "Enquiry updated.") {
     if (!selectedId) return;
@@ -186,9 +188,9 @@ export default function CuratorDeskDemo() {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "The curator workspace could not be opened.");
-      window.sessionStorage.setItem("ryravel-curator-key", key);
+      setAccessKeyDraft("");
       setCheckingAccess(true);
-      setAccessKey(key);
+      setAccessKey("session");
       setNeedsAccess(false);
     } catch (signInError) {
       setError(signInError.message);
@@ -198,8 +200,11 @@ export default function CuratorDeskDemo() {
     }
   }
 
-  function signOut() {
-    window.sessionStorage.removeItem("ryravel-curator-key");
+  async function signOut() {
+    try {
+      const response = await fetch("/api/admin/session", { method: "DELETE" });
+      if (!response.ok) throw new Error("Sign-out could not be confirmed. Please try again.");
+    } catch (signOutError) { setError(signOutError.message); return; }
     setAccessKey("");
     setAccessKeyDraft("");
     setOverview({ actor: "", counts: {}, enquiries: [] });
@@ -241,6 +246,17 @@ export default function CuratorDeskDemo() {
     }
   }
 
+  async function retryDeliveries() {
+    setSaving(true);
+    try {
+      const response = await fetch("/api/admin/operations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "retry-failed" }) });
+      if (!response.ok) throw new Error("Delivery retry could not be started.");
+      setOperations(await response.json());
+      setNotice("Failed deliveries retried. Held CRM jobs remain held until its consent-safe update.");
+    } catch (retryError) { setError(retryError.message); }
+    finally { setSaving(false); }
+  }
+
   const request = detail?.enquiry;
   const counts = overview.counts || {};
 
@@ -265,6 +281,7 @@ export default function CuratorDeskDemo() {
           <header><div><span>{new Intl.DateTimeFormat("en", { weekday: "long", day: "numeric", month: "long" }).format(new Date())}</span><h1>{view === "trash" ? "Deleted enquiries" : "Journey enquiries"}</h1><p>{view === "trash" ? "Recover a submission that was removed by mistake." : "Every conversation, held with intention."}</p></div><button className="desk-refresh" type="button" onClick={() => loadOverview().catch((loadError) => setError(loadError.message))}>Refresh</button></header>
           {error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}
           {notice ? <div className="desk-alert" role="status">{notice}</div> : null}
+          {operations ? <section className="desk-operating-health" aria-label="Operating health"><div><strong>{operations.overdue || 0}</strong><span>Overdue enquiries / actions</span></div><div><strong>{operations.deliveries?.filter(x => ["failed", "retry", "held"].includes(x.status)).reduce((n, x) => n + Number(x.total), 0) || 0}</strong><span>Retrying, failed or held deliveries</span></div><div><strong>{operations.retentionReviews || 0}</strong><span>12-month retention reviews</span></div><p>Accountable team: <a href="mailto:support@ryravel.com">Ryravel Support Team</a> · Scheduler: {operations.schedulerLastRun ? relativeTime(operations.schedulerLastRun + "Z") : "Awaiting first run"}<br />Non-newsletter CRM deliveries are held pending its consent-safe update. <button type="button" className="desk-note-button" disabled={saving} onClick={retryDeliveries}>Retry failed deliveries</button></p></section> : null}
           <section className="desk-metrics">
             <article><span>Need a response</span><strong>{counts.new_count || 0}</strong><small>New enquiries</small></article>
             <article><span>Open conversations</span><strong>{counts.active_count || 0}</strong><small>Across every stage</small></article>
@@ -275,7 +292,7 @@ export default function CuratorDeskDemo() {
           <section className="command-workspace">
             <div className="command-list">
               <div className="desk-tools"><label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search enquiries" /></label><select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All stages</option>{stages.map((stage) => <option value={stage} key={stage}>{title(stage)}</option>)}</select></div>
-              <div className="desk-list-heading"><span>{visible.length} {view === "trash" ? "deleted submissions" : "conversations"}</span><button type="button">Newest first ↓</button></div>
+              <div className="desk-list-heading"><span>{visible.length} {view === "trash" ? "deleted submissions" : "conversations"}</span><button type="button" onClick={() => setOldestFirst(value => !value)}>{oldestFirst ? "Oldest first ↑" : "Newest first ↓"}</button></div>
               <div className="desk-request-list">
                 {loading ? <p className="desk-empty">Loading enquiries…</p> : null}
                 {!loading && visible.length === 0 ? <p className="desk-empty">No enquiries match this view.</p> : null}
