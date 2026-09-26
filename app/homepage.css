@@ -80,6 +80,8 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .return-text em { font-style: italic; }
 .new-home .return-name { font-size: 11px; font-weight: 500; letter-spacing: .03em; margin-top: 1.75rem; }
 .new-home .return-journey { color: var(--home-muted); font-size: 10px; margin-top: .2rem; }
+.new-home .return-story-link { color: var(--home-red); display: inline-block; font-size: 11px; letter-spacing: .08em; margin-top: 1.5rem; text-transform: uppercase; }
+.new-home .return-privacy { color: var(--home-muted); font-size: 12px; line-height: 1.6; margin-top: 1.25rem; }
 
 .new-home .principles { background: #fff; padding: 7rem 3.5rem; }
 .new-home .principles-grid { border-top: .5px solid var(--home-border); display: grid; grid-template-columns: repeat(3,1fr); margin-top: 4rem; }
@@ -94,6 +96,20 @@ html:has(.new-home) body { background: #faf8f5; }
 .new-home .jh-right { align-items: flex-end; display: flex; flex-direction: column; gap: .6rem; }
 .new-home .includes-note { color: var(--home-muted); font-size: 11px; font-style: italic; line-height: 1.55; max-width: 260px; text-align: right; }
 .new-home .journey-grid { background: var(--home-border); display: grid; gap: 1.5px; grid-template-columns: repeat(2,1fr); }
+.new-home .journey-grid.journey-slider { background: transparent; gap: 1.5rem; grid-auto-columns: calc((100% - 1.5rem) / 2); grid-auto-flow: column; grid-template-columns: none; overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 1rem; scrollbar-color: var(--home-muted) var(--home-border); scrollbar-width: thin; scroll-snap-type: x mandatory; }
+.new-home .journey-slider .jcard { scroll-snap-align: start; }
+.new-home .journey-slider:focus-visible { outline: 2px solid var(--home-red); outline-offset: 5px; }
+.new-home .journey-slider-controls { align-items: center; display: flex; justify-content: space-between; margin: -1rem 0 1.25rem; }
+.new-home .journey-slider-controls p { color: var(--home-muted); font-size: 12px; letter-spacing: .08em; }
+.new-home .journey-slider-controls > div { display: flex; gap: .5rem; }
+.new-home .journey-slider-controls button { background: transparent; border: 1px solid var(--home-border); color: var(--home-ink); cursor: pointer; font-size: 22px; height: 44px; width: 48px; }
+.new-home .journey-slider-controls button:hover:not(:disabled) { background: var(--home-ink); color: var(--home-paper); }
+.new-home .journey-slider-controls button:disabled { cursor: default; opacity: .3; }
+.new-home .journey-slider-controls button:focus-visible { outline: 2px solid var(--home-red); outline-offset: 3px; }
+@media (max-width: 700px) {
+  .new-home .journey-grid.journey-slider { grid-auto-columns: 90%; gap: 1rem; }
+  .new-home .return-card { padding: 2rem; }
+}
 .new-home .jcard { background: #fff; color: inherit; display: flex; flex-direction: column; overflow: hidden; }
 .new-home .jcard-img { align-items: flex-end; background: #16100a; display: flex; height: 260px; overflow: hidden; position: relative; }
 .new-home .jcard-img-bg { background-position: center; background-size: cover; inset: 0; position: absolute; transition: transform .6s ease; }

@@ -38,6 +38,10 @@ check(read("app/components/SiteChrome.jsx").includes('href="/official-instagram"
 check(read("app/seo.js").includes("https://www.instagram.com/journeybyry/") && !read("app/seo.js").includes("instagram.com/ryravels"), "Organization identity links only to the current official Instagram account");
 check(retiredJourneySlugs.every((slug) => !journeys.some((journey) => journey.slug === slug)), "All requested journey records are removed from the catalogue");
 check(retiredJourneySlugs.every((slug) => !read("app/components/HomepageExperience.jsx").includes(`/journeys/${slug}`)), "Homepage contains no links to retired journeys");
+const homepageExperience = read("app/components/HomepageExperience.jsx");
+check(homepageExperience.includes('journeyCatalogue.filter((journey) => journey.arc !== "stillness")') && homepageExperience.includes('journey-slider') && homepageExperience.includes('prefers-reduced-motion: reduce'), "Homepage journey slider uses the non-Stillness catalogue and respects reduced motion");
+check(homepageExperience.includes('caseStudies.slice(0, 3)') && homepageExperience.includes('{study.quote}') && homepageExperience.includes('Read the full story') && !homepageExperience.includes('Sarah K.'), "Homepage testimonials come from linked case studies rather than the previous standalone quotes");
+check(homepageExperience.includes('href="/journeys/stillness"') && homepageExperience.includes('id="stillness-heading"'), "Dedicated homepage Stillness feature is preserved");
 check(read("app/journeys/page.jsx").includes('journey.arc !== "stillness"') && read("app/sitemap.js").includes("journeys.some"), "Journey catalogue excludes Stillness tours while their dedicated collection routes remain discoverable");
 const journeyIndex = read("app/journeys/JourneysExperience.jsx");
 check(["Emotional arc", "Country / region", "Collection", "All collections", "Stillness Collection"].every((label) => journeyIndex.includes(label)), "Journey catalogue retains all three supplied filters and the Stillness collection");
