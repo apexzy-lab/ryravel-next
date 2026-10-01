@@ -26,9 +26,9 @@ export default function HeroVideo() {
 
   return (
     <div className="home-hero-media" aria-hidden="true">
-      <video ref={videoRef} autoPlay muted playsInline loop preload="metadata">
+      <video ref={videoRef} autoPlay muted playsInline loop preload="metadata" poster="/images/the-return-river.jpg">
         <source
-          src="https://media.ryravel.com/ryravel-hero.mp4?v=20260831"
+          src="/ryravel-hero-loop.mp4"
           type="video/mp4"
         />
       </video>

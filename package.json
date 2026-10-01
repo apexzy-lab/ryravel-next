@@ -15,6 +15,7 @@
     "deploy:legacy-redirects": "wrangler deploy --config legacy-redirects/wrangler.jsonc",
     "test:gtmcr-background": "node scripts/test-gtmcr-background.mjs",
     "test:funnel": "node scripts/test-funnel.mjs",
+    "test:google-ads": "node scripts/test-google-ads.mjs",
     "test:seo": "node scripts/test-seo.mjs",
     "submit:indexnow": "node scripts/submit-indexnow.mjs",
     "verify:search-live": "node scripts/verify-live-search.mjs",
@@ -32,12 +33,12 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.46.0",
-    "@vinext/cloudflare": "1.0.0-beta.3",
+    "@vinext/cloudflare": "1.0.0",
     "@vitejs/plugin-react": "6.0.4",
-    "@vitejs/plugin-rsc": "0.5.30",
+    "@vitejs/plugin-rsc": "0.5.35",
     "drizzle-kit": "0.31.10",
     "react-server-dom-webpack": "19.2.8",
-    "vinext": "1.0.0-beta.3",
+    "vinext": "1.0.0",
     "vite": "8.1.5",
     "wrangler": "^4.113.0"
   }

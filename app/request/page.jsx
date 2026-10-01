@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { journeys } from "../data";
 import { trackFunnel } from "../lib/funnel";
+import { recordGoogleAdsLead } from "../lib/googleAds";
 
 const feelings = [
   ["Exhausted", "I need to stop", "Running on empty. I need silence more than scenery and permission to be completely still."],
@@ -259,6 +260,7 @@ export default function RequestPage() {
       }
       analyticsSubmitted.current = true;
       trackFunnel("enquiry_submitted", analyticsContext());
+      recordGoogleAdsLead(result.reference);
       if (contactPreference === "private-call") trackFunnel("private_call_requested", analyticsContext());
       setReference(result.reference || "");
       setSent(true);
