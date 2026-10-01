@@ -48,6 +48,8 @@ assert.equal(window.dataLayer.length, count, "Withdrawing consent prevents furth
 const request = readFileSync(new URL("../app/request/page.jsx", import.meta.url), "utf8");
 assert.match(request, /if \(!response\.ok\)[\s\S]*?recordGoogleAdsLead\(result\.reference\)/, "Conversion is queued only after a successful server response");
 const video = readFileSync(new URL("../app/components/HeroVideo.jsx", import.meta.url), "utf8");
-assert.match(video, /src="\/ryravel-hero-loop\.mp4"/, "Hero uses the same-origin video");
+assert.match(video, /src="https:\/\/media\.ryravel\.com\/ryravel-hero\.mp4\?v=20260831"/, "Hero retains the original Ryravel video");
+const worker = readFileSync(new URL("../worker.js", import.meta.url), "utf8");
+assert.match(worker, /media-src 'self' https:\/\/media\.ryravel\.com/, "CSP permits the original Ryravel video");
 
-console.log("PASS Google Ads consent, single tag, confirmed lead event and local video");
+console.log("PASS Google Ads consent, single tag, confirmed lead event and original hero video");
