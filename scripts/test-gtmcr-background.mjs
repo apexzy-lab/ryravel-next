@@ -1,5 +1,5 @@
 import { spawn, spawnSync } from "node:child_process";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -92,7 +92,7 @@ const mock = createServer((request, response) => {
     received.push({ path: request.url, payload });
     const result = { payload, elapsedMs: performance.now() - startedAt };
     if (request.url === "/emails") resolveConfirmationSignal(result);
-    else resolveSlowSignal(result);
+    else if (request.url === "/api/v1/events" && payload.event === "form_submitted") resolveSlowSignal(result);
   });
 });
 
@@ -101,6 +101,11 @@ try {
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0002_certain_cannonball.sql"]);
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0004_delivery_outbox.sql"]);
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0005_newsletter_double_opt_in.sql"]);
+  const repairId = "64e3d38e-f9c4-4a3c-a166-a21bb55b557d";
+  const repairPayload = JSON.stringify({ id: repairId, name: "Prior Enquiry Test", email: "prior-enquiry@example.test" });
+  const identitySql = path.join(persistence, "identity-repair.sql");
+  await writeFile(identitySql, `INSERT INTO delivery_jobs (id,enquiry_id,kind,payload) VALUES ('${repairId}:gtmcr_identity','${repairId}','gtmcr_identity','${repairPayload}');`);
+  runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", identitySql]);
 
   await new Promise((resolve) => mock.listen(0, "127.0.0.1", resolve));
   const mockPort = mock.address().port;
@@ -141,7 +146,7 @@ try {
   const slowSubmission = await submit("slow-signal@example.test");
   const delivered = await Promise.race([
     slowSignal,
-    new Promise((_, reject) => setTimeout(() => reject(new Error(`Slow GTMCR signal did not finish.\n${workerOutput}`)), slowDelayMs + 3000)),
+    new Promise((_, reject) => setTimeout(() => reject(new Error(`Slow GTMCR signal did not finish.\n${workerOutput}`)), slowDelayMs * 2 + 3000)),
   ]);
   if (delivered.elapsedMs < slowDelayMs - 100) throw new Error("Mock GTMCR response was not actually slow");
   if (!delivered.payload.eventId?.startsWith("ryravel-enquiry-") || delivered.payload.event !== "form_submitted") {
@@ -151,7 +156,9 @@ try {
     throw new Error(`GTMCR properties are incomplete: ${JSON.stringify(delivered.payload.properties)}`);
   }
   if ("message" in delivered.payload.properties) throw new Error("Sensitive enquiry message was sent to GTMCR");
-  if (delivered.payload.contact?.email !== "slow-signal@example.test" || "marketing_consent" in delivered.payload.properties) throw new Error("Enquiry signal incorrectly asserted marketing consent");
+  if (delivered.payload.contact?.email !== "slow-signal@example.test" || delivered.payload.contact?.firstName !== "Background" || delivered.payload.contact?.lastName !== "Delivery Test" || "marketing_consent" in delivered.payload.properties) throw new Error("Enquiry signal did not map the contact name or incorrectly asserted marketing consent");
+  const identityEvent = await waitForRequest("/api/v1/events", (body) => body.event === "contact_identified");
+  if (identityEvent.eventId !== `ryravel-contact-identity-${repairId}` || identityEvent.contact?.email !== "prior-enquiry@example.test" || identityEvent.contact?.firstName !== "Prior" || identityEvent.contact?.lastName !== "Enquiry Test" || "marketing_consent" in identityEvent.properties) throw new Error("Identity repair incorrectly changed consent or failed to update the name");
   const confirmation = await Promise.race([
     confirmationSignal,
     new Promise((_, reject) => setTimeout(() => reject(new Error(`Guest confirmation did not finish.\n${workerOutput}`)), slowDelayMs + 3000)),
@@ -191,6 +198,7 @@ try {
     sensitiveMessageExcluded: true,
     doubleOptInRequired: true,
     explicitConsentDeliveryCompleted: true,
+    contactIdentityRepairCompleted: true,
   }));
 } finally {
   if (worker && worker.exitCode === null) {

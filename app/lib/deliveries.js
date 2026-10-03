@@ -1,5 +1,5 @@
 import { getD1, runtimeEnv } from "../../db/index";
-import { sendGtmcrSignal, sendGtmcrConsent, sendGuestConfirmation } from "./delivery-providers";
+import { sendGtmcrSignal, sendGtmcrIdentity, sendGtmcrConsent, sendGuestConfirmation } from "./delivery-providers";
 
 export function deliveryStatement(db, id, kind, payload) {
   return db.prepare("INSERT INTO delivery_jobs (id,enquiry_id,kind,payload) VALUES (?,?,?,?)")
@@ -13,11 +13,12 @@ export async function processDeliveries(limit = 12) {
     if (!lease.meta?.changes) continue;
     try {
       const data = JSON.parse(job.payload);
-      if (job.kind === "gtmcr" && runtimeEnv().GTMCR_TRANSACTIONAL_CONTACTS_READY !== "true") {
+      if ((job.kind === "gtmcr" || job.kind === "gtmcr_identity") && runtimeEnv().GTMCR_TRANSACTIONAL_CONTACTS_READY !== "true") {
         await db.prepare("UPDATE delivery_jobs SET status='held',lease_until=NULL,last_error='Awaiting consent-safe CRM receiver' WHERE id=?").bind(job.id).run();
         continue;
       }
       if (job.kind === 'gtmcr') await sendGtmcrSignal(data);
+      else if (job.kind === 'gtmcr_identity') await sendGtmcrIdentity(data);
       else if (job.kind === 'gtmcr_consent') await sendGtmcrConsent(data);
       else if (job.kind === 'confirmation') await sendGuestConfirmation(data);
       else throw new Error('Unknown delivery kind');

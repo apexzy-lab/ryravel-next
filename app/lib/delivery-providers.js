@@ -1,5 +1,24 @@
 import { runtimeEnv } from "../../db/index";
 
+function contactIdentity(name, email) {
+  const parts = String(name || "").trim().replace(/\s+/g, " ").split(" ").filter(Boolean);
+  return { email, ...(parts.length ? { firstName: parts[0], lastName: parts.slice(1).join(" ") || undefined } : {}) };
+}
+
+async function postGtmcrEvent(body) {
+  const token = String(runtimeEnv().GTMCR_SIGNAL_TOKEN || "").trim();
+  if (!token) throw new Error("GTMCR is not configured");
+  if (runtimeEnv().GTMCR_TRANSACTIONAL_CONTACTS_READY !== "true") throw new Error("CRM consent-safe receiver update required");
+  const endpoint = String(runtimeEnv().GTMCR_SIGNALS_API_URL || "https://gtmcr.pro/api/v1/events").trim();
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(4000),
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw new Error(`GTMCR returned ${response.status}`);
+}
+
 export async function sendGtmcrSignal({
   id,
   name,
@@ -17,47 +36,42 @@ export async function sendGtmcrSignal({
   contactPreference,
   preferredCallTime,
 }) {
-  const token = String(runtimeEnv().GTMCR_SIGNAL_TOKEN || "").trim();
-  if (!token) throw new Error("GTMCR is not configured");
   // An enquiry signal never grants marketing consent, regardless of the form checkbox.
-  if (runtimeEnv().GTMCR_TRANSACTIONAL_CONTACTS_READY !== "true") throw new Error("CRM consent-safe receiver update required");
-  const endpoint = String(runtimeEnv().GTMCR_SIGNALS_API_URL || "https://gtmcr.pro/api/v1/events").trim();
-
-  const response = await fetch(endpoint, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+  await postGtmcrEvent({
+    eventId: `ryravel-enquiry-${id}`,
+    event: "form_submitted",
+    contact: contactIdentity(name, email),
+    occurredAt,
+    properties: {
+      form: "trip-inquiry",
+      name,
+      reference: enquiryReference,
+      feeling,
+      travelMonth,
+      travelYear,
+      duration,
+      people,
+      budget,
+      source_page: sourceUrl,
+      journey_slug: journey?.slug || null,
+      journey_name: journey?.name || null,
+      journey_destination: journey?.destination || null,
+      journey_nights: journey?.nights || null,
+      journey_price: journey?.price || null,
+      contact_preference: contactPreference,
+      preferred_call_time: preferredCallTime || null,
     },
-    signal: AbortSignal.timeout(4000),
-    body: JSON.stringify({
-      eventId: `ryravel-enquiry-${id}`,
-      event: "form_submitted",
-      contact: { email },
-      occurredAt,
-      properties: {
-        form: "trip-inquiry",
-        name,
-        reference: enquiryReference,
-        feeling,
-        travelMonth,
-        travelYear,
-        duration,
-        people,
-        budget,
-        source_page: sourceUrl,
-        journey_slug: journey?.slug || null,
-        journey_name: journey?.name || null,
-        journey_destination: journey?.destination || null,
-        journey_nights: journey?.nights || null,
-        journey_price: journey?.price || null,
-        contact_preference: contactPreference,
-        preferred_call_time: preferredCallTime || null,
-      },
-    }),
   });
+}
 
-  if (!response.ok) throw new Error(`GTMCR returned ${response.status}`);
+export async function sendGtmcrIdentity({ id, name, email }) {
+  // A one-time profile repair, not a second enquiry or a marketing decision.
+  await postGtmcrEvent({
+    eventId: `ryravel-contact-identity-${id}`,
+    event: "contact_identified",
+    contact: contactIdentity(name, email),
+    properties: { source: "ryravel-enquiry-name-backfill" },
+  });
 }
 
 export async function sendGtmcrConsent({ id, email, reference, capturedAt, notice, policyVersion }) {
