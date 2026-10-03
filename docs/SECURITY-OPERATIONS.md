@@ -6,7 +6,7 @@ Accountable owner: Ryravel Support Team (support@ryravel.com).
 
 Enquiries and delivery jobs are committed in one database transaction. CRM and confirmation-email failures retry with backoff; after eight failures a job requires operator review. Successful delivery clears the job's customer payload. Alerts contain counts, never customer details, and are throttled to once per six hours. The scheduler runs every 15 minutes. Review the curator desk daily and assign overdue requests.
 
-Non-newsletter enquiries are held for GTMCR until its receiver supports transactional contacts without subscribing them to marketing. After that receiver is deployed and a fresh test is verified in Signals, set the Ryravel secret/variable GTMCR_TRANSACTIONAL_CONTACTS_READY=true. Do not set it early. The scheduler then releases held jobs. Existing contacts' opt-outs must remain respected.
+GTMCR's consent-safe signal receiver is deployed. Ryravel enables identified enquiry delivery with GTMCR_TRANSACTIONAL_CONTACTS_READY=true. The receiver creates pending contacts, preserves existing subscription status and never treats the signal's marketing_consent property as a marketing grant. Newsletter permission needs a separate explicit-consent write; do not infer it from an enquiry signal or retroactively grant it when retrying jobs. The scheduler processes any held jobs after the flag is enabled. Check the production delivery counts before changing the flag and monitor retry/failed counts afterward.
 
 ## Access
 
