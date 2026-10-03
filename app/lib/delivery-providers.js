@@ -1,8 +1,14 @@
 import { runtimeEnv } from "../../db/index";
 
-function contactIdentity(name, email) {
+function contactIdentity(name, email, phone, countryCode) {
   const parts = String(name || "").trim().replace(/\s+/g, " ").split(" ").filter(Boolean);
-  return { email, ...(parts.length ? { firstName: parts[0], lastName: parts.slice(1).join(" ") || undefined } : {}) };
+  const localPhone = String(phone || "").trim();
+  const completePhone = localPhone.startsWith("+") ? localPhone : [String(countryCode || "").trim(), localPhone].filter(Boolean).join(" ");
+  return {
+    email,
+    ...(parts.length ? { firstName: parts[0], lastName: parts.slice(1).join(" ") || undefined } : {}),
+    ...(completePhone ? { phone: completePhone } : {}),
+  };
 }
 
 async function postGtmcrEvent(body) {
@@ -23,6 +29,8 @@ export async function sendGtmcrSignal({
   id,
   name,
   email,
+  phone,
+  countryCode,
   occurredAt,
   reference: enquiryReference,
   feeling,
@@ -40,7 +48,7 @@ export async function sendGtmcrSignal({
   await postGtmcrEvent({
     eventId: `ryravel-enquiry-${id}`,
     event: "form_submitted",
-    contact: contactIdentity(name, email),
+    contact: contactIdentity(name, email, phone, countryCode),
     occurredAt,
     properties: {
       form: "trip-inquiry",

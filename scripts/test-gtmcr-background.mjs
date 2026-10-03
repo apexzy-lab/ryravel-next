@@ -156,7 +156,7 @@ try {
     throw new Error(`GTMCR properties are incomplete: ${JSON.stringify(delivered.payload.properties)}`);
   }
   if ("message" in delivered.payload.properties) throw new Error("Sensitive enquiry message was sent to GTMCR");
-  if (delivered.payload.contact?.email !== "slow-signal@example.test" || delivered.payload.contact?.firstName !== "Background" || delivered.payload.contact?.lastName !== "Delivery Test" || "marketing_consent" in delivered.payload.properties) throw new Error("Enquiry signal did not map the contact name or incorrectly asserted marketing consent");
+  if (delivered.payload.contact?.email !== "slow-signal@example.test" || delivered.payload.contact?.firstName !== "Background" || delivered.payload.contact?.lastName !== "Delivery Test" || delivered.payload.contact?.phone !== "+1 760 514 0361" || "marketing_consent" in delivered.payload.properties) throw new Error("Enquiry signal did not map contact fields or incorrectly asserted marketing consent");
   const identityEvent = await waitForRequest("/api/v1/events", (body) => body.event === "contact_identified");
   if (identityEvent.eventId !== `ryravel-contact-identity-${repairId}` || identityEvent.contact?.email !== "prior-enquiry@example.test" || identityEvent.contact?.firstName !== "Prior" || identityEvent.contact?.lastName !== "Enquiry Test" || "marketing_consent" in identityEvent.properties) throw new Error("Identity repair incorrectly changed consent or failed to update the name");
   const confirmation = await Promise.race([

@@ -89,7 +89,7 @@ export async function POST(request) {
     .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, savedMessage || null, clean(payload.referral, 80) || null, newsletterRequested ? 1 : 0, sourceUrl || null, clean(request.headers.get("user-agent"), 500) || null, ipHash, JSON.stringify(tags))
 ;
 
-  const signal = { id, name, email, occurredAt: now, reference: enquiryReference, feeling, travelMonth, travelYear, duration, people, budget, sourceUrl: sourceUrl || null, journey, contactPreference, preferredCallTime };
+  const signal = { id, name, email, phone, countryCode, occurredAt: now, reference: enquiryReference, feeling, travelMonth, travelYear, duration, people, budget, sourceUrl: sourceUrl || null, journey, contactPreference, preferredCallTime };
   const receipt = { name, email, reference: enquiryReference, feeling, travelMonth, travelYear, journey, contactPreference, newsletterConfirmationUrl };
   const statements = [insertEnquiry, deliveryStatement(db, id, "gtmcr", signal), deliveryStatement(db, id, "confirmation", receipt)];
   if (newsletterRequested) statements.push(db.prepare("INSERT INTO newsletter_opt_ins (enquiry_id,reference,email,token_hash,notice,policy_version,requested_at,expires_at) VALUES (?,?,?,?,?,?,?,?)")
