@@ -3,6 +3,7 @@ import { getD1, runtimeEnv } from "../../../db/index";
 import { clean, jsonError } from "../../lib/enquiries";
 import { verifyTurnstile } from "../../lib/turnstile";
 import { processDeliveries, deliveryStatement } from "../../lib/deliveries";
+import { NEWSLETTER_CONFIRM_DAYS, NEWSLETTER_CONFIRM_NOTICE, NEWSLETTER_POLICY_VERSION } from "../../lib/newsletter-consent";
 
 const feelings = new Set(["Exhausted", "Restless", "Disconnected", "Romantic", "Curious", "Celebratory", "Purposeful", "Open"]);
 const months = new Set(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]);
@@ -70,6 +71,9 @@ export async function POST(request) {
   const id = crypto.randomUUID();
   const enquiryReference = reference();
   const now = new Date().toISOString();
+  const newsletterRequested = payload.newsletter === true;
+  const newsletterToken = newsletterRequested ? `${crypto.randomUUID().replaceAll("-", "")}${crypto.randomUUID().replaceAll("-", "")}` : null;
+  const newsletterConfirmationUrl = newsletterToken ? new URL(`/newsletter/confirm?token=${newsletterToken}`, request.url).toString() : null;
   const visitorMessage = clean(payload.message, 3600);
   const planningContext = [
     journey.name ? `Selected journey: ${journey.name}${journey.nights ? ` · ${journey.nights} nights` : ""}${journey.destination ? ` · ${journey.destination}` : ""}${journey.price ? ` · from ${journey.price}` : ""}.` : "",
@@ -82,12 +86,15 @@ export async function POST(request) {
     travel_month, travel_year, duration, people, budget, message, referral,
     newsletter, source_url, user_agent, ip_hash, tags
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-    .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, savedMessage || null, clean(payload.referral, 80) || null, payload.newsletter === true ? 1 : 0, sourceUrl || null, clean(request.headers.get("user-agent"), 500) || null, ipHash, JSON.stringify(tags))
+    .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, savedMessage || null, clean(payload.referral, 80) || null, newsletterRequested ? 1 : 0, sourceUrl || null, clean(request.headers.get("user-agent"), 500) || null, ipHash, JSON.stringify(tags))
 ;
 
-  const signal = { id, name, email, occurredAt: now, reference: enquiryReference, feeling, travelMonth, travelYear, duration, people, budget, sourceUrl: sourceUrl || null, journey, contactPreference, preferredCallTime, newsletter: payload.newsletter === true };
-  const receipt = { name, email, reference: enquiryReference, feeling, travelMonth, travelYear, journey, contactPreference };
-  await db.batch([insertEnquiry, deliveryStatement(db, id, "gtmcr", signal), deliveryStatement(db, id, "confirmation", receipt)]);
+  const signal = { id, name, email, occurredAt: now, reference: enquiryReference, feeling, travelMonth, travelYear, duration, people, budget, sourceUrl: sourceUrl || null, journey, contactPreference, preferredCallTime };
+  const receipt = { name, email, reference: enquiryReference, feeling, travelMonth, travelYear, journey, contactPreference, newsletterConfirmationUrl };
+  const statements = [insertEnquiry, deliveryStatement(db, id, "gtmcr", signal), deliveryStatement(db, id, "confirmation", receipt)];
+  if (newsletterRequested) statements.push(db.prepare("INSERT INTO newsletter_opt_ins (enquiry_id,reference,email,token_hash,notice,policy_version,requested_at,expires_at) VALUES (?,?,?,?,?,?,?,?)")
+    .bind(id, enquiryReference, email, await hash(newsletterToken), NEWSLETTER_CONFIRM_NOTICE, NEWSLETTER_POLICY_VERSION, now, new Date(Date.parse(now) + NEWSLETTER_CONFIRM_DAYS * 86400000).toISOString()));
+  await db.batch(statements);
   queueGtmcrSignal();
   queueGuestConfirmation();
 

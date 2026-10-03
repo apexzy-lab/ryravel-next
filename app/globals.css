@@ -53,6 +53,14 @@ em { color: var(--red); font-style: italic; }
 .button-outline { border-color: currentColor; background: transparent; }
 .button-quiet { border-bottom-color: rgba(255,255,255,.4); color: #fff; padding-inline: 0; }
 .text-link { border-bottom: 1px solid var(--red); color: var(--red); font-size: 10px; font-weight: 800; letter-spacing: .16em; padding-bottom: 4px; text-transform: uppercase; }
+.newsletter-confirm-page { align-items: center; background: var(--paper); color: var(--ink); display: flex; justify-content: center; min-height: calc(100svh - 76px); padding: 64px 24px; }
+.newsletter-confirm-card { border-top: 3px solid var(--red); max-width: 620px; width: 100%; }
+.newsletter-confirm-card .kicker { margin-top: 30px; }
+.newsletter-confirm-card h1 { font-size: clamp(42px, 6vw, 72px); font-weight: 400; letter-spacing: -.045em; line-height: 1.08; margin-bottom: 25px; }
+.newsletter-confirm-card p { color: var(--ink-muted); font-size: 17px; line-height: 1.7; margin-bottom: 28px; }
+.newsletter-confirm-card small { color: var(--ink-muted); display: block; font-size: 13px; line-height: 1.5; margin-top: 25px; }
+.newsletter-confirm-card small a { border-bottom: 1px solid currentColor; }
+.newsletter-confirm-card .newsletter-confirm-error { color: var(--red-dark); }
 .paper-section { background: var(--paper); color: var(--ink); }
 
 .site-header { align-items: center; background: color-mix(in srgb, var(--bg) 96%, transparent); border-bottom: 1px solid var(--line); display: flex; height: 76px; justify-content: space-between; padding: 0 48px; position: sticky; top: 0; z-index: 100; }

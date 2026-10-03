@@ -16,6 +16,16 @@ let slowSignal;
 let resolveSlowSignal;
 let confirmationSignal;
 let resolveConfirmationSignal;
+const received = [];
+
+async function waitForRequest(pathname, predicate = () => true) {
+  for (let attempt = 0; attempt < 100; attempt += 1) {
+    const match = received.find((entry) => entry.path === pathname && predicate(entry.payload));
+    if (match) return match.payload;
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+  throw new Error(`Timed out waiting for mock ${pathname}`);
+}
 
 function runWrangler(args) {
   const result = spawnSync(wrangler, args, { cwd: root, encoding: "utf8", shell: true, windowsHide: true });
@@ -33,7 +43,7 @@ async function waitForWorker(output) {
   throw new Error(`Worker did not start.\n${output()}`);
 }
 
-function enquiry(email) {
+function enquiry(email, newsletter = false) {
   return {
     name: "Background Delivery Test",
     email,
@@ -48,15 +58,16 @@ function enquiry(email) {
     phone: "760 514 0361",
     message: "This sensitive message must not be sent to GTMCR.",
     sourceUrl: "https://ryravel.com/request?background-test=1",
+    newsletter,
   };
 }
 
-async function submit(email) {
+async function submit(email, newsletter = false) {
   const startedAt = performance.now();
   const response = await fetch(`http://127.0.0.1:${workerPort}/api/enquiries`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(enquiry(email)),
+    body: JSON.stringify(enquiry(email, newsletter)),
   });
   const elapsedMs = performance.now() - startedAt;
   const body = await response.json();
@@ -78,6 +89,7 @@ const mock = createServer((request, response) => {
     await new Promise((resolve) => setTimeout(resolve, slowDelayMs));
     response.writeHead(202, { "Content-Type": "application/json" });
     response.end("{}");
+    received.push({ path: request.url, payload });
     const result = { payload, elapsedMs: performance.now() - startedAt };
     if (request.url === "/emails") resolveConfirmationSignal(result);
     else resolveSlowSignal(result);
@@ -88,6 +100,7 @@ try {
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0000_famous_blockbuster.sql"]);
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0002_certain_cannonball.sql"]);
   runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0004_delivery_outbox.sql"]);
+  runWrangler(["d1", "execute", "DB", "--local", "--config", "wrangler.jsonc", "--persist-to", persistence, "--file", "drizzle/0005_newsletter_double_opt_in.sql"]);
 
   await new Promise((resolve) => mock.listen(0, "127.0.0.1", resolve));
   const mockPort = mock.address().port;
@@ -100,9 +113,11 @@ try {
     "--persist-to", persistence,
     "--port", String(workerPort),
     "--var", "GTMCR_SIGNAL_TOKEN:test-token",
+    "--var", "GTMCR_CONSENT_TOKEN:test-consent-token",
     "--var", "ADMIN_API_TOKEN:test-only-admin-key",
     "--var", "GTMCR_TRANSACTIONAL_CONTACTS_READY:true",
     "--var", `GTMCR_SIGNALS_API_URL:http://127.0.0.1:${mockPort}/api/v1/events`,
+    "--var", `GTMCR_CONSENT_API_URL:http://127.0.0.1:${mockPort}/api/v1/consents`,
     "--var", "RESEND_API_KEY:test-resend-token",
     "--var", `RESEND_API_URL:http://127.0.0.1:${mockPort}/emails`,
   ], { cwd: root, shell: true, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
@@ -136,14 +151,32 @@ try {
     throw new Error(`GTMCR properties are incomplete: ${JSON.stringify(delivered.payload.properties)}`);
   }
   if ("message" in delivered.payload.properties) throw new Error("Sensitive enquiry message was sent to GTMCR");
-  if (delivered.payload.contact?.email !== "slow-signal@example.test" || delivered.payload.properties.marketing_consent !== false) throw new Error("Identified consent-safe contract was not preserved");
+  if (delivered.payload.contact?.email !== "slow-signal@example.test" || "marketing_consent" in delivered.payload.properties) throw new Error("Enquiry signal incorrectly asserted marketing consent");
   const confirmation = await Promise.race([
     confirmationSignal,
     new Promise((_, reject) => setTimeout(() => reject(new Error(`Guest confirmation did not finish.\n${workerOutput}`)), slowDelayMs + 3000)),
   ]);
   if (confirmation.payload.to?.[0] !== "slow-signal@example.test" || !confirmation.payload.subject?.includes(slowSubmission.reference)) {
-    throw new Error(`Guest confirmation is incomplete: ${JSON.stringify(confirmation.payload)}`);
+    throw new Error("Guest confirmation is incomplete");
   }
+  if (confirmation.payload.html.includes("/newsletter/confirm?token=")) throw new Error("Non-subscriber received a newsletter confirmation link");
+
+  const optIn = await submit("opt-in@example.test", true);
+  const optInEmail = await waitForRequest("/emails", (body) => body.to?.[0] === "opt-in@example.test");
+  if (!optInEmail.subject.includes(optIn.reference)) throw new Error("Opt-in receipt lost the enquiry reference");
+  const link = optInEmail.html.match(/href="([^"]*\/newsletter\/confirm\?token=[a-f0-9]{64})"/)?.[1];
+  if (!link) throw new Error("Opt-in receipt did not contain a confirmation link");
+  if (received.some((entry) => entry.path === "/api/v1/consents")) throw new Error("Marketing consent was sent before email confirmation");
+  const confirmationPage = await fetch(link);
+  if (!confirmationPage.ok || !(await confirmationPage.text()).includes("Confirm journey notes")) throw new Error("Confirmation page is unavailable");
+  if (received.some((entry) => entry.path === "/api/v1/consents")) throw new Error("Opening the email link granted consent without a click");
+  const token = new URL(link).searchParams.get("token");
+  const confirmed = await fetch(base + "/api/newsletter-confirm", { method: "POST", redirect: "manual", body: new URLSearchParams({ token }) });
+  if (confirmed.status !== 303 || !confirmed.headers.get("location")?.endsWith("/newsletter/confirmed")) throw new Error("Email confirmation was not accepted");
+  const consent = await waitForRequest("/api/v1/consents");
+  if (consent.email !== "opt-in@example.test" || consent.purpose !== "marketing" || consent.decision !== "granted" || consent.evidence?.method !== "double_opt_in" || consent.evidence?.reference !== optIn.reference || !consent.policyVersion || !consent.evidence?.notice || !consent.evidence?.capturedAt) throw new Error("Explicit-consent payload is incomplete");
+  const secondClick = await fetch(base + "/api/newsletter-confirm", { method: "POST", redirect: "manual", body: new URLSearchParams({ token }) });
+  if (secondClick.status !== 303 || received.filter((entry) => entry.path === "/api/v1/consents").length !== 1) throw new Error("Confirmation replay generated a second consent event");
 
   await new Promise((resolve) => mock.close(resolve));
   const outageSubmission = await submit("outage-signal@example.test");
@@ -156,6 +189,8 @@ try {
     outageDidNotBreakSubmission: true,
     guestConfirmationQueuedInBackground: true,
     sensitiveMessageExcluded: true,
+    doubleOptInRequired: true,
+    explicitConsentDeliveryCompleted: true,
   }));
 } finally {
   if (worker && worker.exitCode === null) {

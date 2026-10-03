@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { journeys } from "../data";
 import { trackFunnel } from "../lib/funnel";
 import { recordGoogleAdsLead } from "../lib/googleAds";
+import { NEWSLETTER_CHECKBOX_NOTICE } from "../lib/newsletter-consent";
 
 const feelings = [
   ["Exhausted", "I need to stop", "Running on empty. I need silence more than scenery and permission to be completely still."],
@@ -333,7 +334,7 @@ export default function RequestPage() {
                     {contactPreference === "private-call" ? <label className="wide">Best contact time <b>*</b><select name="preferred-call-time" value={preferredCallTime} onChange={(event) => { setPreferredCallTime(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select a window</option><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option><option>Let Ryravel propose a time by email</option></select>{fieldErrors.preferredCallTime ? <small role="alert">{fieldErrors.preferredCallTime}</small> : null}</label> : null}
                     <label>How did you hear about us?<select name="referral" defaultValue=""><option value="" disabled>Select</option><option>Recommendation</option><option>Google</option><option>Instagram</option><option>Press</option><option>Other</option></select></label>
                   </div>
-                  <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>Send me occasional traveller case studies and carefully chosen journey notes from Ryravel.</span></label>
+                  <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>{NEWSLETTER_CHECKBOX_NOTICE} We will email you a confirmation link first.</span></label>
                   <p className="progressive-policy-note">Sending an enquiry does not book a journey or require payment. Your proposal will show the final price, optional add-ons and payment dates before you decide. Standard bookings require a 50% deposit, with the balance due 30 days before departure; bookings within 45 days require full payment. <a href="/privacy">Privacy</a> · <a href="/terms">Booking terms</a> · <a href="/cancellations">Cancellations</a></p>
                   {turnstileEnabled ? <div className="request-turnstile"><div ref={turnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}
                   {fieldErrors.turnstile ? <p className="progressive-field-error" role="alert">{fieldErrors.turnstile}</p> : null}

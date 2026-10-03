@@ -68,3 +68,17 @@ export const funnelEvents = sqliteTable("funnel_events", {
   index("funnel_events_journey_idx").on(table.journeySlug, table.eventType, table.occurredAt),
   index("funnel_events_session_idx").on(table.sessionId, table.occurredAt),
 ]);
+
+export const newsletterOptIns = sqliteTable("newsletter_opt_ins", {
+  enquiryId: text("enquiry_id").primaryKey(),
+  reference: text("reference").notNull(),
+  email: text("email").notNull(),
+  tokenHash: text("token_hash").notNull().unique(),
+  notice: text("notice").notNull(),
+  policyVersion: text("policy_version").notNull(),
+  requestedAt: text("requested_at").notNull(),
+  expiresAt: text("expires_at").notNull(),
+  confirmedAt: text("confirmed_at"),
+}, (table) => [
+  index("newsletter_opt_ins_expiry").on(table.expiresAt),
+]);
