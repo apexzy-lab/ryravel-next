@@ -171,7 +171,7 @@ try {
   if (!confirmationPage.ok || !(await confirmationPage.text()).includes("Confirm journey notes")) throw new Error("Confirmation page is unavailable");
   if (received.some((entry) => entry.path === "/api/v1/consents")) throw new Error("Opening the email link granted consent without a click");
   const token = new URL(link).searchParams.get("token");
-  const confirmed = await fetch(base + "/api/newsletter-confirm", { method: "POST", redirect: "manual", body: new URLSearchParams({ token }) });
+  const confirmed = await fetch(base + "/api/newsletter-confirm", { method: "POST", headers: { Origin: "null" }, redirect: "manual", body: new URLSearchParams({ token }) });
   if (confirmed.status !== 303 || !confirmed.headers.get("location")?.endsWith("/newsletter/confirmed")) throw new Error("Email confirmation was not accepted");
   const consent = await waitForRequest("/api/v1/consents");
   if (consent.email !== "opt-in@example.test" || consent.purpose !== "marketing" || consent.decision !== "granted" || consent.evidence?.method !== "double_opt_in" || consent.evidence?.reference !== optIn.reference || !consent.policyVersion || !consent.evidence?.notice || !consent.evidence?.capturedAt) throw new Error("Explicit-consent payload is incomplete");

@@ -6,7 +6,9 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     // Keep preview/local tooling usable; these protections apply at the production boundary.
-    if (url.protocol === 'https:' && request.method !== 'GET' && request.method !== 'HEAD') {
+    // Newsletter confirmation is protected by its single-use email token and may
+    // be submitted from privacy-preserving email browsers with Origin: null.
+    if (url.protocol === 'https:' && request.method !== 'GET' && request.method !== 'HEAD' && url.pathname !== '/api/newsletter-confirm') {
       const origin = request.headers.get('origin');
       if (origin && origin !== url.origin) return new Response(null, {status:403});
     }
