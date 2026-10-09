@@ -1,12 +1,11 @@
 import { spawn, spawnSync } from "node:child_process";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import { tmpdir } from "node:os";
 import path from "node:path";
 
 const root = path.resolve(import.meta.dirname, "..");
-const wrangler = path.join(root, "node_modules", ".bin", "wrangler.cmd");
-const persistence = await mkdtemp(path.join(tmpdir(), "ryravel-gtmcr-test-"));
+const wrangler = path.join(root, "node_modules", "wrangler", "wrangler-dist", "cli.js");
+const persistence = await mkdtemp(path.join(root, ".gtmcr-test-"));
 const workerPort = 8792;
 const slowDelayMs = 2500;
 const maximumVisitorDelayMs = 1200;
@@ -28,7 +27,7 @@ async function waitForRequest(pathname, predicate = () => true) {
 }
 
 function runWrangler(args) {
-  const result = spawnSync(wrangler, args, { cwd: root, encoding: "utf8", shell: true, windowsHide: true });
+  const result = spawnSync(process.execPath, [wrangler, ...args], { cwd: root, encoding: "utf8", windowsHide: true });
   if (result.status !== 0) throw new Error(`${result.stdout}\n${result.stderr}`.trim());
 }
 
@@ -112,7 +111,7 @@ try {
   slowSignal = new Promise((resolve) => { resolveSlowSignal = resolve; });
   confirmationSignal = new Promise((resolve) => { resolveConfirmationSignal = resolve; });
 
-  worker = spawn(wrangler, [
+  worker = spawn(process.execPath, [wrangler,
     "dev",
     "--config", "dist/server/wrangler.json",
     "--persist-to", persistence,
@@ -125,7 +124,7 @@ try {
     "--var", `GTMCR_CONSENT_API_URL:http://127.0.0.1:${mockPort}/api/v1/consents`,
     "--var", "RESEND_API_KEY:test-resend-token",
     "--var", `RESEND_API_URL:http://127.0.0.1:${mockPort}/emails`,
-  ], { cwd: root, shell: true, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
+  ], { cwd: root, windowsHide: true, stdio: ["ignore", "pipe", "pipe"] });
   worker.stdout.on("data", (chunk) => { workerOutput += chunk; });
   worker.stderr.on("data", (chunk) => { workerOutput += chunk; });
   await waitForWorker(() => workerOutput);
@@ -202,18 +201,18 @@ try {
   }));
 } finally {
   if (worker && worker.exitCode === null) {
-    spawnSync("taskkill.exe", ["/PID", String(worker.pid), "/T", "/F"], { stdio: "ignore", windowsHide: true });
+    worker.kill();
     await new Promise((resolve) => {
-      const timeout = setTimeout(resolve, 2000);
+      const timeout = setTimeout(resolve, 5000);
       worker.once("exit", () => {
         clearTimeout(timeout);
         resolve();
       });
     });
+    if (process.platform === "win32" && worker.exitCode === null && worker.signalCode === null) spawnSync("taskkill.exe", ["/PID", String(worker.pid), "/T", "/F"], { stdio: "ignore", windowsHide: true, timeout: 5000 });
   }
   if (mock.listening) await new Promise((resolve) => mock.close(resolve));
-  const resolvedTemp = path.resolve(tmpdir());
   const resolvedPersistence = path.resolve(persistence);
-  if (!resolvedPersistence.startsWith(`${resolvedTemp}${path.sep}`)) throw new Error(`Refusing to remove unexpected path: ${resolvedPersistence}`);
-  await rm(resolvedPersistence, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+  if (path.dirname(resolvedPersistence) !== root || !path.basename(resolvedPersistence).startsWith(".gtmcr-test-")) throw new Error(`Refusing to remove unexpected path: ${resolvedPersistence}`);
+  await rm(resolvedPersistence, { recursive: true, force: true, maxRetries: 10, retryDelay: 500 });
 }

@@ -4,6 +4,7 @@ node_modules/
 .open-next/
 dist/
 .wrangler/
+.gtmcr-test-*/
 site-build.tar.gz
 work/
 outputs/
