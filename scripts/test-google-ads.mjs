@@ -87,5 +87,6 @@ assert.match(video, /src="https:\/\/media\.ryravel\.com\/ryravel-hero\.mp4\?v=20
 const worker = readFileSync(new URL("../worker.js", import.meta.url), "utf8");
 assert.match(worker, /media-src 'self' https:\/\/media\.ryravel\.com/, "CSP permits the original Ryravel video");
 assert.match(worker, /connect-src [^;]*https:\/\/pagead2\.googlesyndication\.com/, "CSP permits Google Ads conversion beacons");
+assert.match(worker, /connect-src [^;]*https:\/\/ad\.doubleclick\.net/, "CSP permits Google's Ads collection endpoint");
 
 console.log("PASS Google Ads consent, single tag, confirmed lead event and original hero video");
