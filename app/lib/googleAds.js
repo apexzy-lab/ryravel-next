@@ -12,7 +12,7 @@ export function updateGoogleAdsConsent(choice) {
   window.gtag("consent", "update", {
     ad_storage: ["marketing", "all"].includes(choice) ? "granted" : "denied",
     analytics_storage: ["analytics", "all"].includes(choice) ? "granted" : "denied",
-    ad_user_data: "denied",
+    ad_user_data: ["marketing", "all"].includes(choice) ? "granted" : "denied",
     ad_personalization: "denied",
   });
 }

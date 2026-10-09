@@ -29,8 +29,11 @@ assert.equal(sent.length, 2, "Withdrawal stops future analytics");
 saveTrackingChoice("marketing");
 trackFunnel("journey_viewed", { journey_slug: "ex6" });
 assert.equal(sent.length, 2, "Marketing-only consent never enables funnel analytics");
-localStorage.setItem("ryravel-cookie-choice-v2", JSON.stringify({ choice: "all", at: Date.now() - 184 * 86400000 }));
+localStorage.setItem("ryravel-cookie-choice-v3", JSON.stringify({ choice: "all", at: Date.now() - 184 * 86400000 }));
 assert.equal(readTrackingChoice(), null, "Old consent expires and must be renewed");
+localStorage.removeItem("ryravel-cookie-choice-v3");
+localStorage.setItem("ryravel-cookie-choice-v2", JSON.stringify({ choice: "all", at: Date.now() }));
+assert.equal(readTrackingChoice(), null, "Previous marketing choices require fresh consent under the expanded notice");
 
 const endpoint = readFileSync(new URL("../app/api/analytics/route.js", import.meta.url), "utf8");
 assert.match(endpoint, /origin !== new URL\(request.url\).origin/, "Collector is same-origin only");

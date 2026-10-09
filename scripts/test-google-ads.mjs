@@ -31,6 +31,10 @@ installGoogleAdsTag();
 installGoogleAdsTag();
 assert.equal(scripts.length, 1, "Only one Google tag is installed");
 assert.match(scripts[0].src, /AW-18469165502$/);
+const marketingConsent = window.dataLayer.find((entry) => entry[0] === "consent" && entry[1] === "update");
+assert.equal(marketingConsent[2].ad_storage, "granted");
+assert.equal(marketingConsent[2].ad_user_data, "granted", "Explicit marketing consent permits Google Ads conversion measurement");
+assert.equal(marketingConsent[2].ad_personalization, "denied", "Marketing measurement does not enable personalized ads");
 
 recordGoogleAdsLead("RY-TEST");
 const conversion = window.dataLayer.find((entry) => entry[0] === "event" && entry[1] === "conversion");
@@ -41,6 +45,7 @@ assert.deepEqual(Object.keys(conversion[2]).sort(), ["send_to", "transaction_id"
 saveTrackingChoice("reject");
 updateGoogleAdsConsent("reject");
 assert.equal(window.dataLayer.at(-1)[2].ad_storage, "denied", "Withdrawal updates Google consent immediately");
+assert.equal(window.dataLayer.at(-1)[2].ad_user_data, "denied", "Withdrawal disables Google advertising user-data measurement");
 const count = window.dataLayer.length;
 recordGoogleAdsLead("RY-SECOND");
 assert.equal(window.dataLayer.length, count, "Withdrawing consent prevents further conversions");
