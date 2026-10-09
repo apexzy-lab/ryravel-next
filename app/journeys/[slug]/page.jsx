@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { CTA, JourneyCard } from "../../components/Blocks";
 import { arcs, journeys, arcFor, journeyFor } from "../../data";
 import ExhaustedRestoration from "./ExhaustedRestoration";
@@ -32,12 +32,6 @@ function requestHrefFor(journey) {
 export function generateStaticParams() {
   return [...arcs.filter((arc) => journeys.some((journey) => journey.arc === arc.id)).map((arc) => ({ slug: arc.id })), ...journeys.map((journey) => ({ slug: journey.slug }))];
 }
-
-const aliases = {
-  "renewed": "exhausted",
-  "ex11": "ex6",
-  "yakushima-silence": "ex6",
-};
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -195,7 +189,6 @@ function StructuredArc({ arc, children }) {
 
 export default async function JourneyRoute({ params }) {
   const { slug } = await params;
-  if (aliases[slug]) permanentRedirect(`/journeys/${aliases[slug]}`);
   const journey = journeyFor(slug);
   if (journey) {
     const content = slug === "ex6" ? <ExhaustedRestoration /> : slug === "ex9" ? <ExhaustedRestorationSix /> : slug === "rn9" ? <ExhaustedRestorationNine /> : slug === "the-reset" ? <ResetJourney journey={journey} /> : slug === "kimbilio" ? <KimbilioJourney journey={journey} /> : slug === "kimya" ? <KimyaJourney journey={journey} /> : slug === "kupona" ? <KuponaJourney journey={journey} /> : slug === "runyararo" ? <RunyararoJourney journey={journey} /> : slug === "utalala" ? <UtalalaJourney journey={journey} /> : slug === "calving-season" ? <CalvingSeasonJourney journey={journey} /> : slug === "calving-isolation" ? <CalvingIsolationJourney journey={journey} /> : slug === "full-calving-arc" ? <FullCalvingArcJourney journey={journey} /> : <JourneyPage journey={journey} />;

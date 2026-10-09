@@ -10,7 +10,6 @@ const tests = [
   ["journey-kimbilio", `${base}/journeys/kimbilio`, "Googlebot", ["Kimbilio: Private Luxury Katavi Safari", "TouristTrip", "FAQPage", "katavi-sunset.jpg", "katavi-floodplain.jpg", "Usiku · The Night Drive", "$5,500", "When would you disappear?", "Request a private call", "What remained after the journey"]],
   ["journey-kimya", `${base}/journeys/kimya`, "OAI-SearchBot", ["Kimya: Private Luxury Rubondo Island Safari", "TouristTrip", "FAQPage", "rubondo-island.jpg", "rubondo-birds.jpg", "The Listening", "$9,950", "June through March.", "Request a private call", "What remained after the journey", "What happens next"]],
   ["stillness-collection", `${base}/journeys/stillness`, "Googlebot", ["/images/stillness-collection-forest.jpg", "has-hero-image", "Stillness"]],
-  ["stillness-legacy-url", `${base}/tours/stillness`, "OAI-SearchBot", ["/images/stillness-collection-forest.jpg", "Stillness"]],
   ["case-studies", `${base}/case-studies`, "OAI-SearchBot", ["Case Studies"]],
   ["private-bespoke", `${base}/private-bespoke`, "Googlebot", ["Service"]],
   ["travel-styles", `${base}/travel-styles`, "OAI-SearchBot", ["CollectionPage", "Worldwide Luxury Travel Planning", "Luxury Family Travel", "Luxury Honeymoons", "Luxury Wellness Retreats", "Luxury Corporate Retreats"]],
@@ -44,6 +43,19 @@ for (const slug of retiredJourneySlugs) {
   const response = await fetch(`${base}/journeys/${slug}`, { headers: { "user-agent": "Googlebot" }, redirect: "manual" });
   if (response.status !== 404 && response.status !== 410) failed = true;
   console.log(`retired-${slug}: status=${response.status}`);
+}
+
+for (const [source, destination] of [
+  ["/tours/stillness", "/journeys/stillness"],
+  ["/journeys/renewed", "/journeys/exhausted"],
+  ["/journeys/ex11", "/journeys/ex6"],
+  ["/journeys/yakushima-silence", "/journeys/ex6"],
+]) {
+  const response = await fetch(`${base}${source}`, { redirect: "manual" });
+  const location = response.headers.get("location");
+  const correct = [301, 308].includes(response.status) && new URL(location, base).pathname === destination;
+  if (!correct) failed = true;
+  console.log(`legacy-${source}: status=${response.status}; destination=${location}; correct=${correct}`);
 }
 
 const retiredReferenceFound = retiredJourneySlugs.some((slug) => ["homepage", "journeys", "sitemap"].some((name) => liveBodies.get(name)?.includes(`/journeys/${slug}`)));

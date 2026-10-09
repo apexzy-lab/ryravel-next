@@ -109,8 +109,14 @@ for (const passage of [
   "That is the only promise we make.",
   "Every journey is designed directly by the founder.",
 ]) check(returnPage.includes(passage), `The Return retains supplied copy: ${passage}`);
-check(read("app/journeys/[slug]/page.jsx").includes("permanentRedirect"), "Legacy journey aliases use permanent redirects");
-check(read("app/tours/stillness/page.jsx").includes("permanentRedirect"), "Legacy Stillness collection URL uses a permanent redirect");
+const redirectConfig = read("next.config.mjs");
+for (const [source, destination] of [
+  ["/tours/stillness", "/journeys/stillness"],
+  ["/journeys/renewed", "/journeys/exhausted"],
+  ["/journeys/ex11", "/journeys/ex6"],
+  ["/journeys/yakushima-silence", "/journeys/ex6"],
+]) check(redirectConfig.includes(`source: "${source}", destination: "${destination}", permanent: true`), `${source} has a config-level permanent redirect`);
+check(!read("app/sitemap.js").includes("2026-09-14"), "Sitemap does not publish a stale blanket modification date");
 check(caseStudies.length === 7, "All seven case studies are in the collection");
 check(new Set(caseStudies.map(({ slug }) => slug)).size === caseStudies.length, "Every case study has a unique URL slug");
 check(caseStudies.every((study) => study.sections.length === 4 && study.quote && study.description), "Every case study has a complete narrative, testimonial and SEO description");

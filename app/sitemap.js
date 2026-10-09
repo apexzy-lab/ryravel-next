@@ -2,8 +2,6 @@ import { arcs, journeys } from "./data";
 import { absoluteUrl } from "./seo";
 import { caseStudies } from "./case-studies/caseStudies";
 
-const lastModified = new Date("2026-09-14T00:00:00.000Z");
-
 const staticRoutes = [
   ["/", "weekly", 1],
   ["/journeys", "weekly", 0.95],
@@ -41,8 +39,8 @@ export default function sitemap() {
   const publicCaseStudies = caseStudies.map((study) => `/case-studies/${study.slug}`);
 
   return [
-    ...staticRoutes.map(([path, changeFrequency, priority]) => ({ url: absoluteUrl(path), lastModified: ["/transformational-travel", "/official-instagram"].includes(path) ? new Date("2026-09-25T00:00:00.000Z") : lastModified, changeFrequency, priority })),
-    ...publicJourneys.map((path) => ({ url: absoluteUrl(path), lastModified, changeFrequency: "monthly", priority: 0.75 })),
-    ...publicCaseStudies.map((path) => ({ url: absoluteUrl(path), lastModified, changeFrequency: "monthly", priority: 0.8 })),
+    ...staticRoutes.map(([path, changeFrequency, priority]) => ({ url: absoluteUrl(path), changeFrequency, priority })),
+    ...publicJourneys.map((path) => ({ url: absoluteUrl(path), changeFrequency: "monthly", priority: 0.75 })),
+    ...publicCaseStudies.map((path) => ({ url: absoluteUrl(path), changeFrequency: "monthly", priority: 0.8 })),
   ];
 }
