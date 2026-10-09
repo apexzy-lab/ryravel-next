@@ -45,6 +45,36 @@ const count = window.dataLayer.length;
 recordGoogleAdsLead("RY-SECOND");
 assert.equal(window.dataLayer.length, count, "Withdrawing consent prevents further conversions");
 
+// Privacy-restricted browsers can reject localStorage writes. The choice made
+// in the current page must still be honored without persisting it across reloads.
+const blockedStorage = {
+  getItem: () => { throw new Error("storage blocked"); },
+  setItem: () => { throw new Error("storage blocked"); },
+};
+window.localStorage = blockedStorage;
+scripts.length = 0;
+window.dataLayer = [];
+delete window.gtag;
+saveTrackingChoice("all");
+installGoogleAdsTag();
+assert.equal(scripts.length, 1, "An explicit current-page choice still loads the tag when storage is blocked");
+installGoogleAdsTag();
+assert.equal(scripts.length, 1, "Consent does not insert a duplicate tag");
+recordGoogleAdsLead("RY-VOLATILE");
+assert.equal(window.dataLayer.at(-1)[2].transaction_id, "RY-VOLATILE", "An explicit current-page choice permits the confirmed lead event");
+saveTrackingChoice("reject");
+const blockedCount = window.dataLayer.length;
+recordGoogleAdsLead("RY-BLOCKED");
+assert.equal(window.dataLayer.length, blockedCount, "Current-page withdrawal blocks later conversions even when storage is unavailable");
+
+window.localStorage = {
+  getItem: () => JSON.stringify({ choice: "reject", at: Date.now() }),
+  setItem: () => { throw new Error("write blocked"); },
+};
+saveTrackingChoice("marketing");
+recordGoogleAdsLead("RY-WRITE-BLOCKED");
+assert.equal(window.dataLayer.at(-1)[2].transaction_id, "RY-WRITE-BLOCKED", "A stale stored choice cannot override an explicit new choice when writes fail");
+
 const request = readFileSync(new URL("../app/request/page.jsx", import.meta.url), "utf8");
 assert.match(request, /if \(!response\.ok\)[\s\S]*?recordGoogleAdsLead\(result\.reference\)/, "Conversion is queued only after a successful server response");
 const video = readFileSync(new URL("../app/components/HeroVideo.jsx", import.meta.url), "utf8");

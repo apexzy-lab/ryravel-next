@@ -6,19 +6,34 @@ export const FUNNEL_EVENTS = [
 const consentKey = "ryravel-cookie-choice-v2";
 const sessionKey = "ryravel-analytics-session-v1";
 const consentAgeMs = 183 * 86400000;
+let volatileChoice = null;
+
+function validChoice(value) {
+  return ["reject", "analytics", "marketing", "all"].includes(value?.choice)
+    && Number.isFinite(value?.at)
+    && Date.now() - value.at < consentAgeMs
+    && value.at <= Date.now();
+}
 
 export function readTrackingChoice() {
   if (typeof window === "undefined") return null;
+  if (validChoice(volatileChoice)) return volatileChoice.choice;
   try {
     const value = JSON.parse(window.localStorage.getItem(consentKey) || "null");
-    return ["reject", "analytics", "marketing", "all"].includes(value?.choice) && Number.isFinite(value?.at) && Date.now() - value.at < consentAgeMs && value.at <= Date.now()
-      ? value.choice : null;
-  } catch { return null; }
+    if (validChoice(value)) return value.choice;
+  } catch { /* Storage may be unavailable even after a visitor makes a choice. */ }
+  // Keep an explicit choice only for this page session when persistence fails.
+  return null;
 }
 
 export function saveTrackingChoice(choice) {
-  try { window.localStorage.setItem(consentKey, JSON.stringify({ choice, at: Date.now() })); }
-  catch { /* Browsing can continue without storage. */ }
+  if (typeof window === "undefined" || !["reject", "analytics", "marketing", "all"].includes(choice)) return;
+  const value = { choice, at: Date.now() };
+  volatileChoice = value;
+  try {
+    window.localStorage.setItem(consentKey, JSON.stringify(value));
+    if (window.localStorage.getItem(consentKey) === JSON.stringify(value)) volatileChoice = null;
+  } catch { /* Explicit consent remains valid only in this page session. */ }
 }
 
 export function analyticsAllowed() {
