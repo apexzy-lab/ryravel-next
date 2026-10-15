@@ -13,5 +13,5 @@ const reviews = [
 ];
 
 export default function ReviewsPage() {
-  return <main><PageHero kicker="In their own words" title="Journeys that stay" emphasis="with you" copy="The measure of a journey is what remains after the photographs stop." /><section className="reviews-page paper-section">{reviews.map(([quote, person, trip]) => <article key={person}><span>★★★★★</span><blockquote>“{quote}”</blockquote><b>{person}</b><small>{trip}</small></article>)}</section><CTA /></main>;
+  return <main><PageHero kicker="In their own words" title="Journeys that stay" emphasis="with you" copy="The measure of a journey is what remains after the photographs stop. These are words from Ryravel travellers; surnames are abbreviated for privacy. Each journey is personal, and no particular outcome is guaranteed." /><section className="reviews-page paper-section">{reviews.map(([quote, person, trip]) => <article key={person}><span>★★★★★</span><blockquote>“{quote}”</blockquote><b>{person}</b><small>{trip}</small></article>)}</section><CTA /></main>;
 }

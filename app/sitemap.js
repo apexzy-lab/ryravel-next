@@ -3,44 +3,27 @@ import { absoluteUrl } from "./seo";
 import { caseStudies } from "./case-studies/caseStudies";
 
 const staticRoutes = [
-  ["/", "weekly", 1],
-  ["/journeys", "weekly", 0.95],
-  ["/destinations/tanzania", "monthly", 0.9],
-  ["/destinations/zanzibar", "monthly", 0.9],
-  ["/about", "monthly", 0.8],
-  ["/official-instagram", "monthly", 0.65],
-  ["/the-return", "monthly", 0.8],
-  ["/case-studies", "monthly", 0.8],
-  ["/private-bespoke", "monthly", 0.75],
-  ["/gifting", "monthly", 0.7],
-  ["/sustainability", "monthly", 0.65],
-  ["/reviews", "monthly", 0.65],
-  ["/request", "monthly", 0.85],
-  ["/policies", "monthly", 0.65],
-  ["/terms", "monthly", 0.6],
-  ["/cancellations", "monthly", 0.6],
-  ["/travel-information", "monthly", 0.6],
-  ["/privacy", "monthly", 0.5],
-  ["/cookies", "monthly", 0.5],
-  ["/travel-styles", "monthly", 0.9],
-  ["/transformational-travel", "monthly", 0.9],
-  ["/luxury-travel-planning", "monthly", 0.9],
-  ["/luxury-family-travel", "monthly", 0.85],
-  ["/luxury-honeymoons", "monthly", 0.85],
-  ["/luxury-wellness-retreats", "monthly", 0.85],
-  ["/luxury-corporate-retreats", "monthly", 0.8],
+  "/", "/journeys", "/destinations/tanzania", "/destinations/zanzibar",
+  "/about", "/official-instagram", "/the-return", "/case-studies",
+  "/private-bespoke", "/gifting", "/sustainability", "/reviews",
+  "/request", "/policies", "/terms", "/cancellations",
+  "/travel-information", "/privacy", "/cookies", "/travel-styles",
+  "/transformational-travel", "/luxury-travel-planning",
+  "/luxury-family-travel", "/luxury-honeymoons",
+  "/luxury-wellness-retreats", "/luxury-corporate-retreats",
 ];
 
 export default function sitemap() {
-  const publicJourneys = [
-    ...arcs.filter((arc) => journeys.some((journey) => journey.arc === arc.id)).map((arc) => `/journeys/${arc.id}`),
-    ...journeys.map((journey) => `/journeys/${journey.slug}`),
-  ];
-  const publicCaseStudies = caseStudies.map((study) => `/case-studies/${study.slug}`);
-
   return [
-    ...staticRoutes.map(([path, changeFrequency, priority]) => ({ url: absoluteUrl(path), changeFrequency, priority })),
-    ...publicJourneys.map((path) => ({ url: absoluteUrl(path), changeFrequency: "monthly", priority: 0.75 })),
-    ...publicCaseStudies.map((path) => ({ url: absoluteUrl(path), changeFrequency: "monthly", priority: 0.8 })),
+    ...staticRoutes.map((path) => ({ url: absoluteUrl(path) })),
+    ...arcs.filter((arc) => journeys.some((journey) => journey.arc === arc.id)).map((arc) => ({ url: absoluteUrl(`/journeys/${arc.id}`) })),
+    ...journeys.map((journey) => ({
+      url: absoluteUrl(`/journeys/${journey.slug}`),
+      ...(journey.images?.length || journey.image ? { images: (journey.images?.length ? journey.images : [journey.image]).map(absoluteUrl) } : {}),
+    })),
+    ...caseStudies.map((study) => ({
+      url: absoluteUrl(`/case-studies/${study.slug}`),
+      ...(study.image ? { images: [absoluteUrl(study.image)] } : {}),
+    })),
   ];
 }

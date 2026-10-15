@@ -5,6 +5,10 @@ import { getD1 } from "./db/index";
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.hostname === 'www.ryravel.com') {
+      url.hostname = 'ryravel.com';
+      return Response.redirect(url.toString(), 301);
+    }
     // Keep preview/local tooling usable; these protections apply at the production boundary.
     // Newsletter confirmation is protected by its single-use email token and may
     // be submitted from privacy-preserving email browsers with Origin: null.

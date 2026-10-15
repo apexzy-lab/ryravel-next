@@ -120,21 +120,12 @@ function StructuredJourney({ journey, children }) {
     },
     ...(journey.keywords ? { keywords: journey.keywords.join(", ") } : {}),
     ...(journey.tripOrigin ? { tripOrigin: { "@type": "Place", name: journey.tripOrigin } } : {}),
-    ...(journey.days ? {
-      subTrip: journey.phases.map((name, index) => ({
-        "@type": "TouristTrip",
-        name: `Day ${index + 1}: ${name}`,
-        touristType: arc.label,
-        partOfTrip: { "@id": `${canonical}#trip` },
-      })),
-    } : {}),
     ...(journey.price ? {
       offers: {
         "@type": "Offer",
         price: journey.price.replace(/[^0-9.]/g, ""),
         priceCurrency: "USD",
         url: canonical,
-        availability: "https://schema.org/InStock",
         description: journey.priceNote || `From ${journey.price} per ${journey.unit || "person"}`,
       },
     } : {}),
