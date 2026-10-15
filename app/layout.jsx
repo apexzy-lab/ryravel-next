@@ -1,6 +1,7 @@
 import "./globals.css";
 import "./homepage.css";
 import SiteChrome from "./components/SiteChrome";
+import { CLARITY_HEAD_SCRIPT } from "./lib/clarity";
 import { DEFAULT_DESCRIPTION, organizationJsonLd, SITE_NAME, SITE_URL } from "./seo";
 
 export const metadata = {
@@ -32,6 +33,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head><script id="ryravel-clarity-loader" dangerouslySetInnerHTML={{ __html: CLARITY_HEAD_SCRIPT }} /></head>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
         <SiteChrome>{children}</SiteChrome>

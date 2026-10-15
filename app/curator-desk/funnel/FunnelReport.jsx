@@ -35,7 +35,7 @@ export default function FunnelReport() {
   const errors = overall("validation_error");
   const abandoned = overall("form_abandoned");
 
-  return <main className="funnel-report">
+  return <main className="funnel-report" data-clarity-mask="true">
     <div className="funnel-report-top"><div><a href="/curator-desk">← Curator desk</a><span>Private measurement</span><h1>Journey funnel</h1><p>Consent-based interactions, beside identified enquiry outcomes.</p></div><label>Reporting window<select value={days} onChange={(event) => setDays(Number(event.target.value))}><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="90">Last 90 days</option></select></label></div>
     {error ? <p className="funnel-report-error" role="alert">{error} <a href="/curator-desk">Open curator desk</a></p> : null}
     {loading ? <p>Loading the funnel…</p> : null}

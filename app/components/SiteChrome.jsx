@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { clearAnalyticsSession, readTrackingChoice, saveTrackingChoice, trackFunnel } from "../lib/funnel";
 import { installGoogleAdsTag, updateGoogleAdsConsent } from "../lib/googleAds";
+import { installClarity, stopClarity } from "../lib/clarity";
 import { journeys } from "../data";
 
 const nav = [
@@ -84,6 +85,14 @@ export default function SiteChrome({ children }) {
   }, [marketingConsent]);
 
   useEffect(() => {
+    if (analyticsConsent === true) installClarity();
+  }, [analyticsConsent, pathname]);
+
+  useEffect(() => {
+    if (/^\/(curator-desk|newsletter)(\/|$)/.test(pathname || "") && stopClarity()) window.location.reload();
+  }, [pathname]);
+
+  useEffect(() => {
     if (analyticsConsent !== true || !pathname || lastTrackedPath.current === pathname) return;
     lastTrackedPath.current = pathname;
     const journey = /^\/journeys\/([a-z0-9-]+)$/.exec(pathname);
@@ -109,7 +118,8 @@ export default function SiteChrome({ children }) {
     updateGoogleAdsConsent(choice);
     setCookieSettingsOpen(false);
     if (!["all", "analytics"].includes(choice)) { clearAnalyticsSession(); lastTrackedPath.current = ""; }
-    if (!["all", "marketing"].includes(choice) && linkedInLoaded.current) {
+    const clarityWasRunning = !["all", "analytics"].includes(choice) && stopClarity();
+    if (clarityWasRunning || (!["all", "marketing"].includes(choice) && linkedInLoaded.current)) {
       window.location.reload();
       return;
     }
@@ -157,7 +167,7 @@ export default function SiteChrome({ children }) {
         </div>
         <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => setCookieSettingsOpen(true)}>Cookie settings</button></span></div>
       </footer>
-      {(marketingConsent === null || cookieSettingsOpen) && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>Essential site functions always work. With permission, we measure journey and form interactions using a random session ID. Marketing permission lets LinkedIn measure visits and Google Ads use ad-click and completed-request data to measure our ads; personalized ads remain off. Change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseTracking("reject")}>Reject optional</button><button type="button" onClick={() => chooseTracking("analytics")}>Analytics only</button><button type="button" onClick={() => chooseTracking("marketing")}>Marketing only</button><button type="button" onClick={() => chooseTracking("all")}>Allow both</button>{cookieSettingsOpen && marketingConsent !== null && <button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button>}</div></div>}
+      {(marketingConsent === null || cookieSettingsOpen) && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>Essential site functions always work. With analytics permission, we measure journey and form interactions and use Microsoft Clarity for masked session replays. Marketing permission lets LinkedIn measure visits and Google Ads use ad-click and completed-request data to measure our ads; personalized ads remain off. Change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseTracking("reject")}>Reject optional</button><button type="button" onClick={() => chooseTracking("analytics")}>Analytics only</button><button type="button" onClick={() => chooseTracking("marketing")}>Marketing only</button><button type="button" onClick={() => chooseTracking("all")}>Allow both</button>{cookieSettingsOpen && marketingConsent !== null && <button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button>}</div></div>}
     </>
   );
 }

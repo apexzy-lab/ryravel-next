@@ -3,9 +3,9 @@ export const FUNNEL_EVENTS = [
   "feeling_selected", "validation_error", "form_abandoned", "enquiry_submitted", "private_call_requested",
 ];
 
-// Marketing consent now also covers Google's ad-user-data measurement signal.
-// Ask returning visitors again rather than expanding an older choice silently.
-const consentKey = "ryravel-cookie-choice-v3";
+// Ask returning visitors again before expanding analytics consent to include
+// third-party session replay; an older choice covered first-party events only.
+const consentKey = "ryravel-cookie-choice-v4";
 const sessionKey = "ryravel-analytics-session-v1";
 const consentAgeMs = 183 * 86400000;
 let volatileChoice = null;

@@ -261,15 +261,15 @@ export default function CuratorDeskDemo() {
   const counts = overview.counts || {};
 
   if (checkingAccess) {
-    return <main className="curator-desk-demo desk-login-page"><div className="desk-login desk-session-check" role="status"><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Checking secure access.</h1><p>Confirming your curator session before opening the workspace.</p><div className="desk-check-pulse" aria-hidden="true" /></div></main>;
+    return <main className="curator-desk-demo desk-login-page" data-clarity-mask="true"><div className="desk-login desk-session-check" role="status"><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Checking secure access.</h1><p>Confirming your curator session before opening the workspace.</p><div className="desk-check-pulse" aria-hidden="true" /></div></main>;
   }
 
   if (needsAccess) {
-    return <main className="curator-desk-demo desk-login-page"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{loginTurnstile.enabled ? <div className="desk-login-turnstile"><div ref={loginTurnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit" disabled={loading}>{loading ? "Verifying…" : "Open curator desk →"}</button><a href="/">Return to Ryravel</a></form></main>;
+    return <main className="curator-desk-demo desk-login-page" data-clarity-mask="true"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{loginTurnstile.enabled ? <div className="desk-login-turnstile"><div ref={loginTurnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit" disabled={loading}>{loading ? "Verifying…" : "Open curator desk →"}</button><a href="/">Return to Ryravel</a></form></main>;
   }
 
   return (
-    <main className="curator-desk-demo">
+    <main className="curator-desk-demo" data-clarity-mask="true">
       <div className="command-desk live-command-desk">
         <aside className="command-sidebar">
           <div className="desk-brand"><img src="/brand/ryravel-mark.png" alt="" /><div><strong>Ryravel</strong><span>Curator desk</span></div></div>
