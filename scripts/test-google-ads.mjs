@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { installGoogleAdsTag, recordGoogleAdsLead, updateGoogleAdsConsent } from "../app/lib/googleAds.js";
 import { saveTrackingChoice } from "../app/lib/funnel.js";
 
@@ -83,10 +83,13 @@ assert.equal(window.dataLayer.at(-1)[2].transaction_id, "RY-WRITE-BLOCKED", "A s
 const request = readFileSync(new URL("../app/request/page.jsx", import.meta.url), "utf8");
 assert.match(request, /if \(!response\.ok\)[\s\S]*?recordGoogleAdsLead\(result\.reference\)/, "Conversion is queued only after a successful server response");
 const video = readFileSync(new URL("../app/components/HeroVideo.jsx", import.meta.url), "utf8");
-assert.match(video, /src="https:\/\/media\.ryravel\.com\/ryravel-hero\.mp4\?v=20260831"/, "Hero retains the original Ryravel video");
+assert.match(video, /src="\/video\/ryravel-hero-approved-720p\.mp4"/, "Hero uses the optimized approved Ryravel video");
+assert.match(video, /https:\/\/media\.ryravel\.com\/ryravel-hero\.mp4\?v=20260831/, "Hero records the source of the approved footage");
+const heroBytes = statSync(new URL("../public/video/ryravel-hero-approved-720p.mp4", import.meta.url)).size;
+assert.ok(heroBytes > 1_000_000 && heroBytes < 25 * 1024 * 1024, "Approved hero video is present and within Cloudflare's per-asset size limit");
 const worker = readFileSync(new URL("../worker.js", import.meta.url), "utf8");
 assert.match(worker, /media-src 'self' https:\/\/media\.ryravel\.com/, "CSP permits the original Ryravel video");
 assert.match(worker, /connect-src [^;]*https:\/\/pagead2\.googlesyndication\.com/, "CSP permits Google Ads conversion beacons");
 assert.match(worker, /connect-src [^;]*https:\/\/ad\.doubleclick\.net/, "CSP permits Google's Ads collection endpoint");
 
-console.log("PASS Google Ads consent, single tag, confirmed lead event and original hero video");
+console.log("PASS Google Ads consent, single tag, confirmed lead event and approved hero video");

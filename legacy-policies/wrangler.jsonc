@@ -1,0 +1,9 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "ryravel-policy-redirects",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-15",
+  "routes": [
+    { "pattern": "policies.ryravel.com", "custom_domain": true }
+  ]
+}
