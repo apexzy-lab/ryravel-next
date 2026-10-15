@@ -5,7 +5,7 @@ import { absoluteUrl, buildMetadata } from "../seo";
 
 const featuredJourneys = journeys.filter((journey) => journey.arc !== "stillness");
 
-export const metadata = buildMetadata({ title: "Bespoke Luxury Journeys Worldwide", description: "Explore Ryravel's launched Restoration and Return journeys and emotional arcs open for waitlist interest. The Stillness Collection has its own dedicated page. Private journeys are designed worldwide.", path: "/journeys" });
+export const metadata = buildMetadata({ title: "Private Luxury Journeys Across Africa", description: "Explore Ryravel's published feeling-led journeys across Africa, including Restoration and Return. The Stillness Collection has its own page; bespoke requests beyond Africa are welcome.", path: "/journeys" });
 
 const journeyCollectionJsonLd = {
   "@context": "https://schema.org",

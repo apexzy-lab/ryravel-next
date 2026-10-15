@@ -1,7 +1,7 @@
 import { CTA, PageHero } from "../components/Blocks";
 import { absoluteUrl, buildMetadata } from "../seo";
 
-export const metadata = buildMetadata({ title: "Private & Bespoke Travel Worldwide", description: "A completely private luxury journey anywhere in the world, shaped around your dates, pace, interests and emotional intent.", path: "/private-bespoke" });
+export const metadata = buildMetadata({ title: "Private & Bespoke Travel Worldwide", description: "Private luxury journeys across Africa, with bespoke requests beyond the published collection considered around your dates, pace and priorities.", path: "/private-bespoke" });
 
 const serviceJsonLd = {
   "@context": "https://schema.org",
@@ -19,8 +19,8 @@ const serviceJsonLd = {
 export default function PrivatePage() {
   return <main>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }} />
-    <PageHero kicker="Private & bespoke · worldwide" title="There is no package." emphasis="There is only yours." copy="A completely private journey anywhere in the world, built from the first conversation around who you are and what this moment requires." />
-    <section className="editorial paper-section"><span className="kicker">The world, considered</span><h2>Privacy is not isolation.<br /><em>It is freedom from friction.</em></h2><p className="lead">From remote wilderness and private islands to cultural capitals and quiet countryside, we choose the place only after we understand the purpose. Private stays, expert hosts, discreet transfers and access are arranged before you know you need them.</p><div className="property-grid">{["Private islands", "Remote wilderness", "Cultural capitals", "Mountain retreats", "Coastal hideaways", "Country estates"].map((name, index) => <article key={name}><span>0{index + 1}</span><h3>{name}</h3><p>Selected worldwide for privacy, human service and a strong sense of place.</p></article>)}</div></section>
+    <PageHero kicker="Private & bespoke · worldwide" title="There is no package." emphasis="There is only yours." copy="Our published journeys focus on Africa. If your destination is elsewhere, tell us what you have in mind; we will assess how to shape it around you." />
+    <section className="editorial paper-section"><span className="kicker">The world, considered</span><h2>Privacy is not isolation.<br /><em>It is freedom from friction.</em></h2><p className="lead">From remote wilderness and private islands to cultural capitals and quiet countryside, we choose the place only after we understand the purpose. Private stays, expert hosts, discreet transfers and access are proposed around your brief and confirmed before booking.</p><div className="property-grid">{["Private islands", "Remote wilderness", "Cultural capitals", "Mountain retreats", "Coastal hideaways", "Country estates"].map((name, index) => <article key={name}><span>0{index + 1}</span><h3>{name}</h3><p>Considered for privacy, human service and a strong sense of place, subject to availability.</p></article>)}</div></section>
     <section className="dark-editorial"><span className="kicker">Built once</span><h2>No templates. No catalogue.<br /><em>No one else’s journey.</em></h2><p>Your curator holds the entire thread: dates, pace, access, dietary needs, celebrations, silence and the life waiting when you return.</p></section>
     <CTA title="Tell us what this journey needs to hold." />
   </main>;

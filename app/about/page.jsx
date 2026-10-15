@@ -49,7 +49,7 @@ export default function AboutPage() {
             <h3>Why this matters to me</h3>
             <p>I’m not building this for people chasing a nicer photo. I’m building it for people who’ve already had that trip—the well-reviewed, well-located, perfectly nice trip—and come home no different, the way I did.</p>
             <p>You can travel and stay exactly who you were. Or the trip can be built with enough intention that you don’t. I’ve done both. I know which one I’m building now.</p>
-            <footer><strong>Maryangel</strong><span>Founder, Ryravel</span></footer>
+            <footer><strong>Maryangel Ajuzieogu</strong><span>Founder, Ryravel</span></footer>
           </section>
         </div>
       </article>
@@ -57,7 +57,7 @@ export default function AboutPage() {
       <section className="editorial paper-section">
         <span className="kicker">Not thread count. Intention.</span>
         <h2>Travel designed backwards from <em>The Return.</em></h2>
-        <p className="lead">Most travel begins with a map. Ours begins with a person. We design worldwide, choosing the destination, rhythm, people and pauses only after we understand what your life has been asking of you.</p>
+        <p className="lead">Most travel begins with a map. Ours begins with a person. Our published journeys focus on Africa, and we consider bespoke requests further afield. In either case, the destination, rhythm, people and pauses follow what your life has been asking of you.</p>
         <div className="principle-grid">{[
           ["Begin with a feeling", "Before dates or destinations, we ask what needs to change."],
           ["Design the emotional arc", "Arrival, opening, transformation and return each receive their own pace."],
@@ -67,7 +67,7 @@ export default function AboutPage() {
       </section>
 
       <section className="dark-editorial"><span className="kicker">The Ryravel method</span><h2>Human-curated. Emotion-led. <em>Never templated.</em></h2><p>You work with one curator who listens deeply, challenges assumptions and remains present from the first conversation until after you arrive home.</p></section>
-      <section className="curators paper-section" id="curators"><div><span className="kicker">The curators</span><h2>Real people who know when to add—and when to leave space.</h2></div><div className="curator-card"><span>Founder & lead curator</span><h3>Maryangel</h3><p>Ryravel was founded on the belief that the right journey can revise a life. Maryangel brings emotional intelligence, destination fluency and an obsessive care for timing to every itinerary.</p></div></section>
+      <section className="curators paper-section" id="curators"><div><span className="kicker">The curators</span><h2>Real people who know when to add—and when to leave space.</h2></div><div className="curator-card" id="maryangel"><span>Founder & lead curator</span><h3>Maryangel Ajuzieogu</h3><p>Ryravel was founded on the belief that the right journey can revise a life. Maryangel brings emotional intelligence, destination fluency and an obsessive care for timing to every itinerary.</p></div></section>
       <CTA />
     </main>
   );

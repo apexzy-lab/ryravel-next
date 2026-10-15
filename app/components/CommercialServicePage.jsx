@@ -59,7 +59,7 @@ export default function CommercialServicePage({ service, related = [] }) {
     </section>
 
     <section className="commercial-arrangements">
-      <div><span className="kicker">What we can arrange</span><h2>One brief.<br /><em>One considered journey.</em></h2><p>Every inclusion is proposed against your dates, destination and priorities. Availability and exact pricing are confirmed before anything is booked.</p></div>
+      <div><span className="kicker">What we can arrange</span><h2>One brief.<br /><em>One considered journey.</em></h2><p>Our published journeys currently focus on Africa; other destinations are considered by request. Every inclusion is proposed against your dates, destination and priorities. Availability and exact pricing are confirmed before anything is booked.</p></div>
       <ul>{service.arrangements.map((item) => <li key={item}>{item}</li>)}</ul>
     </section>
 

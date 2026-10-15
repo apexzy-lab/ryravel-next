@@ -6,7 +6,7 @@ export const commercialServices = {
     description: "Private, bespoke luxury travel planning worldwide for couples, families, solo travellers and private groups—designed around your pace, priorities and reason for travelling.",
     kicker: "Private travel planning · worldwide",
     headline: "A luxury travel planner for the journey only you should take.",
-    intro: "Ryravel designs private journeys worldwide for people who want the planning handled with judgement, discretion and care. We begin with what this trip needs to change, then select the destination, stays, guides, transfers and pace that serve it.",
+    intro: "Our published journeys focus on Africa; bespoke requests can take us further. We begin with what this trip needs to change, then consider the destination, stays, guides, transfers and pace that serve it. Every arrangement is subject to a personal proposal and confirmation.",
     audience: "International luxury travellers, couples, families, solo travellers and private groups",
     keywords: ["luxury travel planner", "bespoke luxury travel", "private travel planner", "worldwide luxury travel", "custom luxury trips", "tailor-made luxury holidays"],
     pillars: [
@@ -17,7 +17,8 @@ export const commercialServices = {
     arrangements: ["Private and boutique stays", "International and regional route design", "Private transfers and specialist guides", "Dining, access and meaningful experiences", "Rest, recovery and unstructured time", "24/7 support during the journey"],
     proof: { href: "/case-studies", label: "Read traveller case studies", title: "See what changed after the journey." },
     faq: [
-      ["Where does Ryravel design journeys?", "Worldwide. Current published journeys show places where our design is already fully developed, while private requests can begin with a destination—or with no destination at all."],
+      ["Where does Ryravel design journeys?", "Our published collections currently focus on Africa. We also consider bespoke requests beyond Africa, subject to the destination, dates and partners available for your brief."],
+      ["Can I enquire about a destination outside Africa?", "Yes. Ryravel has supported travellers to Qatar, Dubai, the United States, Vietnam, Thailand, the United Kingdom, Iceland, Bali, Costa Rica and Brazil, among other places. These are not currently published tours; tell us where you want to go and we will assess what we can arrange."],
       ["Is every Ryravel journey private?", "Our bespoke journeys are designed around your party. Private transfers, guides, stays and access are selected where they best serve the brief and remain subject to availability."],
       ["What investment should I expect?", "The planning conversation begins from $5,000 per person. The final investment depends on destination, season, journey length, party size, accommodation and access; nothing is booked until you approve the proposal."],
       ["How quickly will someone respond?", "A Ryravel curator reviews completed requests personally and responds within one business day."],

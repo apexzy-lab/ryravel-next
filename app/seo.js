@@ -1,6 +1,6 @@
 export const SITE_URL = "https://ryravel.com";
 export const SITE_NAME = "Ryravel";
-export const DEFAULT_DESCRIPTION = "Ryravel designs private, bespoke luxury journeys worldwide around how you want to feel—from restorative retreats and safaris to islands and cultural journeys.";
+export const DEFAULT_DESCRIPTION = "Ryravel designs feeling-led private journeys across Africa, with bespoke travel requests considered worldwide.";
 
 export function absoluteUrl(path = "/") {
   return new URL(path, SITE_URL).toString();
@@ -40,6 +40,7 @@ export const organizationJsonLd = {
   "@id": `${SITE_URL}/#organization`,
   name: SITE_NAME,
   legalName: "Tourvana Inc",
+  founder: { "@type": "Person", "@id": `${SITE_URL}/about#maryangel`, name: "Maryangel Ajuzieogu", url: `${SITE_URL}/about` },
   url: `${SITE_URL}/`,
   address: {
     "@type": "PostalAddress",
@@ -67,7 +68,7 @@ export const organizationJsonLd = {
     name: "Ryravel private journey collections",
     itemListElement: [
       ["Bespoke private travel", "/private-bespoke"],
-      ["Worldwide emotion-led journeys", "/journeys"],
+      ["Published emotion-led journeys across Africa", "/journeys"],
       ["Worldwide luxury travel planning", "/luxury-travel-planning"],
       ["Luxury family travel", "/luxury-family-travel"],
       ["Bespoke luxury honeymoons", "/luxury-honeymoons"],

@@ -3,7 +3,7 @@ import { buildMetadata, websiteJsonLd } from "./seo";
 
 export const metadata = buildMetadata({
   title: "Ryravel | Bespoke Travel Designed Around How You Feel",
-  description: "Ryravel designs private, bespoke luxury journeys worldwide around how you want to feel—from restorative retreats and safaris to islands and cultural journeys.",
+  description: "Explore Ryravel's feeling-led private journeys across Africa. Bespoke requests for other destinations are welcome and reviewed personally.",
   path: "/",
   absoluteTitle: true,
 });
