@@ -1,6 +1,7 @@
-import { readTrackingChoice } from "./funnel.js";
+import { analyticsAllowed, readTrackingChoice } from "./funnel.js";
 
 const GOOGLE_ADS_ID = "AW-18469165502";
+const GOOGLE_ANALYTICS_ID = "G-CYCBL8SNK8";
 const LEAD_CONVERSION = `${GOOGLE_ADS_ID}/SXVSCOy294wdEL6z5OZE`;
 
 export function googleAdsAllowed() {
@@ -17,13 +18,12 @@ export function updateGoogleAdsConsent(choice) {
   });
 }
 
-export function installGoogleAdsTag() {
-  if (typeof window === "undefined" || !googleAdsAllowed()) return;
-  if (document.querySelector('script[data-ryravel-google-ads="true"]')) return;
-
+function ensureGoogleTag(tagId) {
+  const existing = document.querySelector('script[data-ryravel-google-tag="true"]');
+  if (existing) return existing;
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function gtag() { window.dataLayer.push(arguments); };
-  // Basic consent mode: no Google request is made until marketing is allowed.
+  // Basic consent mode: load nothing until at least one purpose is allowed.
   window.gtag("consent", "default", {
     ad_storage: "denied",
     analytics_storage: "denied",
@@ -32,13 +32,30 @@ export function installGoogleAdsTag() {
   });
   updateGoogleAdsConsent(readTrackingChoice());
   window.gtag("js", new Date());
-  window.gtag("config", GOOGLE_ADS_ID);
 
   const script = document.createElement("script");
   script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`;
-  script.dataset.ryravelGoogleAds = "true";
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${tagId}`;
+  script.dataset.ryravelGoogleTag = "true";
   document.head.appendChild(script);
+  return script;
+}
+
+export function installGoogleAdsTag() {
+  if (typeof window === "undefined" || !googleAdsAllowed()) return;
+  const script = ensureGoogleTag(GOOGLE_ADS_ID);
+  if (script.dataset.ryravelGoogleAdsConfigured === "true") return;
+  script.dataset.ryravelGoogleAdsConfigured = "true";
+  window.gtag("config", GOOGLE_ADS_ID);
+}
+
+export function installGoogleAnalyticsTag() {
+  if (typeof window === "undefined" || !analyticsAllowed()) return;
+  if (/^\/(curator-desk|newsletter|api)(\/|$)/.test(window.location.pathname)) return;
+  const script = ensureGoogleTag(GOOGLE_ANALYTICS_ID);
+  if (script.dataset.ryravelGoogleAnalyticsConfigured === "true") return;
+  script.dataset.ryravelGoogleAnalyticsConfigured = "true";
+  window.gtag("config", GOOGLE_ANALYTICS_ID);
 }
 
 export function recordGoogleAdsLead(reference) {
