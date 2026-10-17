@@ -14,7 +14,7 @@ export async function GET(request) {
         SUM(CASE WHEN status NOT IN ('won','declined','closed') THEN 1 ELSE 0 END) AS active_count,
         SUM(CASE WHEN next_action_due_at IS NOT NULL AND next_action_due_at < datetime('now') THEN 1 ELSE 0 END) AS overdue_count
         FROM journey_enquiries WHERE deleted_at IS NULL AND archived_at IS NULL AND is_spam = 0`),
-      db.prepare(`SELECT id, reference, created_at, name, email, feeling, travel_month, travel_year,
+      db.prepare(`SELECT id, reference, created_at, deleted_at, name, email, feeling, travel_month, travel_year,
         duration, people, budget, status, priority, assigned_to, next_action,
         next_action_due_at, tags, fit_score
         FROM journey_enquiries WHERE ${listCondition}

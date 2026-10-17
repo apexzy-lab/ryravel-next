@@ -26,6 +26,23 @@ function StagePill({ stage }) {
   return <span className={`desk-stage stage-${stage}`}>{title(stage)}</span>;
 }
 
+function DeskIcon({ name }) {
+  const paths = {
+    inbox: <><path d="M3 4h18v14H3z" /><path d="M3 13h5l2 3h4l2-3h5" /></>,
+    trash: <><path d="M4 7h16M8 7V4h8v3M6 7l1 14h10l1-14M10 11v6m4-6v6" /></>,
+    chart: <><path d="M4 20V4m0 16h17M8 16l4-5 3 2 5-7" /></>,
+    pulse: <><path d="M3 12h4l2-5 4 10 2-5h6" /></>,
+    download: <><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4" /></>,
+    compass: <><circle cx="12" cy="12" r="9" /><path d="m15 9-2 4-4 2 2-4 4-2Z" /></>,
+    external: <><path d="M13 4h7v7M20 4l-9 9M20 14v6H4V4h6" /></>,
+    logout: <><path d="M10 4H4v16h6M14 7l5 5-5 5M19 12H9" /></>,
+    clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
+    shield: <><path d="m12 2 8 4v6c0 5-3 8-8 10-5-2-8-5-8-10V6z" /><path d="m9 12 2 2 4-4" /></>,
+    check: <><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></>,
+  };
+  return <svg className="desk-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
+}
+
 export default function CuratorDeskDemo() {
   const [overview, setOverview] = useState({ actor: "", counts: {}, enquiries: [] });
   const [selectedId, setSelectedId] = useState("");
@@ -46,6 +63,9 @@ export default function CuratorDeskDemo() {
   const [needsAccess, setNeedsAccess] = useState(true);
   const [pendingDelete, setPendingDelete] = useState(false);
   const [pendingPurge, setPendingPurge] = useState(false);
+  const [pendingBulk, setPendingBulk] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [bulkProgress, setBulkProgress] = useState(0);
   const [purgePhrase, setPurgePhrase] = useState("");
   const [purgeAcknowledge, setPurgeAcknowledge] = useState(false);
   const [loginTurnstile, setLoginTurnstile] = useState({ enabled: false, siteKey: "" });
@@ -118,6 +138,7 @@ export default function CuratorDeskDemo() {
     if (!response.ok) throw new Error(result.error || "The curator desk could not be loaded.");
     setNeedsAccess(false);
     setOverview(result);
+    setSelectedIds((current) => current.filter((id) => result.enquiries?.some((record) => record.id === id)));
     const operatingResponse = await fetch("/api/admin/operations", { cache: "no-store" });
     if (operatingResponse.ok) setOperations(await operatingResponse.json());
     setSelectedId((current) => result.enquiries?.some((record) => record.id === current) ? current : result.enquiries?.[0]?.id || "");
@@ -175,6 +196,12 @@ export default function CuratorDeskDemo() {
 
   function closePurge() {
     setPendingPurge(false);
+    setPurgePhrase("");
+    setPurgeAcknowledge(false);
+  }
+
+  function closeBulk() {
+    setPendingBulk(false);
     setPurgePhrase("");
     setPurgeAcknowledge(false);
   }
@@ -253,6 +280,8 @@ export default function CuratorDeskDemo() {
   function changeView(nextView) {
     closePurge();
     setPendingDelete(false);
+    setPendingBulk(false);
+    setSelectedIds([]);
     setView(nextView);
     setSelectedId("");
     setDetail(null);
@@ -298,13 +327,65 @@ export default function CuratorDeskDemo() {
   const counts = overview.counts || {};
   const deliveryIssueCount = operations?.deliveries?.filter((item) => ["failed", "retry", "held"].includes(item.status)).reduce((total, item) => total + Number(item.total), 0) || 0;
   const hasDashboardActivity = Number(counts.new_count || 0) + Number(counts.active_count || 0) + Number(counts.overdue_count || 0) > 0;
+  const schedulerAgeMinutes = operations?.schedulerLastRun ? (Date.now() - Date.parse(`${operations.schedulerLastRun}Z`)) / 60000 : Infinity;
+  const healthNeedsAttention = Boolean(operations) && (Number(operations.overdue || 0) + deliveryIssueCount + Number(operations.retentionReviews || 0) > 0 || !Number.isFinite(schedulerAgeMinutes) || schedulerAgeMinutes > 35);
+  const shownIds = visible.map((record) => record.id);
+  const allShownSelected = shownIds.length > 0 && shownIds.every((id) => selectedIds.includes(id));
+  const selectedRecords = overview.enquiries.filter((record) => selectedIds.includes(record.id));
+  const selectedNoun = selectedRecords.length === 1 ? "enquiry" : "enquiries";
+
+  function toggleSelected(id) {
+    setSelectedIds((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
+  }
+
+  function toggleAllShown() {
+    setSelectedIds((current) => allShownSelected ? current.filter((id) => !shownIds.includes(id)) : [...new Set([...current, ...shownIds])]);
+  }
+
+  async function applyBulkDelete() {
+    const records = [...selectedRecords];
+    if (!records.length || saving || (view === "trash" && (purgePhrase !== "DELETE" || !purgeAcknowledge))) return;
+    setSaving(true);
+    setBulkProgress(0);
+    setError("");
+    setNotice("");
+    const failures = [];
+    let completed = 0;
+    for (const record of records) {
+      try {
+        const permanent = view === "trash";
+        const response = await fetch(`/api/admin/enquiries/${encodeURIComponent(record.id)}`, {
+          method: permanent ? "DELETE" : "PATCH",
+          headers: authHeaders(true),
+          body: JSON.stringify(permanent
+            ? { reference: record.reference, confirmation: "DELETE", acknowledgeExternal: true }
+            : { deleted: true }),
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "The record could not be updated.");
+        completed += 1;
+      } catch (bulkError) {
+        failures.push(`${record.reference}: ${bulkError.message}`);
+      }
+      setBulkProgress(completed + failures.length);
+    }
+    closeBulk();
+    setSelectedIds([]);
+    setSelectedId("");
+    setDetail(null);
+    try { await loadOverview(); } catch (loadError) { failures.push(`Refresh: ${loadError.message}`); }
+    if (completed) setNotice(`${completed} ${view === "trash" ? "permanently deleted" : "moved to Trash"}. ${view === "trash" ? "External CRM records and backups require separate handling." : ""}`);
+    if (failures.length) setError(`${failures.length} could not be ${view === "trash" ? "permanently deleted" : "moved to Trash"}: ${failures.slice(0, 5).join(" · ")}${failures.length > 5 ? " · Review the remaining records in the queue." : ""}`);
+    setSaving(false);
+    setBulkProgress(0);
+  }
 
   if (checkingAccess) {
     return <main className="curator-desk-demo desk-login-page" data-clarity-mask="true"><div className="desk-login desk-session-check" role="status"><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Checking secure access.</h1><p>Confirming your curator session before opening the workspace.</p><div className="desk-check-pulse" aria-hidden="true" /></div></main>;
   }
 
   if (needsAccess) {
-    return <main className="curator-desk-demo desk-login-page" data-clarity-mask="true"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{loginTurnstile.enabled ? <div className="desk-login-turnstile"><div ref={loginTurnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit" disabled={loading}>{loading ? "Verifying…" : "Open curator desk →"}</button><a href="/">Return to Ryravel</a></form></main>;
+    return <main className="curator-desk-demo desk-login-page" data-clarity-mask="true"><form className="desk-login" onSubmit={signIn}><img src="/brand/ryravel-mark.png" alt="" /><span>Private curator workspace</span><h1>Welcome back.</h1><p>Enter the curator access key to view traveller enquiries.</p><label>Curator email<input type="email" value={curatorEmail} readOnly aria-readonly="true" /></label><label>Access key<input type="password" value={accessKeyDraft} onChange={(event) => setAccessKeyDraft(event.target.value)} placeholder="Curator access key" autoComplete="current-password" required /></label>{loginTurnstile.enabled ? <div className="desk-login-turnstile"><div ref={loginTurnstileMount} /><small>Protected by Cloudflare Turnstile.</small></div> : null}{error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}<button type="submit" disabled={loading}>{loading ? "Verifying…" : "Open curator desk →"}</button><a href="/" target="_blank" rel="noopener noreferrer">Return to Ryravel ↗</a></form></main>;
   }
 
   return (
@@ -312,15 +393,15 @@ export default function CuratorDeskDemo() {
       <div className="command-desk live-command-desk">
         <aside className="command-sidebar">
           <div className="desk-brand"><img src="/brand/ryravel-mark.png" alt="" /><div><strong>Ryravel</strong><span>Curator desk</span></div></div>
-          <nav aria-label="Curator workspace"><button className={view === "active" ? "active" : ""} type="button" onClick={() => changeView("active")}>Enquiries <b>{counts.active_count || 0}</b></button><button className={view === "trash" ? "active" : ""} type="button" onClick={() => changeView("trash")}>Trash <b>{counts.deleted_count || 0}</b></button><a href="/curator-desk/funnel">Journey funnel</a><a href="#desk-operations">Operations</a><button type="button" onClick={exportCsv}>Export CSV</button><a href="/journeys">Journeys</a><a href="/">Website ↗</a></nav>
-          <div className="desk-user"><span>{initials(overview.actor)}</span><div><b>{overview.actor || "Ryravel curator"}</b><small>Authorised workspace</small></div><button className="desk-logout" type="button" onClick={signOut}>Log out</button></div>
+          <nav aria-label="Curator workspace"><button className={view === "active" ? "active" : ""} type="button" onClick={() => changeView("active")} title="Enquiries" aria-label="Enquiries"><DeskIcon name="inbox" /><span>Enquiries</span><b>{counts.active_count || 0}</b></button><button className={view === "trash" ? "active" : ""} type="button" onClick={() => changeView("trash")} title="Trash" aria-label="Trash"><DeskIcon name="trash" /><span>Trash</span><b>{counts.deleted_count || 0}</b></button><a href="/curator-desk/funnel" title="Journey funnel" aria-label="Journey funnel"><DeskIcon name="chart" /><span>Journey funnel</span></a><a href="#desk-operations" title="Operations" aria-label="Operations"><DeskIcon name="pulse" /><span>Operations</span></a><button type="button" onClick={exportCsv} title="Export CSV" aria-label="Export CSV"><DeskIcon name="download" /><span>Export CSV</span></button><a href="/journeys" target="_blank" rel="noopener noreferrer" title="Journeys (opens in a new tab)" aria-label="Journeys (opens in a new tab)"><DeskIcon name="compass" /><span>Journeys</span><span className="desk-external-mark" aria-hidden="true">↗</span></a><a href="/" target="_blank" rel="noopener noreferrer" title="Website (opens in a new tab)" aria-label="Website (opens in a new tab)"><DeskIcon name="external" /><span>View website</span><span className="desk-external-mark" aria-hidden="true">↗</span></a></nav>
+          <div className="desk-user"><span>{initials(overview.actor)}</span><div><b>{overview.actor || "Ryravel curator"}</b><small>Authorised workspace</small></div><button className="desk-logout" type="button" onClick={signOut} title="Log out"><DeskIcon name="logout" /><span>Log out</span></button></div>
         </aside>
 
         <section className="command-main">
           <header className="desk-hero"><div><span>{view === "trash" ? "Records and accountability" : new Intl.DateTimeFormat("en", { weekday: "long", day: "numeric", month: "long" }).format(new Date())}</span><h1>{view === "trash" ? "Trash review" : "Journey enquiries"}</h1><p>{view === "trash" ? "Recover mistakes and close records deliberately." : "A clear view of every conversation and its next action."}</p></div><div className="desk-hero-count"><strong>{view === "trash" ? counts.deleted_count || 0 : counts.active_count || 0}</strong><small>{view === "trash" ? "trashed enquiries" : "active enquiries"}</small></div></header>
           {error ? <div className="desk-alert desk-alert-error" role="alert">{error}</div> : null}
           {notice ? <div className="desk-alert" role="status">{notice}</div> : null}
-          {operations ? <details className="desk-operating-health" id="desk-operations"><summary>Operating health <span>{Number(operations.overdue || 0) + deliveryIssueCount + Number(operations.retentionReviews || 0) === 0 ? "All clear" : `${operations.overdue || 0} overdue · ${deliveryIssueCount} delivery issues · ${operations.retentionReviews || 0} retention reviews`}</span></summary><div className="desk-operating-health-body"><p>Accountable team: <a href="mailto:support@ryravel.com">Ryravel Support Team</a> · Scheduler: {operations.schedulerLastRun ? relativeTime(operations.schedulerLastRun + "Z") : "Awaiting first run"}</p><p>CRM enquiry signals never grant marketing permission. Newsletter opt-ins require email confirmation and a separate consent record.</p><button type="button" className="desk-note-button" disabled={saving} onClick={retryDeliveries}>Retry failed deliveries</button></div></details> : null}
+          {operations ? <details className="desk-operating-health" id="desk-operations"><summary><span className="desk-health-heading"><DeskIcon name="pulse" /> Operating health</span><span className={`desk-health-status${healthNeedsAttention ? " has-issues" : " is-clear"}`}>{healthNeedsAttention ? "Needs attention" : "All clear"}</span></summary><div className="desk-operating-health-body"><div className="desk-health-grid"><article><DeskIcon name="clock" /><strong>{operations.overdue || 0}</strong><span>Overdue actions</span></article><article><DeskIcon name="pulse" /><strong>{deliveryIssueCount}</strong><span>Delivery issues</span></article><article><DeskIcon name="shield" /><strong>{operations.retentionReviews || 0}</strong><span>Retention reviews</span></article><article><DeskIcon name="check" /><strong>{operations.schedulerLastRun ? relativeTime(operations.schedulerLastRun + "Z") : "Pending"}</strong><span>Scheduler last ran</span></article></div><div className="desk-health-foot"><span>Accountable team: <a href="mailto:support@ryravel.com">Ryravel Support Team</a></span><button type="button" className="desk-note-button" disabled={saving || deliveryIssueCount === 0} onClick={retryDeliveries}>Retry failed deliveries</button></div><p>CRM enquiry signals do not grant marketing permission. Newsletter opt-ins require separate email confirmation.</p></div></details> : null}
           {view === "active" && hasDashboardActivity ? <section className="desk-metrics" aria-label="Enquiry summary">
             <article><span>Need a response</span><strong>{counts.new_count || 0}</strong><small>New enquiries</small></article>
             <article><span>Open conversations</span><strong>{counts.active_count || 0}</strong><small>Across every stage</small></article>
@@ -329,13 +410,14 @@ export default function CuratorDeskDemo() {
 
           <section className="command-workspace">
             <div className="command-list">
-              <div className="desk-list-heading"><div><strong>{view === "trash" ? "Removed enquiries" : "Enquiry queue"}</strong><span>{visible.length} {view === "trash" ? "in Trash" : "conversations"}</span></div><button className="desk-refresh" type="button" onClick={() => loadOverview().catch((loadError) => setError(loadError.message))}>Refresh</button></div>
-              <div className="desk-tools"><label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={view === "trash" ? "Search trash" : "Search enquiries"} aria-label={view === "trash" ? "Search trash" : "Search enquiries"} /></label><select value={filter} onChange={(event) => setFilter(event.target.value)} aria-label="Filter by stage"><option value="all">All stages</option>{stages.map((stage) => <option value={stage} key={stage}>{title(stage)}</option>)}</select><button type="button" onClick={() => setOldestFirst(value => !value)}>{oldestFirst ? "Oldest first ↑" : "Newest first ↓"}</button></div>
-              <div className="desk-table-header"><span>Enquiry</span><span>{view === "trash" ? "Removed" : "Travel window"}</span><span>Stage</span><span>Review</span></div>
+              <div className="desk-list-heading"><div><strong>{view === "trash" ? "Removed enquiries" : "Enquiry queue"}</strong><span>{visible.length} {view === "trash" ? "in Trash" : "conversations"}{Number(view === "trash" ? counts.deleted_count : counts.total) > overview.enquiries.length ? " · Showing the latest 200 only" : ""}</span></div><button className="desk-refresh" type="button" onClick={() => loadOverview().catch((loadError) => setError(loadError.message))}>Refresh</button></div>
+              <div className="desk-tools"><label><span>⌕</span><input value={query} onChange={(event) => { setQuery(event.target.value); setSelectedIds([]); }} placeholder={view === "trash" ? "Search trash" : "Search enquiries"} aria-label={view === "trash" ? "Search trash" : "Search enquiries"} /></label><select value={filter} onChange={(event) => { setFilter(event.target.value); setSelectedIds([]); }} aria-label="Filter by stage"><option value="all">All stages</option>{stages.map((stage) => <option value={stage} key={stage}>{title(stage)}</option>)}</select><button type="button" onClick={() => setOldestFirst(value => !value)}>{oldestFirst ? "Oldest first ↑" : "Newest first ↓"}</button></div>
+              {selectedRecords.length ? <div className="desk-bulk-bar" role="region" aria-label="Selected enquiry actions"><strong>{selectedRecords.length} selected</strong><button type="button" onClick={() => setSelectedIds([])}>Clear selection</button><button className="desk-bulk-delete" type="button" disabled={saving} onClick={() => setPendingBulk(true)}>{view === "trash" ? "Delete permanently" : "Move to Trash"}</button></div> : null}
+              <div className="desk-table-header"><label className="desk-select-cell" title="Select all enquiries shown"><input type="checkbox" aria-label="Select all enquiries shown" checked={allShownSelected} disabled={!shownIds.length || saving} onChange={toggleAllShown} /></label><span>Enquiry</span><span>{view === "trash" ? "Removed" : "Travel window"}</span><span>Stage</span><span>Review</span></div>
               <div className="desk-request-list">
                 {loading ? <p className="desk-empty">Loading enquiries…</p> : null}
                 {!loading && visible.length === 0 ? <div className="desk-empty"><h2>{view === "trash" ? "Trash is clear" : "No enquiries in this view"}</h2><p>{view === "trash" ? "Deleted enquiries will appear here for review." : "New requests will appear here when they arrive. Try clearing search or stage filters if you expected a record."}</p></div> : null}
-                {visible.map((record) => <button className={selectedId === record.id ? "selected" : ""} type="button" key={record.id} onClick={() => setSelectedId(record.id)}><span className="desk-row-person"><span className="desk-avatar">{initials(record.name)}</span><span><b>{record.name}</b><small>{record.reference}</small></span></span><span className="desk-row-window">{view === "trash" ? relativeTime(record.deleted_at) : `${record.travel_month} ${record.travel_year}`}</span><span className="desk-row-stage"><StagePill stage={record.status} /></span><span className="desk-row-review">{selectedId === record.id ? "Selected" : "Review →"}</span></button>)}
+                {visible.map((record) => <div className={`desk-list-row${selectedId === record.id ? " selected" : ""}`} key={record.id}><label className="desk-select-cell" title={`Select ${record.reference}`}><input type="checkbox" aria-label={`Select ${record.reference}`} checked={selectedIds.includes(record.id)} disabled={saving} onChange={() => toggleSelected(record.id)} /></label><button type="button" onClick={() => setSelectedId(record.id)}><span className="desk-row-person"><span className="desk-avatar">{initials(record.name)}</span><span><b>{record.name}</b><small>{record.reference}</small></span></span><span className="desk-row-window">{view === "trash" ? relativeTime(record.deleted_at) : `${record.travel_month} ${record.travel_year}`}</span><span className="desk-row-stage"><StagePill stage={record.status} /></span><span className="desk-row-review">{selectedId === record.id ? "Selected" : "Review →"}</span></button></div>)}
               </div>
             </div>
 
@@ -356,6 +438,7 @@ export default function CuratorDeskDemo() {
       </div>
       {pendingDelete && request ? <div className="desk-confirm-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setPendingDelete(false); }}><section className="desk-confirm" role="dialog" aria-modal="true" aria-labelledby="delete-title"><span>Move to trash</span><h2 id="delete-title">Delete {request.name}’s submission?</h2><p>This removes it from the active desk. It stays recoverable in Trash with its activity history intact.</p><div><button type="button" onClick={() => setPendingDelete(false)}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving} onClick={async () => { setPendingDelete(false); await update({ deleted: true }, "Enquiry moved to Trash."); }}>Move to Trash</button></div></section></div> : null}
       {pendingPurge && request && view === "trash" ? <div className="desk-confirm-backdrop" role="presentation"><section className="desk-confirm desk-purge-confirm" role="dialog" aria-modal="true" aria-labelledby="purge-title"><span>Irreversible action · {request.reference}</span><h2 id="purge-title">Delete this enquiry permanently?</h2><p>The enquiry, local delivery records, newsletter request and activity history will be erased from this desk. This does not erase an external GTMCR contact or Cloudflare backups. Records with unresolved delivery, confirmed newsletter consent, won history or a legal hold are blocked.</p><label>Type DELETE to confirm<input autoFocus autoComplete="off" value={purgePhrase} onChange={(event) => setPurgePhrase(event.target.value)} placeholder="DELETE" /></label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeAcknowledge} onChange={(event) => setPurgeAcknowledge(event.target.checked)} /> I understand that external systems require separate review.</label><div><button type="button" disabled={saving} onClick={closePurge}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving || purgePhrase !== "DELETE" || !purgeAcknowledge} onClick={permanentlyDelete}>{saving ? "Deleting…" : "Delete permanently"}</button></div></section></div> : null}
+      {pendingBulk && selectedRecords.length ? <div className="desk-confirm-backdrop" role="presentation"><section className="desk-confirm desk-purge-confirm" role="dialog" aria-modal="true" aria-labelledby="bulk-title"><span>{view === "trash" ? "Irreversible bulk action" : "Bulk record action"} · {selectedRecords.length} {selectedNoun}</span><h2 id="bulk-title">{view === "trash" ? `Permanently delete ${selectedRecords.length} ${selectedNoun}?` : `Move ${selectedRecords.length} ${selectedNoun} to Trash?`}</h2><p>{view === "trash" ? "This erases the selected local enquiry records and histories. It does not remove external GTMCR contacts or Cloudflare backups. Protected records will be skipped and reported." : "The selected enquiries will leave the active queue. You can restore them from Trash."}</p><p className="desk-bulk-references">{selectedRecords.slice(0, 5).map((record) => record.reference).join(" · ")}{selectedRecords.length > 5 ? ` · and ${selectedRecords.length - 5} more` : ""}</p>{view === "trash" ? <><label>Type DELETE to confirm<input autoFocus autoComplete="off" value={purgePhrase} onChange={(event) => setPurgePhrase(event.target.value)} placeholder="DELETE" /></label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeAcknowledge} onChange={(event) => setPurgeAcknowledge(event.target.checked)} /> I understand that external systems and backups require separate review.</label></> : null}<div><button type="button" disabled={saving} onClick={closeBulk}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving || (view === "trash" && (purgePhrase !== "DELETE" || !purgeAcknowledge))} onClick={applyBulkDelete}>{saving ? `Processing ${bulkProgress}/${selectedRecords.length}…` : view === "trash" ? `Delete ${selectedRecords.length} permanently` : `Move ${selectedRecords.length} to Trash`}</button></div></section></div> : null}
     </main>
   );
 }
