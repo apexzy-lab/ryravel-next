@@ -68,6 +68,7 @@ export async function DELETE(request, { params }) {
   const block = permanentDeletionBlock(enquiry, {
     activeDeliveries: Number(deliveries?.total || 0),
     confirmedConsent: Boolean(consent?.confirmed_at),
+    consentReviewed: payload?.consentReviewed === true,
     wonHistory: Boolean(wonHistory?.found),
   });
   if (block) return jsonError(block, 409);

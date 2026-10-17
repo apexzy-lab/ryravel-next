@@ -68,6 +68,7 @@ export default function CuratorDeskDemo() {
   const [bulkProgress, setBulkProgress] = useState(0);
   const [purgePhrase, setPurgePhrase] = useState("");
   const [purgeAcknowledge, setPurgeAcknowledge] = useState(false);
+  const [purgeConsentReviewed, setPurgeConsentReviewed] = useState(false);
   const [loginTurnstile, setLoginTurnstile] = useState({ enabled: false, siteKey: "" });
   const [loginTurnstileToken, setLoginTurnstileToken] = useState("");
   const loginTurnstileMount = useRef(null);
@@ -198,16 +199,18 @@ export default function CuratorDeskDemo() {
     setPendingPurge(false);
     setPurgePhrase("");
     setPurgeAcknowledge(false);
+    setPurgeConsentReviewed(false);
   }
 
   function closeBulk() {
     setPendingBulk(false);
     setPurgePhrase("");
     setPurgeAcknowledge(false);
+    setPurgeConsentReviewed(false);
   }
 
   async function permanentlyDelete() {
-    if (!request || view !== "trash" || purgePhrase !== "DELETE" || !purgeAcknowledge) return;
+    if (!request || view !== "trash" || purgePhrase !== "DELETE" || !purgeAcknowledge || !purgeConsentReviewed) return;
     setSaving(true);
     setError("");
     setNotice("");
@@ -215,7 +218,7 @@ export default function CuratorDeskDemo() {
       const response = await fetch(`/api/admin/enquiries/${encodeURIComponent(request.id)}`, {
         method: "DELETE",
         headers: authHeaders(true),
-        body: JSON.stringify({ reference: request.reference, confirmation: purgePhrase, acknowledgeExternal: purgeAcknowledge }),
+        body: JSON.stringify({ reference: request.reference, confirmation: purgePhrase, acknowledgeExternal: purgeAcknowledge, consentReviewed: purgeConsentReviewed }),
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Permanent deletion could not be completed.");
@@ -344,7 +347,7 @@ export default function CuratorDeskDemo() {
 
   async function applyBulkDelete() {
     const records = [...selectedRecords];
-    if (!records.length || saving || (view === "trash" && (purgePhrase !== "DELETE" || !purgeAcknowledge))) return;
+    if (!records.length || saving || (view === "trash" && (purgePhrase !== "DELETE" || !purgeAcknowledge || !purgeConsentReviewed))) return;
     setSaving(true);
     setBulkProgress(0);
     setError("");
@@ -358,7 +361,7 @@ export default function CuratorDeskDemo() {
           method: permanent ? "DELETE" : "PATCH",
           headers: authHeaders(true),
           body: JSON.stringify(permanent
-            ? { reference: record.reference, confirmation: "DELETE", acknowledgeExternal: true }
+            ? { reference: record.reference, confirmation: "DELETE", acknowledgeExternal: true, consentReviewed: purgeConsentReviewed }
             : { deleted: true }),
         });
         const result = await response.json();
@@ -437,8 +440,8 @@ export default function CuratorDeskDemo() {
         </section>
       </div>
       {pendingDelete && request ? <div className="desk-confirm-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setPendingDelete(false); }}><section className="desk-confirm" role="dialog" aria-modal="true" aria-labelledby="delete-title"><span>Move to trash</span><h2 id="delete-title">Delete {request.name}’s submission?</h2><p>This removes it from the active desk. It stays recoverable in Trash with its activity history intact.</p><div><button type="button" onClick={() => setPendingDelete(false)}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving} onClick={async () => { setPendingDelete(false); await update({ deleted: true }, "Enquiry moved to Trash."); }}>Move to Trash</button></div></section></div> : null}
-      {pendingPurge && request && view === "trash" ? <div className="desk-confirm-backdrop" role="presentation"><section className="desk-confirm desk-purge-confirm" role="dialog" aria-modal="true" aria-labelledby="purge-title"><span>Irreversible action · {request.reference}</span><h2 id="purge-title">Delete this enquiry permanently?</h2><p>The enquiry, local delivery records, newsletter request and activity history will be erased from this desk. This does not erase an external GTMCR contact or Cloudflare backups. Records with unresolved delivery, confirmed newsletter consent, won history or a legal hold are blocked.</p><label>Type DELETE to confirm<input autoFocus autoComplete="off" value={purgePhrase} onChange={(event) => setPurgePhrase(event.target.value)} placeholder="DELETE" /></label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeAcknowledge} onChange={(event) => setPurgeAcknowledge(event.target.checked)} /> I understand that external systems require separate review.</label><div><button type="button" disabled={saving} onClick={closePurge}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving || purgePhrase !== "DELETE" || !purgeAcknowledge} onClick={permanentlyDelete}>{saving ? "Deleting…" : "Delete permanently"}</button></div></section></div> : null}
-      {pendingBulk && selectedRecords.length ? <div className="desk-confirm-backdrop" role="presentation"><section className="desk-confirm desk-purge-confirm" role="dialog" aria-modal="true" aria-labelledby="bulk-title"><span>{view === "trash" ? "Irreversible bulk action" : "Bulk record action"} · {selectedRecords.length} {selectedNoun}</span><h2 id="bulk-title">{view === "trash" ? `Permanently delete ${selectedRecords.length} ${selectedNoun}?` : `Move ${selectedRecords.length} ${selectedNoun} to Trash?`}</h2><p>{view === "trash" ? "This erases the selected local enquiry records and histories. It does not remove external GTMCR contacts or Cloudflare backups. Protected records will be skipped and reported." : "The selected enquiries will leave the active queue. You can restore them from Trash."}</p><p className="desk-bulk-references">{selectedRecords.slice(0, 5).map((record) => record.reference).join(" · ")}{selectedRecords.length > 5 ? ` · and ${selectedRecords.length - 5} more` : ""}</p>{view === "trash" ? <><label>Type DELETE to confirm<input autoFocus autoComplete="off" value={purgePhrase} onChange={(event) => setPurgePhrase(event.target.value)} placeholder="DELETE" /></label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeAcknowledge} onChange={(event) => setPurgeAcknowledge(event.target.checked)} /> I understand that external systems and backups require separate review.</label></> : null}<div><button type="button" disabled={saving} onClick={closeBulk}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving || (view === "trash" && (purgePhrase !== "DELETE" || !purgeAcknowledge))} onClick={applyBulkDelete}>{saving ? `Processing ${bulkProgress}/${selectedRecords.length}…` : view === "trash" ? `Delete ${selectedRecords.length} permanently` : `Move ${selectedRecords.length} to Trash`}</button></div></section></div> : null}
+      {pendingPurge && request && view === "trash" ? <div className="desk-confirm-backdrop" role="presentation"><section className="desk-confirm desk-purge-confirm" role="dialog" aria-modal="true" aria-labelledby="purge-title"><span>Irreversible action · {request.reference}</span><h2 id="purge-title">Delete this enquiry permanently?</h2><p>The enquiry, local delivery records, newsletter request and activity history will be erased from this desk. This does not erase an external GTMCR contact, its consent record, or Cloudflare backups. Records with unresolved delivery, won history or a legal hold remain blocked.</p><label>Type DELETE to confirm<input autoFocus autoComplete="off" value={purgePhrase} onChange={(event) => setPurgePhrase(event.target.value)} placeholder="DELETE" /></label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeAcknowledge} onChange={(event) => setPurgeAcknowledge(event.target.checked)} /> I understand that external systems require separate review.</label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeConsentReviewed} onChange={(event) => setPurgeConsentReviewed(event.target.checked)} /> I have reviewed any linked GTMCR contact and confirmed journey-notes consent. Deleting this local enquiry will not unsubscribe or delete that contact.</label><div><button type="button" disabled={saving} onClick={closePurge}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving || purgePhrase !== "DELETE" || !purgeAcknowledge || !purgeConsentReviewed} onClick={permanentlyDelete}>{saving ? "Deleting…" : "Delete permanently"}</button></div></section></div> : null}
+      {pendingBulk && selectedRecords.length ? <div className="desk-confirm-backdrop" role="presentation"><section className="desk-confirm desk-purge-confirm" role="dialog" aria-modal="true" aria-labelledby="bulk-title"><span>{view === "trash" ? "Irreversible bulk action" : "Bulk record action"} · {selectedRecords.length} {selectedNoun}</span><h2 id="bulk-title">{view === "trash" ? `Permanently delete ${selectedRecords.length} ${selectedNoun}?` : `Move ${selectedRecords.length} ${selectedNoun} to Trash?`}</h2><p>{view === "trash" ? "This erases the selected local enquiry records and histories. It does not remove external GTMCR contacts, consent records, or Cloudflare backups. Records with unresolved delivery, won history or a legal hold will be skipped and reported." : "The selected enquiries will leave the active queue. You can restore them from Trash."}</p><p className="desk-bulk-references">{selectedRecords.slice(0, 5).map((record) => record.reference).join(" · ")}{selectedRecords.length > 5 ? ` · and ${selectedRecords.length - 5} more` : ""}</p>{view === "trash" ? <><label>Type DELETE to confirm<input autoFocus autoComplete="off" value={purgePhrase} onChange={(event) => setPurgePhrase(event.target.value)} placeholder="DELETE" /></label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeAcknowledge} onChange={(event) => setPurgeAcknowledge(event.target.checked)} /> I understand that external systems and backups require separate review.</label><label className="desk-purge-acknowledge"><input type="checkbox" checked={purgeConsentReviewed} onChange={(event) => setPurgeConsentReviewed(event.target.checked)} /> I have reviewed linked GTMCR contacts and any confirmed journey-notes consent for every selected enquiry. Local deletion will not unsubscribe or delete those contacts.</label></> : null}<div><button type="button" disabled={saving} onClick={closeBulk}>Cancel</button><button className="desk-delete-confirm" type="button" disabled={saving || (view === "trash" && (purgePhrase !== "DELETE" || !purgeAcknowledge || !purgeConsentReviewed))} onClick={applyBulkDelete}>{saving ? `Processing ${bulkProgress}/${selectedRecords.length}…` : view === "trash" ? `Delete ${selectedRecords.length} permanently` : `Move ${selectedRecords.length} to Trash`}</button></div></section></div> : null}
     </main>
   );
 }

@@ -10,12 +10,16 @@ assert.match(permanentDeletionBlock(trashed, { wonHistory: true }), /won history
 assert.match(permanentDeletionBlock({ ...trashed, admin_note: "LEGAL HOLD: retain" }), /legal hold/);
 assert.match(permanentDeletionBlock(trashed, { activeDeliveries: 1 }), /unresolved delivery/);
 assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true }), /confirmed journey-notes consent/);
+assert.equal(permanentDeletionBlock(trashed, { confirmedConsent: true, consentReviewed: true }), null);
+assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true, consentReviewed: true, activeDeliveries: 1 }), /unresolved delivery/);
+assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true, consentReviewed: true, wonHistory: true }), /won history/);
 
 const route = readFileSync(new URL("../app/api/admin/enquiries/[id]/route.js", import.meta.url), "utf8");
 assert.match(route, /export async function DELETE/);
 assert.match(route, /adminIdentity\(request\)/);
 assert.match(route, /payload\?\.confirmation !== "DELETE"/);
 assert.match(route, /payload\.reference !== enquiry\.reference/);
+assert.match(route, /consentReviewed: payload\?\.consentReviewed === true/);
 assert.match(route, /DELETE FROM delivery_jobs WHERE enquiry_id/);
 assert.match(route, /DELETE FROM newsletter_opt_ins WHERE enquiry_id/);
 assert.match(route, /DELETE FROM journey_enquiry_events WHERE enquiry_id/);
@@ -27,5 +31,6 @@ const desk = readFileSync(new URL("../app/curator-desk/CuratorDeskDemo.jsx", imp
 assert.match(desk, /Select all enquiries shown/);
 assert.match(desk, /setSelectedIds\(\[\]\)/);
 assert.match(desk, /purgePhrase !== "DELETE" \|\| !purgeAcknowledge/);
+assert.match(desk, /I have reviewed linked GTMCR contacts and any confirmed journey-notes consent/);
 assert.match(desk, /target="_blank" rel="noopener noreferrer"/);
 console.log("PASS Permanent deletion is Trash-only, confirmed, dependency-aware and clears local linked records");
