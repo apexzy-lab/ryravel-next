@@ -296,7 +296,7 @@ export default function RequestPage() {
               {["How you feel", "Your journey", "Your details"].map((label, index) => <li className={step === index + 1 ? "active" : step > index + 1 ? "complete" : ""} aria-current={step === index + 1 ? "step" : undefined} key={label}><b>0{index + 1}</b><span>{label}</span></li>)}
             </ol>
           </header>
-          <button className="progressive-founder-mobile" type="button" onClick={() => founderNoteRef.current?.showModal()}><span className="progressive-founder-mobile-photo"><img src="/people/maryangel-ajuzieogu.webp" alt="" width="1400" height="1750" /></span><span><strong>A note from Maryangel</strong><small>Founder &amp; Journey Curator · Personal reply within one business day</small></span><span aria-hidden="true">↗</span></button>
+          <button className="progressive-founder-mobile" type="button" onClick={() => founderNoteRef.current?.showModal()}><span className="progressive-founder-mobile-photo"><img src="/people/maryangel-ajuzieogu.webp" alt="" width="1400" height="1750" /></span><span><strong>A Note From The CEO</strong><small>Maryangel Ajuzieogu · Personal reply within one business day</small></span><span aria-hidden="true">↗</span></button>
 
           <form className="progressive-form" id="journey-request" ref={formRef} onSubmit={submit} onChangeCapture={startForm} noValidate>
             <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
@@ -356,7 +356,7 @@ export default function RequestPage() {
                 {journeyContext?.slug ? <a href={`/journeys/${journeyContext.slug}`}>Review selected journey ↗</a> : null}
                 <div className="progressive-founder-note">
                   <figure className="progressive-founder-portrait"><img src="/people/maryangel-ajuzieogu.webp" alt="Maryangel Ajuzieogu, Ryravel founder and journey curator" width="1400" height="1750" /></figure>
-                  <div className="progressive-founder-intro"><span className="progressive-founder-kicker">A note from Maryangel</span><strong>Maryangel Ajuzieogu</strong><small>Founder &amp; Journey Curator<br />Replies within one business day</small></div>
+                  <div className="progressive-founder-intro"><span className="progressive-founder-kicker">A Note From The CEO</span><strong>Maryangel Ajuzieogu</strong><small>CEO &amp; Journey Curator<br />Replies within one business day</small></div>
                   <p>“I read every request myself. Tell me where you are; I’ll reply with real thoughts, not a brochure.”</p>
                   <button type="button" onClick={() => founderNoteRef.current?.showModal()}>Read her note <span aria-hidden="true">↗</span></button>
                 </div>
@@ -365,13 +365,13 @@ export default function RequestPage() {
             </div>
           </form>
           <dialog className="progressive-founder-dialog" ref={founderNoteRef} aria-labelledby="founder-note-title" aria-describedby="founder-note-body">
-            <button className="progressive-founder-close" type="button" onClick={() => founderNoteRef.current?.close()} aria-label="Close Maryangel's note">×</button>
+            <button className="progressive-founder-close" type="button" onClick={() => founderNoteRef.current?.close()} aria-label="Close CEO note">×</button>
             <div className="progressive-founder-dialog-layout">
               <figure className="progressive-founder-dialog-photo"><img src="/people/maryangel-ajuzieogu.webp" alt="" width="1400" height="1750" /></figure>
-              <div className="progressive-founder-dialog-copy"><span className="kicker">A note from Maryangel</span>
+              <div className="progressive-founder-dialog-copy"><span className="kicker">A Note From The CEO</span>
                 <h2 id="founder-note-title">The conversation begins with you.</h2>
                 <div id="founder-note-body"><p>Hi, I’m Maryangel. I founded Ryravel, and I still read every journey request that comes through this page myself.</p><p>When you tell me you’re exhausted and haven’t stopped in two years, I don’t see a form field. I see the beginning of a real conversation.</p><p>The brief is everything. An itinerary can be assembled from preferences. A journey worth taking starts with understanding where you are now and how you hope to feel when you come home.</p><p>Tell me where you are. You may receive an automatic confirmation that your request arrived; the considered reply comes from me within one business day, with real thoughts, not a brochure.</p></div>
-                <p className="progressive-founder-signature"><strong>Maryangel Ajuzieogu</strong><span>Founder &amp; Journey Curator, Ryravel</span></p>
+                <p className="progressive-founder-signature"><strong>Maryangel Ajuzieogu</strong><span>CEO &amp; Journey Curator, Ryravel</span></p>
               </div>
             </div>
           </dialog>
