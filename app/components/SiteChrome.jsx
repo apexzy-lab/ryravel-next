@@ -26,6 +26,7 @@ export function Logo({ forceLight = false }) {
 
 export default function SiteChrome({ children }) {
   const pathname = usePathname();
+  const isCuratorPage = /^\/curator-desk(?:\/|$)/.test(pathname || "");
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(undefined);
@@ -68,7 +69,7 @@ export default function SiteChrome({ children }) {
   }, []);
 
   useEffect(() => {
-    if (marketingConsent !== true || linkedInLoaded.current) return;
+    if (marketingConsent !== true || isCuratorPage || linkedInLoaded.current) return;
     linkedInLoaded.current = true;
     window._linkedin_partner_id = "10765993";
     window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
@@ -78,18 +79,18 @@ export default function SiteChrome({ children }) {
     script.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
     script.dataset.ryravelMarketing = "linkedin";
     document.head.appendChild(script);
-  }, [marketingConsent]);
+  }, [marketingConsent, isCuratorPage]);
 
   useEffect(() => {
-    if (marketingConsent === true) installGoogleAdsTag();
-  }, [marketingConsent]);
+    if (marketingConsent === true && !isCuratorPage) installGoogleAdsTag();
+  }, [marketingConsent, isCuratorPage]);
 
   useEffect(() => {
-    if (analyticsConsent === true) {
+    if (analyticsConsent === true && !isCuratorPage) {
       installClarity();
       installGoogleAnalyticsTag();
     }
-  }, [analyticsConsent, pathname]);
+  }, [analyticsConsent, pathname, isCuratorPage]);
 
   useEffect(() => {
     if (/^\/(curator-desk|newsletter)(\/|$)/.test(pathname || "") && stopClarity()) window.location.reload();
@@ -170,7 +171,7 @@ export default function SiteChrome({ children }) {
         </div>
         <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => setCookieSettingsOpen(true)}>Cookie settings</button></span></div>
       </footer>
-      {(marketingConsent === null || cookieSettingsOpen) && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>Essential site functions always work. With analytics permission, we measure journey and form interactions using first-party events, Google Analytics and Microsoft Clarity masked session replays. Marketing permission lets LinkedIn measure visits and Google Ads use ad-click and completed-request data to measure our ads; personalized ads remain off. Change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseTracking("reject")}>Reject optional</button><button type="button" onClick={() => chooseTracking("analytics")}>Analytics only</button><button type="button" onClick={() => chooseTracking("marketing")}>Marketing only</button><button type="button" onClick={() => chooseTracking("all")}>Allow both</button>{cookieSettingsOpen && marketingConsent !== null && <button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button>}</div></div>}
+      {!isCuratorPage && (marketingConsent === null || cookieSettingsOpen) && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>Essential site functions always work. With analytics permission, we measure journey and form interactions using first-party events, Google Analytics and Microsoft Clarity masked session replays. Marketing permission lets LinkedIn measure visits and Google Ads use ad-click and completed-request data to measure our ads; personalized ads remain off. Change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseTracking("reject")}>Reject optional</button><button type="button" onClick={() => chooseTracking("analytics")}>Analytics only</button><button type="button" onClick={() => chooseTracking("marketing")}>Marketing only</button><button type="button" onClick={() => chooseTracking("all")}>Allow both</button>{cookieSettingsOpen && marketingConsent !== null && <button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button>}</div></div>}
     </>
   );
 }

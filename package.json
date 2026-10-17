@@ -15,6 +15,7 @@
     "deploy:legacy-redirects": "wrangler deploy --config legacy-redirects/wrangler.jsonc",
     "test:gtmcr-background": "node scripts/test-gtmcr-background.mjs",
     "test:funnel": "node scripts/test-funnel.mjs",
+    "test:curator-delete": "node scripts/test-curator-delete.mjs",
     "test:google-ads": "node scripts/test-google-ads.mjs",
     "test:clarity": "node scripts/test-clarity.mjs",
     "test:seo": "node scripts/test-seo.mjs",

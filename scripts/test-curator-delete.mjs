@@ -1,0 +1,24 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { permanentDeletionBlock } from "../app/lib/purge-policy.js";
+
+const trashed = { deleted_at: "2026-10-17T00:00:00.000Z", status: "new", admin_note: "" };
+assert.equal(permanentDeletionBlock(trashed), null);
+assert.match(permanentDeletionBlock({ ...trashed, deleted_at: null }), /Trash/);
+assert.match(permanentDeletionBlock({ ...trashed, status: "won" }), /won history/);
+assert.match(permanentDeletionBlock(trashed, { wonHistory: true }), /won history/);
+assert.match(permanentDeletionBlock({ ...trashed, admin_note: "LEGAL HOLD: retain" }), /legal hold/);
+assert.match(permanentDeletionBlock(trashed, { activeDeliveries: 1 }), /unresolved delivery/);
+assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true }), /confirmed journey-notes consent/);
+
+const route = readFileSync(new URL("../app/api/admin/enquiries/[id]/route.js", import.meta.url), "utf8");
+assert.match(route, /export async function DELETE/);
+assert.match(route, /adminIdentity\(request\)/);
+assert.match(route, /payload\?\.confirmation !== "DELETE"/);
+assert.match(route, /payload\.reference !== enquiry\.reference/);
+assert.match(route, /DELETE FROM delivery_jobs WHERE enquiry_id/);
+assert.match(route, /DELETE FROM newsletter_opt_ins WHERE enquiry_id/);
+assert.match(route, /DELETE FROM journey_enquiry_events WHERE enquiry_id/);
+assert.match(route, /DELETE FROM journey_enquiries WHERE id = \? AND reference = \? AND deleted_at IS NOT NULL/);
+assert.match(route, /AND EXISTS \(SELECT 1 FROM journey_enquiries WHERE id = \? AND reference = \? AND deleted_at IS NOT NULL\)/);
+console.log("PASS Permanent deletion is Trash-only, confirmed, dependency-aware and clears local linked records");
