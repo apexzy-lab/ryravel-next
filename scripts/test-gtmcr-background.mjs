@@ -42,7 +42,7 @@ async function waitForWorker(output) {
   throw new Error(`Worker did not start.\n${output()}`);
 }
 
-function enquiry(email, newsletter = false) {
+function enquiry(email, newsletter = false, contactPreference = "written-enquiry") {
   return {
     name: "Background Delivery Test",
     email,
@@ -57,16 +57,18 @@ function enquiry(email, newsletter = false) {
     phone: "760 514 0361",
     message: "This sensitive message must not be sent to GTMCR.",
     sourceUrl: "https://ryravel.com/request?background-test=1",
+    contactPreference,
+    ...(contactPreference === "private-call" ? { preferredCallTime: "Weekday afternoon" } : {}),
     newsletter,
   };
 }
 
-async function submit(email, newsletter = false) {
+async function submit(email, newsletter = false, contactPreference = "written-enquiry") {
   const startedAt = performance.now();
   const response = await fetch(`http://127.0.0.1:${workerPort}/api/enquiries`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(enquiry(email, newsletter)),
+    body: JSON.stringify(enquiry(email, newsletter, contactPreference)),
   });
   const elapsedMs = performance.now() - startedAt;
   const body = await response.json();
@@ -156,6 +158,12 @@ try {
   }
   if ("message" in delivered.payload.properties) throw new Error("Sensitive enquiry message was sent to GTMCR");
   if (delivered.payload.contact?.email !== "slow-signal@example.test" || delivered.payload.contact?.firstName !== "Background" || delivered.payload.contact?.lastName !== "Delivery Test" || delivered.payload.contact?.phone !== "+1 760 514 0361" || "marketing_consent" in delivered.payload.properties) throw new Error("Enquiry signal did not map contact fields or incorrectly asserted marketing consent");
+  const writtenService = await waitForRequest("/api/v1/events", (body) => body.event === "ryravel_written_journey_requested" && body.contact?.email === "slow-signal@example.test");
+  if (!writtenService.eventId?.startsWith("ryravel-service-") || writtenService.properties?.reference !== slowSubmission.reference || writtenService.properties?.contact_preference !== "written-enquiry" || "marketing_consent" in writtenService.properties) throw new Error("Written request did not produce one consent-safe service signal");
+  const callSubmission = await submit("private-call@example.test", false, "private-call");
+  const callService = await waitForRequest("/api/v1/events", (body) => body.event === "ryravel_private_call_requested" && body.contact?.email === "private-call@example.test");
+  if (callService.properties?.reference !== callSubmission.reference || callService.properties?.contact_preference !== "private-call" || callService.properties?.preferred_call_time !== "Weekday afternoon" || "marketing_consent" in callService.properties) throw new Error("Private call did not produce one consent-safe service signal with its contact window");
+  if (received.some((entry) => entry.payload?.contact?.email === "private-call@example.test" && entry.payload?.event === "ryravel_written_journey_requested")) throw new Error("Private call entered the written-request service path");
   const identityEvent = await waitForRequest("/api/v1/events", (body) => body.event === "contact_identified");
   if (identityEvent.eventId !== `ryravel-contact-identity-${repairId}` || identityEvent.contact?.email !== "prior-enquiry@example.test" || identityEvent.contact?.firstName !== "Prior" || identityEvent.contact?.lastName !== "Enquiry Test" || "marketing_consent" in identityEvent.properties) throw new Error("Identity repair incorrectly changed consent or failed to update the name");
   const confirmation = await Promise.race([
@@ -198,6 +206,7 @@ try {
     doubleOptInRequired: true,
     explicitConsentDeliveryCompleted: true,
     contactIdentityRepairCompleted: true,
+    preferenceSpecificServiceSignals: true,
   }));
 } finally {
   if (worker && worker.exitCode === null) {

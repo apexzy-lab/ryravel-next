@@ -45,30 +45,41 @@ export async function sendGtmcrSignal({
   preferredCallTime,
 }) {
   // An enquiry signal never grants marketing consent, regardless of the form checkbox.
+  const contact = contactIdentity(name, email, phone, countryCode);
+  const properties = {
+    form: "trip-inquiry",
+    name,
+    reference: enquiryReference,
+    feeling,
+    travelMonth,
+    travelYear,
+    duration,
+    people,
+    budget,
+    source_page: sourceUrl,
+    journey_slug: journey?.slug || null,
+    journey_name: journey?.name || null,
+    journey_destination: journey?.destination || null,
+    journey_nights: journey?.nights || null,
+    journey_price: journey?.price || null,
+    contact_preference: contactPreference,
+    preferred_call_time: preferredCallTime || null,
+  };
   await postGtmcrEvent({
     eventId: `ryravel-enquiry-${id}`,
     event: "form_submitted",
-    contact: contactIdentity(name, email, phone, countryCode),
+    contact,
     occurredAt,
-    properties: {
-      form: "trip-inquiry",
-      name,
-      reference: enquiryReference,
-      feeling,
-      travelMonth,
-      travelYear,
-      duration,
-      people,
-      budget,
-      source_page: sourceUrl,
-      journey_slug: journey?.slug || null,
-      journey_name: journey?.name || null,
-      journey_destination: journey?.destination || null,
-      journey_nights: journey?.nights || null,
-      journey_price: journey?.price || null,
-      contact_preference: contactPreference,
-      preferred_call_time: preferredCallTime || null,
-    },
+    properties,
+  });
+  // A second, idempotent signal selects exactly one service-response workflow.
+  // Keep form_submitted unchanged for existing reporting and attribution.
+  await postGtmcrEvent({
+    eventId: `ryravel-service-${id}`,
+    event: contactPreference === "private-call" ? "ryravel_private_call_requested" : "ryravel_written_journey_requested",
+    contact,
+    occurredAt,
+    properties,
   });
 }
 
