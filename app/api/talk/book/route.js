@@ -55,6 +55,7 @@ export async function POST(request) {
       await db.batch([
         db.prepare("UPDATE talk_bookings SET status='confirmed',google_event_id=?,meet_url=?,updated_at=? WHERE id=? AND status='pending'")
           .bind(event.eventId, event.meetUrl, confirmedAt, id),
+        deliveryStatement(db, id, "talk_confirmation", { name, email, reference, start: slot.start, end: slot.end, timeZone, meetUrl: event.meetUrl }),
         deliveryStatement(db, id, "talk_gtmcr", { id, name, email, reference, feeling, journey, start: slot.start, timeZone, occurredAt: confirmedAt }),
       ]);
       waitUntil(processDeliveries().catch(() => console.error("Talk CRM delivery processing failed")));

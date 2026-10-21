@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { candidateSlots, slotOverlapsBusy, validTimeZone } from "../app/lib/talk-slots.js";
+import { buildTalkConfirmation } from "../app/lib/talk-email.js";
 
 const now = Date.parse("2026-10-21T12:00:00Z");
 const lagos = candidateSlots("2026-10-27", "Africa/Lagos", "Africa/Lagos", now);
@@ -15,4 +17,18 @@ assert.equal(validTimeZone("America/Los_Angeles"), true);
 assert.equal(validTimeZone("not-a-zone"), false);
 assert.equal(slotOverlapsBusy(lagos[0], [{ start: "2026-10-27T09:30:00.000Z", end: "2026-10-27T10:00:00.000Z" }]), true, "Ten-minute buffer blocks adjacent calls");
 assert.equal(slotOverlapsBusy(lagos[0], [{ start: "2026-10-27T10:00:00.000Z", end: "2026-10-27T10:30:00.000Z" }]), false);
+const mail = buildTalkConfirmation({ name: "Test Guest", email: "guest@example.com", reference: "RT-26TEST", start: lagos[0].start, end: lagos[0].end, timeZone: "Africa/Lagos", meetUrl: "https://meet.google.com/abc-defg-hij" });
+assert.equal(mail.from, "Ryravel Curator <curator@ryravel.com>");
+assert.equal(mail.reply_to, "curator@ryravel.com");
+assert.equal(mail.to[0], "guest@example.com");
+assert.match(mail.html, /https:\/\/meet\.google\.com\/abc-defg-hij/);
+const ics = Buffer.from(mail.attachments[0].content, "base64").toString("utf8");
+assert.match(ics, /BEGIN:VCALENDAR\r\n/);
+assert.match(ics, /ORGANIZER;CN=Ryravel Curator:mailto:curator@ryravel.com/);
+assert.match(ics, /DTSTART:20261027T090000Z/);
+assert.doesNotMatch(ics, /ryravelinc@gmail.com/);
+assert.throws(() => buildTalkConfirmation({ ...mail, meetUrl: "https://example.com/not-meet" }));
+const calendarSource = readFileSync(new URL("../app/lib/talk-calendar.js", import.meta.url), "utf8");
+assert.match(calendarSource, /sendUpdates=none/);
+assert.doesNotMatch(calendarSource, /attendees:\s*\[/);
 console.log("Talk slot and time-zone tests passed.");

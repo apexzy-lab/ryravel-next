@@ -9,7 +9,8 @@ export function talkConfiguration() {
   const clientSecret = String(env.TALK_GOOGLE_CLIENT_SECRET || "").trim();
   const refreshToken = String(env.TALK_GOOGLE_REFRESH_TOKEN || "").trim();
   const hostTimeZone = String(env.TALK_HOST_TIMEZONE || "Africa/Lagos").trim();
-  return { calendarId, clientId, clientSecret, refreshToken, hostTimeZone, ready: Boolean(calendarId && clientId && clientSecret && refreshToken) };
+  const senderReady = env.TALK_EMAIL_SENDER_READY === "true" && Boolean(env.RESEND_API_KEY);
+  return { calendarId, clientId, clientSecret, refreshToken, hostTimeZone, ready: Boolean(calendarId && clientId && clientSecret && refreshToken && senderReady) };
 }
 
 
@@ -71,12 +72,23 @@ export async function createGoogleTalkEvent(config, booking) {
     ].filter(Boolean).join("\n"),
     start: { dateTime: booking.start, timeZone: config.hostTimeZone },
     end: { dateTime: booking.end, timeZone: config.hostTimeZone },
-    attendees: [{ email: booking.email, displayName: booking.name }],
+    // The guest is deliberately not a Google attendee: Google invitations
+    // reveal the personal Gmail organizer. Ryravel sends the .ics invite.
+    visibility: "private",
     conferenceData: { createRequest: { requestId: booking.id, conferenceSolutionKey: { type: "hangoutsMeet" } } },
     extendedProperties: { private: { ryravelBookingId: booking.id } },
   };
-  const path = `/calendars/${encodeURIComponent(config.calendarId)}/events?conferenceDataVersion=1&sendUpdates=all`;
+  const path = `/calendars/${encodeURIComponent(config.calendarId)}/events?conferenceDataVersion=1&sendUpdates=none`;
   const event = await googleRequest(config, path, { method: "POST", body });
   if (!event.id) throw new Error("Google Calendar did not confirm the event");
-  return { eventId: event.id, meetUrl: event.hangoutLink || event.conferenceData?.entryPoints?.find((entry) => entry.entryPointType === "video")?.uri || null };
+  const meetLink = (value) => value.hangoutLink || value.conferenceData?.entryPoints?.find((entry) => entry.entryPointType === "video")?.uri || null;
+  let meetUrl = meetLink(event);
+  for (let attempt = 0; !meetUrl && attempt < 4; attempt += 1) {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const refreshed = await googleRequest(config, `/calendars/${encodeURIComponent(config.calendarId)}/events/${encodeURIComponent(event.id)}`);
+    meetUrl = meetLink(refreshed);
+    if (refreshed.conferenceData?.createRequest?.status?.statusCode === "failure") break;
+  }
+  if (!meetUrl) throw new Error("Google Meet link was not ready for the guest email");
+  return { eventId: event.id, meetUrl };
 }

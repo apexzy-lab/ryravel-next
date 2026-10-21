@@ -1,5 +1,5 @@
 import { getD1, runtimeEnv } from "../../db/index";
-import { sendGtmcrSignal, sendGtmcrIdentity, sendGtmcrConsent, sendGuestConfirmation, sendGtmcrTalkBooking } from "./delivery-providers";
+import { sendGtmcrSignal, sendGtmcrIdentity, sendGtmcrConsent, sendGuestConfirmation, sendGtmcrTalkBooking, sendTalkConfirmation } from "./delivery-providers";
 
 export function deliveryStatement(db, id, kind, payload) {
   return db.prepare("INSERT INTO delivery_jobs (id,enquiry_id,kind,payload) VALUES (?,?,?,?)")
@@ -22,6 +22,7 @@ export async function processDeliveries(limit = 12) {
       else if (job.kind === 'gtmcr_consent') await sendGtmcrConsent(data);
       else if (job.kind === 'confirmation') await sendGuestConfirmation(data);
       else if (job.kind === 'talk_gtmcr') await sendGtmcrTalkBooking(data);
+      else if (job.kind === 'talk_confirmation') await sendTalkConfirmation(data);
       else throw new Error('Unknown delivery kind');
       await db.prepare("UPDATE delivery_jobs SET status='delivered', delivered_at=datetime('now'), attempts=attempts+1, lease_until=NULL, last_error=NULL, payload='{}' WHERE id=?").bind(job.id).run();
     } catch (error) {

@@ -1,4 +1,5 @@
 import { runtimeEnv } from "../../db/index";
+import { buildTalkConfirmation } from "./talk-email";
 
 function contactIdentity(name, email, phone, countryCode) {
   const parts = String(name || "").trim().replace(/\s+/g, " ").split(" ").filter(Boolean);
@@ -153,4 +154,17 @@ export async function sendGuestConfirmation({ name, email, reference: enquiryRef
     }),
   });
   if (!response.ok) throw new Error(`Confirmation email returned ${response.status}`);
+}
+
+export async function sendTalkConfirmation(data) {
+  const env = runtimeEnv();
+  if (env.TALK_EMAIL_SENDER_READY !== "true" || !env.RESEND_API_KEY) throw new Error("Curator sender is not verified");
+  const message = buildTalkConfirmation(data);
+  const response = await fetch(env.RESEND_API_URL || "https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `ryravel-talk-${data.reference}` },
+    body: JSON.stringify(message),
+    signal: AbortSignal.timeout(8000),
+  });
+  if (!response.ok) throw new Error(`Curator confirmation returned ${response.status}`);
 }
