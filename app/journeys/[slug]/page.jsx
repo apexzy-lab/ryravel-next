@@ -68,7 +68,7 @@ function ArcPage({ arc }) {
       <section className="arc-journeys paper-section"><div className="section-heading"><div><span className="kicker">Choose your arc</span><h2>{cards.length} journeys. <em>One feeling.</em></h2></div></div><div className="journey-cards">{cards.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>
       <JourneyProof arc={arc.id} />
       {arc.id === "stillness" && <StillnessTrust />}
-      <CTA {...(arc.id === "stillness" ? { title: "What are you carrying right now?", copy: "Tell us, and we'll build the journey around it. One honest conversation is all it takes to begin." } : {})} requestHref={`/request?arc=${encodeURIComponent(arc.id)}&name=${encodeURIComponent(arc.title)}`} />
+      <CTA {...(arc.id === "stillness" ? { title: "What are you hoping to leave behind?", copy: "Tell us, and we'll build the journey around it. One honest conversation is all it takes to begin." } : {})} requestHref={`/request?arc=${encodeURIComponent(arc.id)}&name=${encodeURIComponent(arc.title)}`} />
     </main>
   );
 }

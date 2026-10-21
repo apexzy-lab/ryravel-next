@@ -151,7 +151,7 @@ export async function POST(request) {
 
   if (!name || !email || !phone || !duration || !people || !budget || !travelYear) return jsonError("Complete every required field.", 422);
   if (!/^\S+@\S+\.\S+$/.test(email) || email !== emailConfirmation) return jsonError("Enter matching email addresses.", 422);
-  if (!feelings.has(feeling)) return jsonError("Choose what you are going through.", 422);
+  if (!feelings.has(feeling)) return jsonError("Choose what brings you to us.", 422);
   if (!months.has(travelMonth)) return jsonError("Choose a travel month.", 422);
   if (!/^20\d{2}$/.test(travelYear)) return jsonError("Choose a valid travel year.", 422);
   if (contactPreference === "private-call" && !preferredCallTime) return jsonError("Choose the best time for your curator to contact you.", 422);

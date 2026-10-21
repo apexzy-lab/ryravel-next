@@ -4,13 +4,13 @@ import { useEffect, useRef, useState } from "react";
 import { journeys } from "../data";
 
 const feelings = [
-  ["Exhausted", "I\u2019m worn out and can\u2019t switch off", ""],
-  ["Disconnected", "Someone or something has ended, and I feel adrift", ""],
-  ["Purposeful", "My life is changing and I don\u2019t know what comes next", ""],
-  ["Romantic", "We need to find each other again", ""],
-  ["Celebratory", "We\u2019re marking something big", ""],
-  ["Restless", "I\u2019m restless and need a push", ""],
-  ["Open", "I\u2019m not sure yet. Talk with me.", ""],
+  ["Exhausted", "I need to rest and switch off", ""],
+  ["Disconnected", "I\u2019m starting over after a big change", ""],
+  ["Purposeful", "I\u2019m at a crossroads and want clarity", ""],
+  ["Romantic", "We want to reconnect", ""],
+  ["Celebratory", "We\u2019re celebrating something", ""],
+  ["Restless", "I want something that pushes me", ""],
+  ["Open", "Not sure yet. I\u2019d like to talk it through", ""],
 ];
 
 const budgets = ["$5,000 – $7,000", "$7,000 – $12,000", "$12,000 – $20,000", "$20,000 – $30,000", "$30,000+"];
@@ -134,8 +134,8 @@ export default function RequestPage() {
   async function submit(event) {
     event.preventDefault();
     setError("");
-    if (!feeling || !budget) {
-      setError("Please choose what you are going through and an investment range.");
+    if (!budget) {
+      setError("Please choose an investment range.");
       return;
     }
     if (turnstileEnabled && !turnstileToken) {
@@ -182,7 +182,7 @@ export default function RequestPage() {
           <div>
             <span className="kicker">Plan my journey</span>
             <h1>Every journey begins<br />with one honest<br /><em>conversation.</em></h1>
-            <p>Tell us what you are going through. We will take it from there. A dedicated curator will respond within one business day.</p>
+            <p>Tell us what you have in mind. We will take it from there. A dedicated curator will respond within one business day.</p>
           </div>
         </div>
         <aside className="curator-hours">
@@ -217,8 +217,8 @@ export default function RequestPage() {
           {journeyContext ? <section className="request-journey-context" aria-label="Selected journey"><div><span>Your selected journey</span><h2>{journeyContext.name}</h2><p>{journeyContext.nights ? `${journeyContext.nights} nights · ` : ""}{journeyContext.destination}</p></div><div>{journeyContext.price ? <><small>From</small><strong>{journeyContext.price}</strong></> : <strong>Bespoke</strong>}<a href={`/journeys/${journeyContext.slug}`}>Review journey ↗</a></div></section> : null}
           <section className="request-contact-choice" aria-labelledby="contact-choice-title"><div><span className="kicker">How would you like to begin?</span><h2 id="contact-choice-title">Choose the kind of first conversation.</h2></div><div><button type="button" className={contactPreference === "written-enquiry" ? "selected" : ""} onClick={() => setContactPreference("written-enquiry")}><strong>Written journey request</strong><small>Share the essentials now. A curator replies personally within one business day.</small></button><button type="button" className={contactPreference === "private-call" ? "selected" : ""} onClick={() => setContactPreference("private-call")}><strong>Private curator call</strong><small>Tell us the essentials, then we will contact you to arrange a private conversation.</small></button></div></section>
           <section className="feeling-fieldset">
-            <div className="request-section-heading"><span>What you are going through</span><small>Pick the closest one. You can tell us more on the call.</small></div>
-            <p className="feeling-intro">Right now, honestly, what are you going through? This shapes everything we build for you.</p>
+            <div className="request-section-heading"><span>What brings you to us</span><small>Choose whichever is closest. Nothing here is a commitment, and you can change it on the call.</small></div>
+            <p className="feeling-intro">What brings you to us? This helps us shape what we build for you.</p>
             <div className="feeling-grid">
               {feelings.map(([name, title, copy]) => (
                 <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => setFeeling(name)} aria-pressed={feeling === name}>
@@ -226,8 +226,8 @@ export default function RequestPage() {
                 </button>
               ))}
             </div>
-            <input type="hidden" name="feeling" value={feeling} />
-            <small className="selection-note">Choose the one that feels most honest.</small>
+            <input type="hidden" name="feeling" value={feeling || "Open"} />
+            <small className="selection-note">Prefer not to say? Skip this and we will talk it through.</small>
           </section>
 
           <section className="request-form-card">
