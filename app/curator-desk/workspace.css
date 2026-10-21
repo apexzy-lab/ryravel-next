@@ -184,7 +184,7 @@
 .curator-desk-demo .desk-health-status.has-issues { background:#fff0df; color:#a45a22; }
 .curator-desk-demo .desk-operating-health summary::after { margin-left:0; }
 .curator-desk-demo .desk-operating-health-body { border:0; border-top:1px solid #e8dfd5; padding:19px 0; }
-.curator-desk-demo .desk-health-grid { display:grid; gap:10px; grid-template-columns:repeat(4,minmax(0,1fr)); }
+.curator-desk-demo .desk-health-grid { display:grid; gap:10px; grid-template-columns:repeat(5,minmax(0,1fr)); }
 .curator-desk-demo .desk-health-grid article { background:#f7f2eb; display:grid; gap:4px; grid-template-columns:28px 1fr; padding:15px; }
 .curator-desk-demo .desk-health-grid .desk-icon { color:#a33e35; grid-row:1/3; height:20px; width:20px; }
 .curator-desk-demo .desk-health-grid strong { color:#26211d; font-size:22px; line-height:1.1; }

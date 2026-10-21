@@ -82,3 +82,23 @@ export const newsletterOptIns = sqliteTable("newsletter_opt_ins", {
 }, (table) => [
   index("newsletter_opt_ins_expiry").on(table.expiresAt),
 ]);
+
+export const talkBookings = sqliteTable("talk_bookings", {
+  id: text("id").primaryKey(),
+  reference: text("reference").notNull().unique(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  feeling: text("feeling"),
+  journey: text("journey"),
+  note: text("note"),
+  startUtc: text("start_utc").notNull(),
+  endUtc: text("end_utc").notNull(),
+  guestTimeZone: text("guest_time_zone").notNull(),
+  status: text("status").notNull().default("pending"),
+  googleEventId: text("google_event_id"),
+  meetUrl: text("meet_url"),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+}, (table) => [
+  index("talk_bookings_email_created").on(table.email, table.createdAt),
+]);

@@ -1,0 +1,62 @@
+.talk-page{--talk-ink:#171411;--talk-muted:#6f6358;--talk-paper:#f3eee7;--talk-white:#fffdfa;--talk-line:#d9cfc2;--talk-red:#ee4540;max-width:1400px;margin:0 auto 90px;background:var(--talk-paper);color:var(--talk-ink);font-family:var(--font-sans);min-height:680px}
+.talk-page *{box-sizing:border-box}
+.talk-page button,.talk-page input,.talk-page select,.talk-page textarea{font:inherit}
+.talk-page button{cursor:pointer}
+.talk-page button:disabled{cursor:not-allowed;opacity:.48}
+.talk-head{display:flex;justify-content:space-between;gap:20px;background:#171411;color:#e7d9ce;padding:15px clamp(24px,5vw,72px);font-size:11px;letter-spacing:.19em}
+.talk-hero{display:grid;grid-template-columns:1.05fr .95fr;min-height:570px}
+.talk-hero-copy{padding:clamp(48px,7vw,105px) clamp(28px,6vw,80px)}
+.talk-eyebrow{color:var(--talk-red);font-size:11px;letter-spacing:.21em;text-transform:uppercase;font-weight:700}
+.talk-page h1,.talk-page h2,.talk-page h3{font-family:var(--font-serif);font-weight:400;letter-spacing:-.045em;color:var(--talk-ink)}
+.talk-page h1{font-size:clamp(48px,5.4vw,76px);line-height:1.04;margin:24px 0}
+.talk-page h2{font-size:clamp(38px,4vw,56px);line-height:1.07;margin:16px 0 23px}
+.talk-page h3{font-size:28px;line-height:1.13;margin:19px 0}
+.talk-page p{color:var(--talk-muted);font-size:16px;line-height:1.7}
+.talk-hero-copy>p{max-width:520px;margin-bottom:29px}
+.talk-hero-copy>small{display:block;color:var(--talk-muted);font-size:12px;margin-top:25px}
+.talk-hero-art{position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:46px;background:linear-gradient(135deg,#4f3d35,#8b6e59 48%,#dab58d);color:#fff8ee}
+.talk-hero-art i{position:absolute;inset:19% 9% 15% 29%;border-radius:50% 50% 0 0;background:radial-gradient(circle at 50% 38%,#dfc9a0 0 15%,#ae8c68 16% 45%,#685540 46% 100%);opacity:.73}
+.talk-hero-art p{position:relative;font-family:var(--font-serif);font-size:clamp(26px,3vw,40px);font-style:italic;color:#fff8ee;line-height:1.16;margin:0}
+.talk-primary,.talk-secondary{display:inline-flex;align-items:center;justify-content:center;gap:15px;border:0;background:var(--talk-red);color:#fff;text-transform:uppercase;letter-spacing:.13em;font-size:11px!important;font-weight:700;padding:17px 24px;min-height:51px;text-decoration:none}
+.talk-secondary{background:var(--talk-ink);margin-top:8px}
+.talk-primary:hover,.talk-secondary:hover{filter:brightness(.9)}
+.talk-flow{padding-bottom:70px}
+.talk-progress{display:flex;gap:35px;flex-wrap:wrap;background:var(--talk-white);border-bottom:1px solid var(--talk-line);padding:19px clamp(24px,5vw,72px);font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:var(--talk-muted)}
+.talk-progress span{border-bottom:2px solid transparent;padding:7px 0}
+.talk-progress .active{color:var(--talk-ink);border-color:var(--talk-red)}
+.talk-step{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(25px,6vw,80px);padding:clamp(36px,5vw,72px) clamp(24px,5vw,72px);max-width:1200px}
+.talk-step>div>p{max-width:670px}
+.talk-label,.talk-fields label,.talk-note{display:block;color:var(--talk-muted);text-transform:uppercase;letter-spacing:.11em;font-size:11px;font-weight:700;margin:26px 0 10px}
+.talk-page input,.talk-page select,.talk-page textarea{display:block;width:100%;background:var(--talk-white);border:1px solid var(--talk-line);border-radius:0;color:var(--talk-ink);padding:14px 16px;min-height:50px;font-size:15px;margin-top:8px}
+.talk-page textarea{resize:vertical;min-height:95px}
+.talk-page input:focus,.talk-page select:focus,.talk-page textarea:focus,.talk-page button:focus-visible,.talk-page a:focus-visible{outline:2px solid var(--talk-red);outline-offset:3px}
+.talk-dates{display:flex;gap:8px;overflow-x:auto;padding:17px 2px 19px;margin-top:11px;max-width:680px}
+.talk-dates button{border:1px solid var(--talk-line);background:var(--talk-white);color:var(--talk-ink);min-width:65px;min-height:71px;padding:8px 11px;flex:none}
+.talk-dates button small,.talk-dates button strong{display:block}
+.talk-dates button small{color:var(--talk-muted);text-transform:uppercase;letter-spacing:.07em;font-size:10px;margin-bottom:4px}
+.talk-dates button strong{font:24px var(--font-serif)}
+.talk-unavailable{border-top:1px solid var(--talk-line);margin-top:30px;padding-top:8px}
+.talk-dates button.selected{border:2px solid var(--talk-red);padding:7px 10px;color:var(--talk-red)}
+.talk-slots{display:grid;grid-template-columns:repeat(3,minmax(110px,1fr));gap:10px;max-width:560px;margin:17px 0}
+.talk-slots button{min-height:51px;padding:10px;background:var(--talk-white);color:var(--talk-ink);border:1px solid var(--talk-line)}
+.talk-slots button.selected{border:2px solid var(--talk-red);color:var(--talk-red)}
+.talk-hint{margin-top:12px}
+.talk-aside{background:var(--talk-white);border:1px solid var(--talk-line);padding:28px;margin-top:24px}
+.talk-aside p{font-size:14px;margin-bottom:0}
+.talk-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px}
+.talk-text{background:none;border:0;color:var(--talk-ink);font-size:13px;text-decoration:underline;padding:12px}
+.talk-fields{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.talk-note span{font-weight:400;text-transform:none;letter-spacing:0}
+.talk-fine{font-size:13px!important;color:var(--talk-muted);max-width:650px}
+.talk-fine a{color:var(--talk-ink);text-decoration:underline}
+.talk-review{border-top:1px solid var(--talk-line);margin-top:25px}
+.talk-review>div{display:flex;justify-content:space-between;align-items:baseline;gap:20px;border-bottom:1px solid var(--talk-line);padding:16px 0;font-size:14px}
+.talk-review span{color:var(--talk-muted)}
+.talk-review strong{text-align:right;overflow-wrap:anywhere}
+.talk-error{color:#9e2723!important;border-left:3px solid #ba342c;padding-left:12px;margin:17px 0;font-weight:700}
+.talk-turnstile{margin-top:18px;min-height:15px}
+.talk-success{max-width:790px;padding:clamp(45px,7vw,88px) clamp(24px,7vw,90px)}
+.talk-success>p{max-width:650px}
+.talk-check{height:55px;width:55px;border-radius:50%;background:var(--talk-red);color:#fff;display:grid;place-items:center;font-size:25px;margin-bottom:27px}
+@media(max-width:850px){.talk-hero,.talk-step{grid-template-columns:1fr}.talk-hero-art{min-height:300px}.talk-step{gap:10px}.talk-aside{max-width:650px;margin-top:0}}
+@media(max-width:520px){.talk-head{font-size:9px;letter-spacing:.09em}.talk-head span:last-child{display:none}.talk-hero-art{min-height:230px;padding:28px}.talk-progress{gap:15px;font-size:10px}.talk-fields{grid-template-columns:1fr}.talk-slots{grid-template-columns:repeat(2,minmax(0,1fr))}.talk-review>div{display:block}.talk-review strong{display:block;text-align:left;margin-top:6px}}

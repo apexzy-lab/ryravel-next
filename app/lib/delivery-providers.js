@@ -93,6 +93,17 @@ export async function sendGtmcrIdentity({ id, name, email }) {
   });
 }
 
+export async function sendGtmcrTalkBooking({ id, name, email, reference, feeling, journey, start, timeZone, occurredAt }) {
+  // A confirmed service appointment is an identified CRM signal, not marketing consent.
+  await postGtmcrEvent({
+    eventId: `ryravel-talk-${id}`,
+    event: "ryravel_call_booked",
+    contact: contactIdentity(name, email),
+    occurredAt,
+    properties: { source: "ryravel-talk", reference, feeling: feeling || null, journey: journey || null, start_utc: start, guest_time_zone: timeZone },
+  });
+}
+
 export async function sendGtmcrConsent({ id, email, reference, capturedAt, notice, policyVersion }) {
   const token = String(runtimeEnv().GTMCR_CONSENT_TOKEN || "").trim();
   if (!token) throw new Error("GTMCR explicit-consent key is not configured");

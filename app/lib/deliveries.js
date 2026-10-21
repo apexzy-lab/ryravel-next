@@ -1,5 +1,5 @@
 import { getD1, runtimeEnv } from "../../db/index";
-import { sendGtmcrSignal, sendGtmcrIdentity, sendGtmcrConsent, sendGuestConfirmation } from "./delivery-providers";
+import { sendGtmcrSignal, sendGtmcrIdentity, sendGtmcrConsent, sendGuestConfirmation, sendGtmcrTalkBooking } from "./delivery-providers";
 
 export function deliveryStatement(db, id, kind, payload) {
   return db.prepare("INSERT INTO delivery_jobs (id,enquiry_id,kind,payload) VALUES (?,?,?,?)")
@@ -13,7 +13,7 @@ export async function processDeliveries(limit = 12) {
     if (!lease.meta?.changes) continue;
     try {
       const data = JSON.parse(job.payload);
-      if ((job.kind === "gtmcr" || job.kind === "gtmcr_identity") && runtimeEnv().GTMCR_TRANSACTIONAL_CONTACTS_READY !== "true") {
+      if (["gtmcr", "gtmcr_identity", "talk_gtmcr"].includes(job.kind) && runtimeEnv().GTMCR_TRANSACTIONAL_CONTACTS_READY !== "true") {
         await db.prepare("UPDATE delivery_jobs SET status='held',lease_until=NULL,last_error='Awaiting consent-safe CRM receiver' WHERE id=?").bind(job.id).run();
         continue;
       }
@@ -21,6 +21,7 @@ export async function processDeliveries(limit = 12) {
       else if (job.kind === 'gtmcr_identity') await sendGtmcrIdentity(data);
       else if (job.kind === 'gtmcr_consent') await sendGtmcrConsent(data);
       else if (job.kind === 'confirmation') await sendGuestConfirmation(data);
+      else if (job.kind === 'talk_gtmcr') await sendGtmcrTalkBooking(data);
       else throw new Error('Unknown delivery kind');
       await db.prepare("UPDATE delivery_jobs SET status='delivered', delivered_at=datetime('now'), attempts=attempts+1, lease_until=NULL, last_error=NULL, payload='{}' WHERE id=?").bind(job.id).run();
     } catch (error) {
@@ -34,26 +35,27 @@ export async function processDeliveries(limit = 12) {
 }
 export async function operationsSummary() {
   const db = getD1();
-  const [delivery, overdue, retention, scheduler] = await db.batch([
+  const [delivery, overdue, retention, scheduler, talkPending] = await db.batch([
     db.prepare("SELECT status,COUNT(*) AS total FROM delivery_jobs GROUP BY status"),
     db.prepare("SELECT COUNT(*) AS total FROM journey_enquiries WHERE deleted_at IS NULL AND archived_at IS NULL AND is_spam=0 AND status NOT IN ('won','declined','closed') AND ((status='new' AND julianday(created_at)<julianday('now','-1 day')) OR julianday(next_action_due_at)<julianday('now'))"),
     db.prepare("SELECT COUNT(*) AS total FROM journey_enquiries e WHERE e.status IN ('declined','closed') AND julianday(COALESCE(e.updated_at,e.created_at))<julianday('now','-12 months') AND e.archived_at IS NULL AND COALESCE(e.admin_note,'') NOT LIKE '%LEGAL HOLD%' AND NOT EXISTS (SELECT 1 FROM journey_enquiry_events h WHERE h.enquiry_id=e.id AND (h.previous_value='won' OR h.next_value='won'))"),
     db.prepare("SELECT updated_at FROM operations_state WHERE key='scheduler'"),
+    db.prepare("SELECT COUNT(*) AS total FROM talk_bookings WHERE status='pending' AND julianday(created_at)<julianday('now','-5 minutes')"),
   ]);
-  return { deliveries: delivery.results || [], overdue: Number(overdue.results?.[0]?.total || 0), retentionReviews: Number(retention.results?.[0]?.total || 0), schedulerLastRun: scheduler.results?.[0]?.updated_at || null };
+  return { deliveries: delivery.results || [], overdue: Number(overdue.results?.[0]?.total || 0), retentionReviews: Number(retention.results?.[0]?.total || 0), schedulerLastRun: scheduler.results?.[0]?.updated_at || null, talkPending: Number(talkPending.results?.[0]?.total || 0) };
 }
 export async function alertOperations() {
   const env = runtimeEnv(), db = getD1();
   const summary = await operationsSummary();
   const failed = summary.deliveries.filter(x => x.status === 'failed').reduce((n,x) => n+Number(x.total),0);
   const retrying = summary.deliveries.filter(x => x.status === 'retry').reduce((n,x) => n+Number(x.total),0);
-  if (!failed && !retrying && !summary.overdue) return;
+  if (!failed && !retrying && !summary.overdue && !summary.talkPending) return;
   const state = await db.prepare("SELECT updated_at FROM operations_state WHERE key='last-alert'").first();
   if (state && Date.now()-Date.parse(state.updated_at+'Z') < 6*3600000) return;
   if (!env.RESEND_API_KEY) { console.error('Operations alerts are not configured'); return; }
   const response = await fetch(env.RESEND_API_URL || 'https://api.resend.com/emails', {
     method:'POST', headers:{Authorization:`Bearer ${env.RESEND_API_KEY}`,'Content-Type':'application/json'}, signal:AbortSignal.timeout(4000),
-    body:JSON.stringify({ from:env.RESEND_FROM_EMAIL || 'Ryravel Operations <curator@updates.ryravel.com>', to:[env.OPS_ALERT_EMAIL || 'support@ryravel.com'], subject:'Ryravel operations: attention required', text:`Failed deliveries: ${failed}\nRetrying deliveries: ${retrying}\nOverdue enquiries/actions: ${summary.overdue}\nOpen https://ryravel.com/curator-desk to review. Customer details are not included in this alert.` }),
+    body:JSON.stringify({ from:env.RESEND_FROM_EMAIL || 'Ryravel Operations <curator@updates.ryravel.com>', to:[env.OPS_ALERT_EMAIL || 'support@ryravel.com'], subject:'Ryravel operations: attention required', text:`Failed deliveries: ${failed}\nRetrying deliveries: ${retrying}\nOverdue enquiries/actions: ${summary.overdue}\nUnresolved curator-call reservations: ${summary.talkPending}\nOpen https://ryravel.com/curator-desk to review. Customer details are not included in this alert.` }),
   });
   if (!response.ok) throw new Error(`Operations alert failed (${response.status})`);
   await db.prepare("INSERT INTO operations_state(key,value,updated_at) VALUES('last-alert','sent',datetime('now')) ON CONFLICT(key) DO UPDATE SET value='sent',updated_at=datetime('now')").run();
