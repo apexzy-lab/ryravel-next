@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./KimbilioJourney.module.css";
-import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives } from "./JourneyPlanning";
+import { JourneyAvailability, JourneyFaqs, JourneyProofSection, StillnessAlternatives, StillnessTrust } from "./JourneyPlanning";
 
 const days = [
   {
@@ -140,6 +140,7 @@ export default function KimbilioJourney({ journey }) {
 
       <JourneyProofSection />
       <JourneyFaqs journey={journey} />
+      <StillnessTrust />
 
       <section className={styles.nextSteps}>
         <div><span className={styles.sectionLabel}>What happens next</span><h2>A private conversation.<br />Then a protected way out.</h2></div>

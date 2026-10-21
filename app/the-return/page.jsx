@@ -54,6 +54,22 @@ export default function ReturnPage() {
           <p>The person who had been circling a decision for eight months. They did not arrive at it by thinking. They arrived at it by stopping thinking long enough for what they already knew to become audible. They came home and made the call within three days. They did not call it clarity. <em>They called it quiet.</em></p>
           <p>The couple who came back having chosen each other again. Not out of routine. Out of the specific certainty that comes from having been two people, in a place that had nothing to do with their ordinary life, who looked at each other <em>and stayed.</em></p>
           <p>The person who came back smaller, and was not diminished by it. Quieter and more accurate. They said they felt less like a version of themselves and more like <em>the thing the version had been standing in front of.</em></p>
+          <p className={styles.compositeNote}>These four portraits are composites, drawn from several travellers and changed so that no one can be identified.</p>
+        </div>
+      </section>
+
+      <section className={styles.afterTrip} aria-labelledby="after-trip-title">
+        <div>
+          <span className={styles.afterKicker}>After the trip</span>
+          <h2 id="after-trip-title">The trip is the middle, <em>not the end.</em></h2>
+          <p className={styles.afterLead}>Most trips lose what they gave within a week or two of getting home. We stay in touch through that stretch on purpose. Here is what happens next.</p>
+          <ol className={styles.timeline}>
+            <li><b>The day you leave</b><span>Your Departure Box is placed in your hands, written to you and timed for the journey home.</span></li>
+            <li><b>Day 7</b><span>Your curator checks in, one message, no pressure, asking what has already started to slip back into old shape.</span></li>
+            <li><b>Day 30</b><span>A second check-in, once you can tell which parts of the old version of you you want back.</span></li>
+            <li><b>Through the weeks after</b><span>Founder calls, and your written integration: what stayed, what to protect, what to change.</span></li>
+            <li><b>A few weeks later</b><span>Your hand-bound Silent Documentary arrives.</span></li>
+          </ol>
         </div>
       </section>
 

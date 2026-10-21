@@ -54,7 +54,7 @@ function FeelingQuiz() {
   function restart() { setStep(0); setAnswers([]); setSelected(null); setComplete(false); }
 
   return <section className="quiz-section" id="feeling-quiz">
-    <div className="quiz-intro"><span className="kicker">Begin with a feeling</span><h2 className="serif-h2">Find your <em>arc</em></h2><p>Answer a few questions. We will show you where your journey begins.</p></div>
+    <div className="quiz-intro"><span className="kicker">Begin with what you&rsquo;re going through</span><h2 className="serif-h2">Find your <em>arc</em></h2><p>Answer a few questions. We will show you where your journey begins.</p></div>
     <div className="quiz-panel"><div className="quiz-bar"><div className="quiz-bar-fill" style={{ width: complete ? "100%" : `${((step + 1) / questions.length) * 100}%` }} /></div>
       {!complete ? <div className="quiz-inner"><p className="quiz-step">Step {step + 1} of {questions.length}</p><h3 className="quiz-q">{questions[step].q}</h3><div className="quiz-opts">{questions[step].opts.map(([text, answer]) => <button type="button" aria-pressed={selected === answer} className={`quiz-opt${selected === answer ? " sel" : ""}`} key={text} onClick={() => setSelected(answer)}>{text}</button>)}</div><div className="quiz-nav"><button type="button" className="quiz-back" onClick={back} disabled={step === 0}>← Back</button><button type="button" className="quiz-fwd" onClick={next} disabled={!selected}>{step === questions.length - 1 ? "See my arc →" : "Next →"}</button></div></div> :
         <div className="quiz-result show" aria-live="polite"><p className="quiz-res-arc">{winner.label}</p><h3 className="quiz-res-name">{winner.name}</h3><p className="quiz-res-desc">{winner.desc}</p><div className="quiz-res-btns"><Link className="btn-primary" href={winner.url}>Explore this journey</Link><button type="button" className="quiz-restart" onClick={restart}>Start again</button></div></div>}
@@ -64,7 +64,7 @@ function FeelingQuiz() {
 
 export default function HomepageExperience() {
   return <main className="new-home">
-    <section className="hero"><HeroVideo /><div className="hero-overlay" /><div className="hero-body"><span className="hero-eye">Bespoke travel designed for who you become</span><h1 className="hero-h1">The journey ends.<br /><em>The change does not.</em></h1><p className="hero-sub">Every journey we design begins not with a destination, but with a feeling. The answer shapes everything that follows.</p><div className="hero-btns"><a className="btn-primary" href="#feeling-quiz">Begin with a feeling</a><Link className="btn-quiet" href="/journeys">Explore journeys</Link></div></div><span className="scroll-cue">Scroll ↓</span></section>
+    <section className="hero"><HeroVideo /><div className="hero-overlay" /><div className="hero-body"><span className="hero-eye">Bespoke travel designed for who you become</span><h1 className="hero-h1">The journey ends.<br /><em>The change does not.</em></h1><p className="hero-sub">Every journey we design begins not with a destination, but with a feeling. The answer shapes everything that follows.</p><div className="hero-btns"><a className="btn-primary" href="#feeling-quiz">Begin with what you&rsquo;re going through</a><Link className="btn-quiet" href="/journeys">Explore journeys</Link></div></div><span className="scroll-cue">Scroll ↓</span></section>
 
     <div className="ticker" aria-hidden="true"><div className="ticker-inner">{["100% bespoke journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design", "Every journey designed by the founder", "100% bespoke journeys", "24/7 curator support", "No two journeys alike", "Emotion-led by design", "Every journey designed by the founder"].map((item, index) => <span className="ticker-item" key={`${item}-${index}`}>{item}</span>)}</div></div>
 
@@ -80,7 +80,7 @@ export default function HomepageExperience() {
 
     <FeelingQuiz />
 
-    <section className="global-cta"><span className="kicker">Begin your return</span><h2>How do you want<br />to <em>feel?</em></h2><p>One honest conversation is all it takes. Tell us where you are, and we will design the rest.</p><div className="cta-btns"><Link className="btn-cta" href="/request">Begin your return</Link><Link className="btn-cta-ol" href="/journeys">Explore journeys</Link></div></section>
+    <section className="global-cta"><span className="kicker">Begin your return</span><h2>What are you<br /><em>carrying right now?</em></h2><p>Tell us, and we will build the journey around it. One honest conversation is all it takes.</p><div className="cta-btns"><Link className="btn-cta" href="/request">Begin your return</Link><Link className="btn-cta-ol" href="/journeys">Explore journeys</Link></div></section>
 
   </main>;
 }

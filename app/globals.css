@@ -521,3 +521,13 @@ html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f
   .restoration-month-grid { grid-template-columns: repeat(2,1fr); }
   .restoration-dates form, .restoration-dates label, .restoration-dates input, .restoration-dates select, .restoration-dates button { width: 100%; }
 }
+
+.price-scope { border-top: 1px solid currentColor; border-top-color: rgba(128,128,128,.3); margin-top: 18px; padding-top: 14px; }
+.price-scope p { font-size: 14px; line-height: 1.7; margin: 0 0 8px; opacity: .85; }
+.price-scope b { font-weight: 600; opacity: 1; }
+.trust-section { border-top: 1px solid var(--paper-line); padding: 80px 24%; }
+.trust-section h2 { font-size: 36px; margin: 10px 0 30px; }
+.trust-grid { display: grid; gap: 40px; grid-template-columns: 1fr 1fr; }
+.trust-grid h3 { font-size: 20px; margin-bottom: 10px; }
+.trust-grid p { color: var(--ink-muted); line-height: 1.8; }
+@media (max-width: 900px) { .trust-section { padding: 60px 24px; } .trust-grid { grid-template-columns: 1fr; gap: 28px; } }

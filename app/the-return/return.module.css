@@ -72,3 +72,17 @@
 }
 
 @media (prefers-reduced-motion: reduce) { .secondaryButton { transition: none; } }
+
+.compositeNote { border-bottom: 0 !important; color: #7a756e !important; font-family: var(--font, system-ui), sans-serif !important; font-size: .8rem !important; font-style: italic; letter-spacing: .02em; margin: 3rem 0 0 !important; padding-bottom: 0 !important; }
+
+.afterTrip { background: var(--return-warm); border-bottom: 1px solid var(--return-line); display: flex; justify-content: center; padding: clamp(5rem, 9vw, 8rem) max(7vw, 1.5rem); }
+.afterTrip > div { max-width: 48rem; width: 100%; }
+.afterKicker { color: #8a6d1f; font-size: .72rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+.afterTrip h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(2rem, 4.2vw, 3.2rem); font-weight: 400; letter-spacing: -.03em; line-height: 1.1; margin: 1rem 0 1.5rem; }
+.afterLead { color: var(--return-soft); font-family: Georgia, "Times New Roman", serif; font-size: clamp(1.05rem, 1.6vw, 1.3rem); line-height: 1.75; margin-bottom: 2.5rem; }
+.timeline { border-left: 1px solid var(--return-gold); list-style: none; margin: 0; padding: 0 0 0 1.75rem; }
+.timeline li { margin-bottom: 1.75rem; position: relative; }
+.timeline li:last-child { margin-bottom: 0; }
+.timeline li::before { background: var(--return-gold); border-radius: 50%; content: ""; height: .6rem; left: calc(-1.75rem - .3rem); position: absolute; top: .5rem; width: .6rem; }
+.timeline b { color: var(--return-ink); display: block; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; }
+.timeline span { color: var(--return-soft); display: block; line-height: 1.7; margin-top: .3rem; }

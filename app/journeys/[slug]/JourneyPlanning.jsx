@@ -56,3 +56,33 @@ export function StillnessAlternatives({ currentSlug }) {
     </section>
   );
 }
+
+export function PriceScope({ journey }) {
+  if (!journey.includes && !journey.excludes) return null;
+  return (
+    <div className="price-scope">
+      {journey.priceNote && <p className="price-scope-base"><b>{journey.priceNote}.</b></p>}
+      {journey.includes && <p><b>Included:</b> {journey.includes}.</p>}
+      {journey.excludes && <p><b>Not included:</b> {journey.excludes}.</p>}
+    </div>
+  );
+}
+
+export function StillnessTrust() {
+  return (
+    <section className="trust-section" aria-labelledby="stillness-trust-title">
+      <span className="kicker">Before you commit</span>
+      <h2 id="stillness-trust-title">What you can rely on.</h2>
+      <div className="trust-grid">
+        <article>
+          <h3>Refunds and changes</h3>
+          <p>Nothing is booked until you accept a booking agreement and deposit. Changes and cancellation terms are written into your proposal, because they depend on the camps and partners involved, so you see them before you decide.</p>
+        </article>
+        <article>
+          <h3>Who leads each part</h3>
+          <p>The founder designs every journey and holds the founder calls. Your curator is your single point of contact before and after the trip, and the camp&apos;s own guides lead the days on the ground.</p>
+        </article>
+      </div>
+    </section>
+  );
+}

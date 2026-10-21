@@ -9,6 +9,7 @@ import KimbilioJourney from "./KimbilioJourney";
 import KimyaJourney from "./KimyaJourney";
 import { absoluteUrl, buildMetadata } from "../../seo";
 import JourneyProof from "../../components/JourneyProof";
+import { PriceScope, StillnessTrust } from "./JourneyPlanning";
 
 function requestHrefFor(journey) {
   const query = new URLSearchParams({
@@ -66,7 +67,8 @@ function ArcPage({ arc }) {
       <section className="arc-story paper-section"><p className="lead">{arc.story}</p><span className="kicker">How the arc works</span><div className="principle-grid">{arc.principles.map(([title, copy], index) => <article key={title}><span>— 0{index + 1}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
       <section className="arc-journeys paper-section"><div className="section-heading"><div><span className="kicker">Choose your arc</span><h2>{cards.length} journeys. <em>One feeling.</em></h2></div></div><div className="journey-cards">{cards.map((journey) => <JourneyCard journey={journey} key={journey.slug} />)}</div></section>
       <JourneyProof arc={arc.id} />
-      <CTA requestHref={`/request?arc=${encodeURIComponent(arc.id)}&name=${encodeURIComponent(arc.title)}`} />
+      {arc.id === "stillness" && <StillnessTrust />}
+      <CTA {...(arc.id === "stillness" ? { title: "What are you carrying right now?", copy: "Tell us, and we'll build the journey around it. One honest conversation is all it takes to begin." } : {})} requestHref={`/request?arc=${encodeURIComponent(arc.id)}&name=${encodeURIComponent(arc.title)}`} />
     </main>
   );
 }
@@ -91,7 +93,8 @@ function JourneyPage({ journey }) {
         ))}
       </section>
       <JourneyProof arc={journey.arc} />
-      <section className="investment paper-section"><div><span className="kicker">Investment</span><h2>{journey.nights} nights. Everything included.</h2><p>International flights are not included. Private transfers, experiences, indicated meals, signature rituals and curator support are included.</p>{journey.priceNote && <p className="price-note">{journey.priceNote}</p>}</div><div><small>From</small><strong>{journey.price}</strong><span>/ {journey.unit || "person"}</span><Link className="button button-red" href={requestHref}>Begin the conversation →</Link></div></section>
+      <section className="investment paper-section"><div><span className="kicker">Investment</span><h2>{journey.nights} nights. Everything included.</h2><p>International flights are not included. Private transfers, experiences, indicated meals, signature rituals and curator support are included.</p>{journey.priceNote && <p className="price-note">{journey.priceNote}</p>}<PriceScope journey={journey} /></div><div><small>From</small><strong>{journey.price}</strong><span>/ {journey.unit || "person"}</span><Link className="button button-red" href={requestHref}>Begin the conversation →</Link></div></section>
+      {journey.arc === "stillness" && <StillnessTrust />}
       <section className="related paper-section"><span className="kicker">Continue exploring</span><div className="journey-cards">{journeys.filter((item) => item.arc === journey.arc && item.slug !== journey.slug).map((item) => <JourneyCard journey={item} key={item.slug} />)}</div></section>
       <CTA title={journey.tagline} copy="A curator will adapt every detail to your dates, pace and the feeling you want to carry home." requestHref={requestHref} />
     </main>
