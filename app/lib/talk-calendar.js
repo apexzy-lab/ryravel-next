@@ -9,7 +9,7 @@ export function talkConfiguration() {
   const clientSecret = String(env.TALK_GOOGLE_CLIENT_SECRET || "").trim();
   const refreshToken = String(env.TALK_GOOGLE_REFRESH_TOKEN || "").trim();
   const hostTimeZone = String(env.TALK_HOST_TIMEZONE || "Africa/Lagos").trim();
-  const senderReady = env.TALK_EMAIL_SENDER_READY === "true" && Boolean(env.RESEND_API_KEY);
+  const senderReady = env.TALK_EMAIL_SENDER_READY === "true" && Boolean(env.ZEPTO_SEND_API_KEY);
   return { calendarId, clientId, clientSecret, refreshToken, hostTimeZone, ready: Boolean(calendarId && clientId && clientSecret && refreshToken && senderReady) };
 }
 

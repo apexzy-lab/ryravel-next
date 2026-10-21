@@ -158,13 +158,14 @@ export async function sendGuestConfirmation({ name, email, reference: enquiryRef
 
 export async function sendTalkConfirmation(data) {
   const env = runtimeEnv();
-  if (env.TALK_EMAIL_SENDER_READY !== "true" || !env.RESEND_API_KEY) throw new Error("Curator sender is not verified");
+  if (env.TALK_EMAIL_SENDER_READY !== "true" || !env.ZEPTO_SEND_API_KEY) throw new Error("ZeptoMail curator sender is not configured");
   const message = buildTalkConfirmation(data);
-  const response = await fetch(env.RESEND_API_URL || "https://api.resend.com/emails", {
+  const response = await fetch(env.TALK_ZEPTO_API_URL || "https://cpaas.zoho.com/v1.1/email", {
     method: "POST",
-    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `ryravel-talk-${data.reference}` },
+    headers: { Authorization: `Zoho-enczapikey ${env.ZEPTO_SEND_API_KEY}`, "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(message),
     signal: AbortSignal.timeout(8000),
   });
-  if (!response.ok) throw new Error(`Curator confirmation returned ${response.status}`);
+  const result = await response.json().catch(() => ({}));
+  if (!response.ok || result.message !== "OK") throw new Error(`ZeptoMail curator confirmation returned ${response.status}`);
 }
