@@ -27,6 +27,7 @@ export function Logo({ forceLight = false }) {
 export default function SiteChrome({ children }) {
   const pathname = usePathname();
   const isCuratorPage = /^\/(curator-desk|partners)(?:\/|$)/.test(pathname || "");
+  const isPartnerPortal = /^\/partners\/portal(?:\/|$)/.test(pathname || "");
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(undefined);
@@ -137,6 +138,8 @@ export default function SiteChrome({ children }) {
     document.documentElement.dataset.theme = next ? "light" : "dark";
     try { window.localStorage.setItem("ryravel-theme", next ? "light" : "dark"); } catch { /* Keep the current tab's choice even without persistence. */ }
   }
+
+  if (isPartnerPortal) return children;
 
   return (
     <>
