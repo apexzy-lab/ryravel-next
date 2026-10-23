@@ -65,6 +65,7 @@ export default function RequestPage() {
   const [turnstileEnabled, setTurnstileEnabled] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [journeyContext, setJourneyContext] = useState(null);
+  const [partnerSlug, setPartnerSlug] = useState("");
   const [contactPreference, setContactPreference] = useState("written-enquiry");
   const [preferredCallTime, setPreferredCallTime] = useState("");
   const [travelMonth, setTravelMonth] = useState("");
@@ -108,6 +109,8 @@ export default function RequestPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const partner = params.get("partner") || "";
+    if (/^[a-z0-9](?:[a-z0-9-]{0,46}[a-z0-9])?$/.test(partner)) setPartnerSlug(partner);
     const slug = params.get("journey");
     const selectedJourney = journeys.find((journey) => journey.slug === slug);
     analyticsJourneySlug.current = selectedJourney?.slug || "";
@@ -247,6 +250,7 @@ export default function RequestPage() {
     payload.contactPreference = contactPreference;
     payload.preferredCallTime = preferredCallTime;
     payload.sourceUrl = window.location.href;
+    payload.partnerSlug = partnerSlug;
     payload.turnstileToken = turnstileToken;
     try {
       const response = await fetch("/api/enquiries", {
@@ -300,6 +304,7 @@ export default function RequestPage() {
 
           <form className="progressive-form" id="journey-request" ref={formRef} onSubmit={submit} onChangeCapture={startForm} noValidate>
             <label className="request-honeypot" aria-hidden="true">Website<input name="website" tabIndex="-1" autoComplete="off" /></label>
+            {partnerSlug ? <p className="request-partner-intro">Introduced through a Ryravel curator partner. Your request goes directly to Ryravel; your personal details stay private.</p> : null}
             <div className="progressive-workspace">
               <div className={`progressive-stage-card progressive-stage-card-step-${step}`}>
                 <section className="progressive-stage progressive-feeling-stage" hidden={step !== 1} aria-labelledby="feeling-stage-title">
@@ -333,6 +338,7 @@ export default function RequestPage() {
                     <label className="wide">Telephone <b>*</b><span className="phone-field"><input className="calling-code" name="country-code" type="tel" list="calling-code-options" placeholder="+Code" aria-label="Country calling code" autoComplete="tel-country-code" onChange={() => setFieldErrors({})} /><datalist id="calling-code-options">{countryCodes.map(([country, code]) => <option value={code} key={`${country}-${code}`}>{country}</option>)}</datalist><input name="phone" type="tel" placeholder="Phone number" autoComplete="tel-national" onChange={() => setFieldErrors({})} /></span>{fieldErrors.countryCode || fieldErrors.phone ? <small role="alert">{fieldErrors.countryCode || fieldErrors.phone}</small> : null}</label>
                     {contactPreference === "private-call" ? <label className="wide">Best contact time <b>*</b><select name="preferred-call-time" value={preferredCallTime} onChange={(event) => { setPreferredCallTime(event.target.value); setFieldErrors({}); }}><option value="" disabled>Select a window</option><option>Weekday morning</option><option>Weekday afternoon</option><option>Weekday evening</option><option>Saturday</option><option>Let Ryravel propose a time by email</option></select>{fieldErrors.preferredCallTime ? <small role="alert">{fieldErrors.preferredCallTime}</small> : null}</label> : null}
                     <label>How did you hear about us?<select name="referral" defaultValue=""><option value="" disabled>Select</option><option>Recommendation</option><option>Google</option><option>Instagram</option><option>Press</option><option>Other</option></select></label>
+                    {!partnerSlug ? <label>Coach referral code (optional)<input name="partnerCode" placeholder="If a coach introduced you" autoComplete="off" /></label> : null}
                   </div>
                   <label className="newsletter-field"><input name="newsletter" type="checkbox" /><span>{NEWSLETTER_CHECKBOX_NOTICE} We will email you a confirmation link first.</span></label>
                   <p className="progressive-policy-note">Sending an enquiry does not book a journey or require payment. Your proposal will show the final price, optional add-ons and payment dates before you decide. Standard bookings require a 50% deposit, with the balance due 30 days before departure; bookings within 45 days require full payment. <a href="/privacy">Privacy</a> · <a href="/terms">Booking terms</a> · <a href="/cancellations">Cancellations</a></p>

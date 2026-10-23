@@ -17,7 +17,7 @@ export const CLARITY_HEAD_SCRIPT = `
 
 export function installClarity() {
   if (typeof window === "undefined" || !analyticsAllowed()) return;
-  if (/^\/(curator-desk|newsletter|api)(\/|$)/.test(window.location.pathname)) return;
+  if (/^\/(curator-desk|partners|newsletter|api)(\/|$)/.test(window.location.pathname)) return;
   window.ryravelLoadClarity?.();
 }
 

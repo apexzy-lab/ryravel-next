@@ -17,6 +17,7 @@
     "test:funnel": "node scripts/test-funnel.mjs",
     "test:curator-delete": "node scripts/test-curator-delete.mjs",
     "test:talk": "node scripts/test-talk.mjs",
+    "test:partners": "node scripts/test-partners.mjs",
     "test:google-ads": "node scripts/test-google-ads.mjs",
     "test:clarity": "node scripts/test-clarity.mjs",
     "test:seo": "node scripts/test-seo.mjs",

@@ -17,6 +17,7 @@ export const journeyEnquiries = sqliteTable("journey_enquiries", {
   budget: text("budget").notNull(),
   message: text("message"),
   referral: text("referral"),
+  partnerSlug: text("partner_slug"),
   newsletter: integer("newsletter").notNull().default(0),
   sourceUrl: text("source_url"),
   userAgent: text("user_agent"),
@@ -39,7 +40,18 @@ export const journeyEnquiries = sqliteTable("journey_enquiries", {
   index("journey_enquiries_due_idx").on(table.nextActionDueAt),
   index("journey_enquiries_deleted_idx").on(table.deletedAt),
   index("journey_enquiries_ip_created_idx").on(table.ipHash, table.createdAt),
+  index("journey_enquiries_partner_created_idx").on(table.partnerSlug, table.createdAt),
 ]);
+
+export const referralPartners = sqliteTable("referral_partners", {
+  slug: text("slug").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email"),
+  accessTokenHash: text("access_token_hash").notNull().unique(),
+  active: integer("active").notNull().default(1),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
 
 export const enquiryEvents = sqliteTable("journey_enquiry_events", {
   id: text("id").primaryKey(),

@@ -26,7 +26,7 @@ export function Logo({ forceLight = false }) {
 
 export default function SiteChrome({ children }) {
   const pathname = usePathname();
-  const isCuratorPage = /^\/curator-desk(?:\/|$)/.test(pathname || "");
+  const isCuratorPage = /^\/(curator-desk|partners)(?:\/|$)/.test(pathname || "");
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(undefined);
@@ -93,7 +93,7 @@ export default function SiteChrome({ children }) {
   }, [analyticsConsent, pathname, isCuratorPage]);
 
   useEffect(() => {
-    if (/^\/(curator-desk|newsletter)(\/|$)/.test(pathname || "") && stopClarity()) window.location.reload();
+    if (/^\/(curator-desk|partners|newsletter)(\/|$)/.test(pathname || "") && stopClarity()) window.location.reload();
   }, [pathname]);
 
   useEffect(() => {

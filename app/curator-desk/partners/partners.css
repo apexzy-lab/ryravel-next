@@ -1,0 +1,23 @@
+.partner-manager { background:#f3efe8; color:#211b18; min-height:100vh; padding:40px 24px 90px; }
+.partner-manager-inner { margin:auto; max-width:1080px; }
+.partner-manager-back { color:#9c403a; display:inline-block; font-size:14px; margin-bottom:32px; }
+.partner-manager-kicker { color:#b33e38; font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }
+.partner-manager h1 { font-family:var(--font-serif),Georgia,serif; font-size:clamp(48px,6vw,76px); font-weight:400; margin:8px 0 12px; }
+.partner-manager p { color:#6b6056; line-height:1.6; }
+.partner-manager-form,.partner-manager-issued,.partner-manager-list { background:#fffdf9; border:1px solid #e2d8cc; margin-top:28px; padding:28px; }
+.partner-manager h2 { font-family:var(--font-serif),Georgia,serif; font-size:28px; font-weight:400; margin:0 0 18px; }
+.partner-manager-form>div { display:grid; gap:15px; grid-template-columns:repeat(3,1fr); }
+.partner-manager label { color:#554c43; display:block; font-size:13px; font-weight:600; }
+.partner-manager input { background:#f8f5f0; border:1px solid #d9cfc4; color:#211b18; display:block; font-size:15px; margin-top:7px; min-height:46px; padding:10px 12px; width:100%; }
+.partner-manager button { background:#211b18; border:1px solid #211b18; color:#fff; cursor:pointer; font-size:13px; min-height:42px; padding:8px 15px; }
+.partner-manager-form>button { margin-top:20px; }
+.partner-manager-error { color:#ac312b!important; }
+.partner-manager-issued { border-color:#a57b5a; }
+.partner-manager-issued label { margin-top:18px; }
+.partner-manager-table article { align-items:center; border-top:1px solid #e2d8cc; display:flex; gap:20px; justify-content:space-between; padding:18px 0; }
+.partner-manager-table article strong,.partner-manager-table article span,.partner-manager-table article small { display:block; }
+.partner-manager-table article span,.partner-manager-table article small { color:#6b6056; margin-top:3px; }
+.partner-manager-controls { display:flex; flex-wrap:wrap; gap:8px; }
+.partner-manager-controls a { align-items:center; border:1px solid #cbbfb4; color:#51453a; display:inline-flex; font-size:13px; padding:8px 12px; }
+.partner-manager-note { font-size:13px; margin-top:25px; }
+@media(max-width:800px) { .partner-manager-form>div { grid-template-columns:1fr; } .partner-manager-table article { align-items:start; flex-direction:column; } }

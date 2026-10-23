@@ -4,6 +4,7 @@ import { clean, jsonError } from "../../lib/enquiries";
 import { verifyTurnstile } from "../../lib/turnstile";
 import { processDeliveries, deliveryStatement } from "../../lib/deliveries";
 import { NEWSLETTER_CONFIRM_DAYS, NEWSLETTER_CONFIRM_NOTICE, NEWSLETTER_POLICY_VERSION } from "../../lib/newsletter-consent";
+import { partnerSlug } from "../../lib/partners";
 
 const feelings = new Set(["Exhausted", "Restless", "Disconnected", "Romantic", "Curious", "Celebratory", "Purposeful", "Open"]);
 const months = new Set(["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]);
@@ -44,6 +45,7 @@ export async function POST(request) {
   const countryCode = clean(payload.countryCode, 8);
   const phone = clean(payload.phone, 40);
   const sourceUrl = clean(payload.sourceUrl, 500);
+  const requestedPartner = partnerSlug(payload.partnerSlug) || partnerSlug(payload.partnerCode);
   const rawJourney = payload.journey && typeof payload.journey === "object" ? payload.journey : {};
   const journey = {
     slug: clean(rawJourney.slug, 80),
@@ -63,6 +65,7 @@ export async function POST(request) {
   if (contactPreference === "private-call" && !preferredCallTime) return jsonError("Choose the best time for your curator to contact you.", 422);
 
   const db = getD1();
+  const partner = requestedPartner ? await db.prepare("SELECT slug FROM referral_partners WHERE slug = ? AND active = 1 LIMIT 1").bind(requestedPartner).first() : null;
   const ip = request.headers.get("cf-connecting-ip") || "unknown";
   const ipHash = await hash(`${runtimeEnv().RATE_LIMIT_SALT || "ryravel"}:${ip}`);
   const recent = await db.prepare("SELECT COUNT(*) AS total FROM journey_enquiries WHERE ip_hash = ? AND julianday(created_at) >= julianday('now', '-1 hour')").bind(ipHash).first();
@@ -84,12 +87,12 @@ export async function POST(request) {
   const insertEnquiry = db.prepare(`INSERT INTO journey_enquiries (
     id, reference, created_at, name, email, phone, country_code, feeling,
     travel_month, travel_year, duration, people, budget, message, referral,
-    newsletter, source_url, user_agent, ip_hash, tags
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
-    .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, savedMessage || null, clean(payload.referral, 80) || null, newsletterRequested ? 1 : 0, sourceUrl || null, clean(request.headers.get("user-agent"), 500) || null, ipHash, JSON.stringify(tags))
+    newsletter, source_url, user_agent, ip_hash, tags, partner_slug
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .bind(id, enquiryReference, now, name, email, phone, countryCode, feeling, travelMonth, travelYear, duration, people, budget, savedMessage || null, clean(payload.referral, 80) || null, newsletterRequested ? 1 : 0, sourceUrl || null, clean(request.headers.get("user-agent"), 500) || null, ipHash, JSON.stringify(tags), partner?.slug || null)
 ;
 
-  const signal = { id, name, email, phone, countryCode, occurredAt: now, reference: enquiryReference, feeling, travelMonth, travelYear, duration, people, budget, sourceUrl: sourceUrl || null, journey, contactPreference, preferredCallTime };
+  const signal = { id, name, email, phone, countryCode, occurredAt: now, reference: enquiryReference, feeling, travelMonth, travelYear, duration, people, budget, sourceUrl: sourceUrl || null, partnerSlug: partner?.slug || null, journey, contactPreference, preferredCallTime };
   const receipt = { name, email, reference: enquiryReference, feeling, travelMonth, travelYear, journey, contactPreference, newsletterConfirmationUrl };
   const statements = [insertEnquiry, deliveryStatement(db, id, "gtmcr", signal), deliveryStatement(db, id, "confirmation", receipt)];
   if (newsletterRequested) statements.push(db.prepare("INSERT INTO newsletter_opt_ins (enquiry_id,reference,email,token_hash,notice,policy_version,requested_at,expires_at) VALUES (?,?,?,?,?,?,?,?)")

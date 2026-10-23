@@ -1,7 +1,7 @@
 import { SITE_URL } from "./seo";
 
 export default function robots() {
-  const privatePaths = ["/api/", "/curator-desk"];
+  const privatePaths = ["/api/", "/curator-desk", "/partners"];
   return {
     rules: [
       { userAgent: "OAI-SearchBot", allow: "/", disallow: privatePaths },

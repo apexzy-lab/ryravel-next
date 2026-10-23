@@ -406,6 +406,8 @@ html:has(.request-page) .site-footer { display: none; }
 
 /* Curator desk concept lab */
 html:has(.curator-desk-demo) .site-header, html:has(.curator-desk-demo) .site-footer { display: none; }
+html:has(.partner-report) .site-header, html:has(.partner-report) .site-footer { display: none; }
+.request-partner-intro { color:#d6c8b9; font-size:13px; margin:0 0 16px; }
 html:has(.curator-desk-demo), html:has(.curator-desk-demo) body { background: #f3f0ea; color: #171512; }
 .curator-desk-demo { min-height: 100vh; }
 .desk-how-button { align-items: center; background: #f0443e; border: 0; bottom: 22px; box-shadow: 0 8px 30px rgba(56,24,20,.24); color: #fff; display: flex; font-size: 8px; font-weight: 800; gap: 10px; letter-spacing: .1em; padding: 11px 12px 11px 16px; position: fixed; right: 22px; text-transform: uppercase; z-index: 180; }.desk-how-button span { align-items: center; border: 1px solid rgba(255,255,255,.5); border-radius: 50%; display: flex; font-size: 9px; height: 22px; justify-content: center; width: 22px; }
