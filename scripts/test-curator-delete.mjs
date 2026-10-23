@@ -5,14 +5,14 @@ import { permanentDeletionBlock } from "../app/lib/purge-policy.js";
 const trashed = { deleted_at: "2026-10-17T00:00:00.000Z", status: "new", admin_note: "" };
 assert.equal(permanentDeletionBlock(trashed), null);
 assert.match(permanentDeletionBlock({ ...trashed, deleted_at: null }), /Trash/);
-assert.match(permanentDeletionBlock({ ...trashed, status: "won" }), /won history/);
-assert.match(permanentDeletionBlock(trashed, { wonHistory: true }), /won history/);
+assert.match(permanentDeletionBlock({ ...trashed, status: "won" }), /booking or payment history/);
+assert.match(permanentDeletionBlock(trashed, { wonHistory: true }), /booking or payment history/);
 assert.match(permanentDeletionBlock({ ...trashed, admin_note: "LEGAL HOLD: retain" }), /legal hold/);
 assert.match(permanentDeletionBlock(trashed, { activeDeliveries: 1 }), /unresolved delivery/);
 assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true }), /confirmed journey-notes consent/);
 assert.equal(permanentDeletionBlock(trashed, { confirmedConsent: true, consentReviewed: true }), null);
 assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true, consentReviewed: true, activeDeliveries: 1 }), /unresolved delivery/);
-assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true, consentReviewed: true, wonHistory: true }), /won history/);
+assert.match(permanentDeletionBlock(trashed, { confirmedConsent: true, consentReviewed: true, wonHistory: true }), /booking or payment history/);
 
 const route = readFileSync(new URL("../app/api/admin/enquiries/[id]/route.js", import.meta.url), "utf8");
 assert.match(route, /export async function DELETE/);

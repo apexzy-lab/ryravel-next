@@ -22,6 +22,17 @@ assert.match(enquiry, /SELECT slug FROM referral_partners WHERE slug = \? AND ac
 assert.match(enquiry, /partner_slug\s*\n\s*\) VALUES/);
 const portal = readFileSync(new URL("../app/api/partners/me/route.js", import.meta.url), "utf8");
 assert.doesNotMatch(portal, /SELECT[^;]*\b(email|phone|message|budget)\b/i);
+assert.match(portal, /payment_verified_at IS NOT NULL/);
+assert.match(portal, /payment_kind/);
+assert.doesNotMatch(portal, /payment_invoice_reference/);
+const paymentMigration = readFileSync(new URL("../drizzle/0008_partner_payment_verification.sql", import.meta.url), "utf8");
+assert.match(paymentMigration, /payment_verified_at/);
+const paymentRoute = readFileSync(new URL("../app/api/admin/enquiries/[id]/payment/route.js", import.meta.url), "utf8");
+assert.match(paymentRoute, /clearedFundsConfirmed/);
+assert.match(paymentRoute, /payment_verification_revoked/);
+const requestCss = readFileSync(new URL("../app/globals.css", import.meta.url), "utf8");
+assert.doesNotMatch(requestCss, /request-page:not\(\.request-page-complete\)\)\s*\{\s*height:[^}]*overflow:\s*hidden/);
+assert.match(requestCss, /request-page:not\(\.request-page-complete\)\s*\{\s*min-height:/);
 const delivery = readFileSync(new URL("../app/lib/delivery-providers.js", import.meta.url), "utf8");
 assert.match(delivery, /partner_slug: partnerSlug \|\| null/);
 const access = readFileSync(new URL("../app/partners/access/route.js", import.meta.url), "utf8");

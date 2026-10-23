@@ -48,6 +48,10 @@ export default function CuratorDeskDemo() {
   const [overview, setOverview] = useState({ actor: "", counts: {}, enquiries: [] });
   const [selectedId, setSelectedId] = useState("");
   const [detail, setDetail] = useState(null);
+  const [paymentInvoice, setPaymentInvoice] = useState("");
+  const [paymentKind, setPaymentKind] = useState("deposit");
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false);
+  const [paymentCorrection, setPaymentCorrection] = useState("");
   const [filter, setFilter] = useState("all");
   const [view, setView] = useState("active");
   const [query, setQuery] = useState("");
@@ -160,6 +164,10 @@ export default function CuratorDeskDemo() {
   }, [authReady, accessKey, loadOverview]);
 
   useEffect(() => {
+    setPaymentInvoice("");
+    setPaymentKind("deposit");
+    setPaymentConfirmed(false);
+    setPaymentCorrection("");
     loadDetail(selectedId).catch((loadError) => setError(loadError.message));
   }, [selectedId, loadDetail]);
 
@@ -191,6 +199,30 @@ export default function CuratorDeskDemo() {
       setNotice(successMessage);
     } catch (updateError) {
       setError(updateError.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function changePayment(method, body, message) {
+    if (!selectedId) return;
+    setSaving(true);
+    setError("");
+    setNotice("");
+    try {
+      const response = await fetch(`/api/admin/enquiries/${encodeURIComponent(selectedId)}/payment`, {
+        method,
+        headers: authHeaders(true),
+        body: JSON.stringify(body),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Payment status could not be updated.");
+      setDetail(result);
+      setPaymentConfirmed(false);
+      setPaymentCorrection("");
+      setNotice(message);
+    } catch (paymentError) {
+      setError(paymentError.message);
     } finally {
       setSaving(false);
     }
@@ -431,6 +463,7 @@ export default function CuratorDeskDemo() {
                 {view === "active" ? <div className="desk-score"><div><span>Fit score</span><strong>{request.fit_score ?? "Pending"}</strong>{request.fit_score == null ? null : <small>/ 100</small>}</div><label>Priority<select value={request.priority} onChange={(event) => update({ priority: event.target.value })} disabled={saving}><option value="normal">Normal</option><option value="high">High</option><option value="urgent">Urgent</option></select></label></div> : null}
                 <section><span className="desk-label">What they told us</span><blockquote>{request.message ? `“${request.message}”` : "No additional message was provided."}</blockquote></section>
                 <section className="desk-facts">{[["Feeling", request.feeling], ["Travel window", `${request.travel_month} ${request.travel_year}`], ["Duration", request.duration], ["Travellers", request.people], ["Investment", request.budget], ["Partner referral", request.partner_slug || "None"], ["Found us through", request.referral || "Not provided"]].map(([label, value]) => <div key={label}><span>{label}</span><b>{value}</b></div>)}</section>
+                {view === "active" && request.partner_slug ? <section className="desk-payment"><span className="desk-label">Partner-visible payment status</span>{request.payment_verified_at ? <><p><strong>{request.payment_kind === "full" ? "Full payment" : "Deposit"} verified</strong> on {new Date(request.payment_verified_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}. Invoice {request.payment_invoice_reference}. This status is visible to the referring partner; the invoice number is not.</p><label>Correction reason<input value={paymentCorrection} onChange={(event) => setPaymentCorrection(event.target.value)} placeholder="Refund, reversal, or mistaken match" maxLength={300} /></label><button className="desk-note-button" type="button" disabled={saving || !paymentCorrection.trim()} onClick={() => changePayment("DELETE", { reason: paymentCorrection }, "Partner-visible payment status removed.")}>Remove verification</button></> : <><p>Bank transfer payments are not detected automatically. Check cleared funds and match the invoice before confirming this to the partner.</p><div className="desk-payment-fields"><label>Invoice reference<input value={paymentInvoice} onChange={(event) => setPaymentInvoice(event.target.value)} maxLength={100} autoComplete="off" placeholder="Issued invoice number" /></label><label>Payment received<select value={paymentKind} onChange={(event) => setPaymentKind(event.target.value)}><option value="deposit">Deposit</option><option value="full">Full payment</option></select></label></div><label className="desk-payment-check"><input type="checkbox" checked={paymentConfirmed} onChange={(event) => setPaymentConfirmed(event.target.checked)} /> I have matched this invoice to cleared funds in Ryravel’s account.</label><button className="desk-note-button" type="button" disabled={saving || !paymentInvoice.trim() || !paymentConfirmed} onClick={() => changePayment("POST", { invoiceReference: paymentInvoice, kind: paymentKind, clearedFundsConfirmed: true }, "Cleared payment verified for the partner report.")}>Verify cleared payment</button></>}</section> : null}
                 <section><span className="desk-label">Contact</span><div className="desk-contact"><a href={`mailto:${request.email}`}>{request.email}</a><a href={`tel:${request.country_code}${request.phone}`}>{request.country_code} {request.phone}</a></div></section>
                 {view === "active" ? <section className="desk-operations"><span className="desk-label">Curator operations</span><div className="desk-operation-grid"><label>Stage<select value={request.status} onChange={(event) => update({ status: event.target.value }, `Moved to ${title(event.target.value)}.`)} disabled={saving}>{stages.map((stage) => <option value={stage} key={stage}>{title(stage)}</option>)}</select></label><label>Fit score<input type="number" min="0" max="100" value={request.fit_score ?? ""} onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, fit_score: event.target.value } }))} onBlur={(event) => update({ fitScore: event.target.value })} /></label><label>Owner<input value={request.assigned_to || ""} placeholder="curator@ryravel.com" onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, assigned_to: event.target.value } }))} /></label><label>Due<input type="datetime-local" value={request.next_action_due_at?.slice(0, 16) || ""} onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, next_action_due_at: event.target.value } }))} /></label></div><label>Next action<input value={request.next_action || ""} placeholder="Book discovery call" onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, next_action: event.target.value } }))} /></label><button className="desk-note-button" type="button" disabled={saving} onClick={() => update({ assignedTo: request.assigned_to, nextAction: request.next_action, nextActionDueAt: request.next_action_due_at }, "Operations saved.")}>Save operations</button></section> : null}
                 {view === "active" ? <section><label className="desk-label" htmlFor="curator-tags">Tags</label><input className="desk-tags-input" id="curator-tags" value={(() => { try { return JSON.parse(request.tags || "[]").join(", "); } catch { return ""; } })()} onChange={(event) => setDetail((current) => ({ ...current, enquiry: { ...current.enquiry, tags: JSON.stringify(event.target.value.split(",").map((tag) => tag.trim()).filter(Boolean)) } }))} placeholder="honeymoon, vip, repeat traveller" /><button className="desk-note-button" type="button" disabled={saving} onClick={() => update({ tags: (() => { try { return JSON.parse(request.tags || "[]"); } catch { return []; } })() }, "Tags saved.")}>Save tags</button></section> : null}
