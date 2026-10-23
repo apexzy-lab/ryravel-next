@@ -24,4 +24,7 @@ const portal = readFileSync(new URL("../app/api/partners/me/route.js", import.me
 assert.doesNotMatch(portal, /SELECT[^;]*\b(email|phone|message|budget)\b/i);
 const delivery = readFileSync(new URL("../app/lib/delivery-providers.js", import.meta.url), "utf8");
 assert.match(delivery, /partner_slug: partnerSlug \|\| null/);
+const access = readFileSync(new URL("../app/partners/access/route.js", import.meta.url), "utf8");
+assert.match(access, /http-equiv="refresh" content="0;url=\/partners\/portal"/);
+assert.doesNotMatch(access, /status: 303|Location:.*partners\/portal/);
 console.log("Partner link, access, attribution, and report boundaries pass.");
