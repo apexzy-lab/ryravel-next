@@ -303,7 +303,7 @@ export default function RequestPage() {
             <div className="progressive-workspace">
               <div className={`progressive-stage-card progressive-stage-card-step-${step}`}>
                 <section className="progressive-stage progressive-feeling-stage" hidden={step !== 1} aria-labelledby="feeling-stage-title">
-                  <div className="progressive-stage-heading"><div><span className="kicker">01 · How you feel</span><h2 id="feeling-stage-title">Right now, honestly—<br />how are you?</h2></div><small>Step 1 of 3 · about 30 seconds</small></div>
+                  <div className="progressive-stage-heading"><div><span className="kicker">01 · How you feel</span><h2 id="feeling-stage-title">Right now, honestly,<br />how are you?</h2></div><small>Step 1 of 3 · about 30 seconds</small></div>
                   <p className="progressive-intro">Choose the feeling closest to where you are. This shapes what comes next.</p>
                   <div className="progressive-feelings">
                     {feelings.map(([name, title]) => <button className={feeling === name ? "selected" : ""} type="button" key={name} onClick={() => { startForm(); setFeeling(name); setFieldErrors({}); trackFunnel("feeling_selected", { ...analyticsContext(), feeling: name }); }} aria-pressed={feeling === name}><span className="progressive-feeling-mark" aria-hidden="true"><FeelingIcon name={name} />{feeling === name ? <span className="progressive-feeling-check">✓</span> : null}</span><em>{name}</em><strong>{title}</strong></button>)}

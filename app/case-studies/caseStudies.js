@@ -21,7 +21,7 @@ export const caseStudies = [
       { label: "01 · Before", title: "She was not looking for a vacation.", paragraphs: [
         "For two years, Amara woke up already tired. Not the kind of tired sleep fixes. The kind that sits behind the eyes.",
         "She was building a career she had worked hard for, saying yes to everything because saying no felt like proof she could not handle it. Early starts became late replies. Her phone was in her hand before her feet touched the floor.",
-        "Nothing was landing anymore—not dinner with people she loved, a small win at work or a weekend off. She was not simply exhausted. She felt estranged from the person who used to feel things fully.",
+        "Nothing was landing anymore, not dinner with people she loved, a small win at work or a weekend off. She was not simply exhausted. She felt estranged from the person who used to feel things fully.",
         "There was no dramatic breaking point. Just the slow accumulation of nights spent scrolling instead of sleeping. She had tried vacations. They changed the light, not the life waiting underneath it.",
       ], pullQuote: "A different destination was not enough. The journey itself had to ask less of her." },
       { label: "02 · The brief", title: "Nothing should be asked of her.", paragraphs: [
@@ -30,12 +30,12 @@ export const caseStudies = [
       ] },
       { label: "03 · The turning point", title: "A morning asked nothing of her.", paragraphs: [
         "There was no grand breakthrough. What she remembers is smaller, and more important.",
-        "One morning, Amara woke up and realized no one needed anything from her—not an email, a decision or a version of herself performing okay. She did not journal or optimize the day. She let the morning happen instead of managing it.",
+        "One morning, Amara woke up and realized no one needed anything from her, not an email, a decision or a version of herself performing okay. She did not journal or optimize the day. She let the morning happen instead of managing it.",
         "Later, she noticed she had not checked her phone in four hours. Not because it had been taken away, but because she had forgotten it existed. Nothing had gone wrong in her absence.",
       ] },
       { label: "04 · The Return", title: "The change was a line she could keep.", paragraphs: [
         "Amara did not come home with a new personality or a dramatic life overhaul. She came home and drew one boundary she had never allowed herself before: no work email after 7 pm.",
-        "She did not announce it as a policy. She simply began closing the door each evening, on purpose. Then she took days off without arranging them around a deadline. The change showed up in what she stopped doing—not in what she needed to announce.",
+        "She did not announce it as a policy. She simply began closing the door each evening, on purpose. Then she took days off without arranging them around a deadline. The change showed up in what she stopped doing, not in what she needed to announce.",
       ] },
     ],
     quote: "Maryangel, thank you for designing this trip for me.",
@@ -64,7 +64,7 @@ export const caseStudies = [
         "He had taken his family to Dubai, London and Accra. But a change of geography never changed what he brought with him: the need to manage the itinerary, the children's behaviour, his wife's experience and his own inability to be still.",
         "By July, his wife had stopped asking for his attention. His children had learned to perform happiness around him, the same way he performed relaxation. The house was full of people who had adapted to his absence while he was sitting right there.",
       ], pullQuote: "A different destination was not enough. The journey had to ask less of him, not more." },
-      { label: "02 · The brief", title: "Nothing asked him to be the executive—or the perfect father.", paragraphs: [
+      { label: "02 · The brief", title: "Nothing asked him to be the executive, or the perfect father.", paragraphs: [
         "Richard booked six nights across Egypt and Morocco around one principle: nothing asked him to prove that he was providing. His hesitation was the children. Would they be bored without scheduled entertainment? Would his wife have to pick up the slack? Would he spend another family holiday mentally negotiating production targets?",
         "He went because his wife had said, quietly, “I want to know you again. And I want them to know you.”",
       ] },
@@ -74,7 +74,7 @@ export const caseStudies = [
       ] },
       { label: "04 · The Return", title: "His presence became enough.", paragraphs: [
         "Richard came home and stopped checking his phone before breakfast. Then he stopped bringing it to dinner. Then Saturdays became a boundary rather than a luxury.",
-        "His children began initiating conversations instead of waiting for him. His wife started asking for small things again—his opinion, or his hand on a walk. The change was not dramatic. It was the slow return of a man who had remembered that his presence was enough.",
+        "His children began initiating conversations instead of waiting for him. His wife started asking for small things again, his opinion, or his hand on a walk. The change was not dramatic. It was the slow return of a man who had remembered that his presence was enough.",
       ] },
     ],
     quote: "Maryangel, I have been on many trips with my family. This was the first time I actually travelled with them.",
@@ -103,12 +103,12 @@ export const caseStudies = [
         "The team was functional but fragmented. Conversations stayed in safe territory. Vulnerability was a liability. A conventional team-building exercise would not be enough; they needed to be displaced from the roles that defined them.",
       ] },
       { label: "02 · The brief", title: "The hierarchy would not travel.", paragraphs: [
-        "They booked seven nights in Egypt and Morocco—not a corporate retreat, but a private journey with shared spaces, meals that were not working dinners and mornings without agendas.",
+        "They booked seven nights in Egypt and Morocco, not a corporate retreat, but a private journey with shared spaces, meals that were not working dinners and mornings without agendas.",
         "Ryravel would not facilitate trust falls or strategy sessions. The design would create the conditions for colleagues to become people to one another. Their question was whether anything would remain once they returned to Lagos. Maryam, the most senior among them, believed the team could become more than a unit.",
       ] },
       { label: "03 · The turning point", title: "Four people admitted they did not have the answer.", paragraphs: [
         "On the second night in Egypt, a rooftop conversation began by accident. Abdul-Azeez, usually the quietest in meetings, mentioned a real fear about an upcoming project. Instead of offering a solution, Maryam shared her own. Then Faiza. Then Kaumi.",
-        "There was no power play and no performance of competence. The next morning, Maryam initiated a conversation with Abdul-Azeez she would never have begun in Lagos—not because hierarchy had vanished, but because they had seen one another uncertain.",
+        "There was no power play and no performance of competence. The next morning, Maryam initiated a conversation with Abdul-Azeez she would never have begun in Lagos, not because hierarchy had vanished, but because they had seen one another uncertain.",
       ] },
       { label: "04 · The Return", title: "The work stayed. The way they worked changed.", paragraphs: [
         "They did not return as instant friends. They returned as colleagues who understood one another. Maryam began opening conversations earlier. Faiza stopped over-explaining her ideas. Kaumi asked for input before giving directives. Abdul-Azeez raised concerns before they became crises.",
@@ -140,7 +140,7 @@ export const caseStudies = [
       { label: "01 · Before", title: "Precision had become an identity.", paragraphs: [
         "Faiza Dauda built her career by being the most prepared person in the room. She could forecast a liability and find the gap in a strategy before the presenter reached the second slide.",
         "But precision is exhausting when it is turned inward. She measured rest by how productive she would be afterward, relationships by their utility and happiness by whether it was justified. The career was intact and the reputation solid, but she could not remember the last time she had done something without calculating the return.",
-        "She was not burned out. She was accounted for—living in a ledger where every entry was correct and nothing felt like hers.",
+        "She was not burned out. She was accounted for, living in a ledger where every entry was correct and nothing felt like hers.",
       ] },
       { label: "02 · The brief", title: "Do not optimize this.", paragraphs: [
         "Faiza booked four solo nights at LUX Marijani in Zanzibar with no client, deck or outcome to justify the cost. Her hesitation was not travelling alone; she had done that often for work. It was being alone without an objective.",
@@ -148,7 +148,7 @@ export const caseStudies = [
       ] },
       { label: "03 · The turning point", title: "The island did not need her to improve it.", paragraphs: [
         "Before sunrise on the second morning, Faiza walked to the beach. The wind moved through the palms in a rhythm she could not control. The waves arrived, broke and returned. No one was waiting for her analysis.",
-        "Later in Stone Town, she watched a craftsman build a door by hand. No rush or efficiency metric—only a tradition older than her urgency. She stayed longer than intended. She did not take a photograph or research the history. She simply watched.",
+        "Later in Stone Town, she watched a craftsman build a door by hand. No rush or efficiency metric, only a tradition older than her urgency. She stayed longer than intended. She did not take a photograph or research the history. She simply watched.",
       ] },
       { label: "04 · The Return", title: "The change appeared in small refusals.", paragraphs: [
         "Faiza did not return with a new life plan. She stopped bringing her laptop to bed, began taking lunch away from her desk and declined a project she could have handled because she no longer believed her value was proven by how much she carried.",
@@ -185,11 +185,11 @@ export const caseStudies = [
         "Four days without meetings, pitch decks or founder dinners felt irresponsible. But something in him was tired of being useful, and he went anyway.",
       ] },
       { label: "03 · The turning point", title: "The skyline looked young from the desert.", paragraphs: [
-        "Outside Doha, Richard watched the wind reshape dunes that predated the city. The skyline behind him looked small—not unimpressive, simply young. He realized the lesson was not Qatar's speed but the patience beneath it: the willingness to build beyond a quarterly timeline.",
+        "Outside Doha, Richard watched the wind reshape dunes that predated the city. The skyline behind him looked small, not unimpressive, simply young. He realized the lesson was not Qatar's speed but the patience beneath it: the willingness to build beyond a quarterly timeline.",
         "In Souq Waqif, he watched an old man repair a dhow model. Richard did not ask for a card or consider a marketplace opportunity. Later he sat in the Museum of Islamic Art for two hours without turning the geometry into information. It was the longest he had been still in years.",
       ] },
       { label: "04 · The Return", title: "The company grew differently.", paragraphs: [
-        "Richard returned without a Qatar expansion plan. He cancelled three meetings and gave his team one agenda-free afternoon each month—the freedom to be curious about something that would not appear on a spreadsheet.",
+        "Richard returned without a Qatar expansion plan. He cancelled three meetings and gave his team one agenda-free afternoon each month, the freedom to be curious about something that would not appear on a spreadsheet.",
         "He stopped treating his own curiosity like a resource to be mined. The company did not immediately grow faster. It grew differently.",
       ] },
     ],
@@ -214,7 +214,7 @@ export const caseStudies = [
     designedAround: "Wilderness before ancient water. No working holiday. Enough protected time for the body to stop treating leave as another performance cycle.",
     sections: [
       { label: "01 · Before", title: "His breaks changed the light, not the life.", paragraphs: [
-        "Emmanuel worked in energy—the kind of work that does not pause when you do. For ten years, he honoured a contract with himself: one trip, once a year, then return and resume.",
+        "Emmanuel worked in energy, the kind of work that does not pause when you do. For ten years, he honoured a contract with himself: one trip, once a year, then return and resume.",
         "Dubai, London and Accra all ended the same way: the same inbox, emails answered from a beach chair and rest treated as a transaction in exchange for sustained performance.",
         "By October, he was not burned out. He was habituated. His annual leave never changed the life waiting beneath it.",
       ] },
@@ -239,7 +239,7 @@ export const caseStudies = [
     slug: "returning-guest-seychelles",
     headline: "He used to take one break a year. Then he came back to Ryravel.",
     seoTitle: "A Returning Guest's Private Seychelles Journey",
-    description: "Why a returning Ryravel guest booked five unstructured nights in Seychelles—and changed rest from annual recovery into a continuing practice.",
+    description: "Why a returning Ryravel guest booked five unstructured nights in Seychelles, and changed rest from annual recovery into a continuing practice.",
     arc: "Exhausted, The Restoration · Returning Guest",
     traveller: "Emmanuel · Returning guest",
     destination: "Seychelles",
@@ -249,10 +249,10 @@ export const caseStudies = [
     relatedJourney: "/private-bespoke",
     relatedLabel: "Explore private journeys",
     intro: "The first journey taught Emmanuel that he could stop. The second was designed to help him keep stopping before exhaustion made the decision for him.",
-    designedAround: "Maintenance, not rescue. Five unstructured island nights. No breakthrough required—only space to remember what the first journey had made possible.",
+    designedAround: "Maintenance, not rescue. Five unstructured island nights. No breakthrough required, only space to remember what the first journey had made possible.",
     sections: [
       { label: "01 · Before", title: "He had never been a returning traveller.", paragraphs: [
-        "One trip a year had been Emmanuel's rule for a decade—always a different company, always a different city and always the same return.",
+        "One trip a year had been Emmanuel's rule for a decade, always a different company, always a different city and always the same return.",
         "Then a Ryravel journey through Kenya and Egypt changed the pattern. The break stayed with him. The 7 pm boundary held. His inbox remained outside his evenings.",
       ] },
       { label: "02 · The brief", title: "This time, the journey was maintenance.", paragraphs: [
@@ -264,7 +264,7 @@ export const caseStudies = [
         "The first journey had taught him how to stop. The second was teaching him how to keep stopping. He did not need revelation; he needed to remember.",
       ] },
       { label: "04 · The Return", title: "One annual break became two.", paragraphs: [
-        "Emmanuel changed his rule—not because he was more exhausted, but because rest was no longer annual maintenance. It had become a practice.",
+        "Emmanuel changed his rule, not because he was more exhausted, but because rest was no longer annual maintenance. It had become a practice.",
         "He returned to Ryravel the following year, and the year after that. The strongest evidence was not a dramatic testimonial. It was the decision to come back.",
       ] },
     ],

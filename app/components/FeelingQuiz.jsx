@@ -4,17 +4,17 @@ import Link from "next/link";
 import { useState } from "react";
 
 const steps = [
-  ["Right now, honestly—how are you?", ["Running on empty, depleted", "Restless and itching to move", "Disconnected—from myself or others", "Searching for something I cannot name"]],
+  ["Right now, honestly, how are you?", ["Running on empty, depleted", "Restless and itching to move", "Disconnected from myself, or from others", "Searching for something I cannot name"]],
   ["What do you need more of?", ["Deep stillness", "Raw aliveness", "Real connection", "A clearer sense of self"]],
   ["Which rhythm feels right?", ["Slow and spacious", "Bold and immersive", "Intimate and private", "Shared and celebratory"]],
   ["What should the journey change?", ["My energy", "My courage", "My relationship", "The way I see my life"]],
 ];
 
 const directions = {
-  "Deep stillness": ["/journeys/exhausted", "Exhausted - The Restoration"],
+  "Deep stillness": ["/journeys/exhausted", "Exhausted, The Restoration"],
   "Raw aliveness": ["/luxury-travel-planning", "A private journey shaped around challenge"],
   "Real connection": ["/luxury-family-travel", "A private journey shaped around connection"],
-  "A clearer sense of self": ["/journeys/exhausted", "Exhausted - The Restoration"],
+  "A clearer sense of self": ["/journeys/exhausted", "Exhausted, The Restoration"],
 };
 
 export default function FeelingQuiz() {

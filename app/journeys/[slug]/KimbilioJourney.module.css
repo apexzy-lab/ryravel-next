@@ -43,7 +43,7 @@
 .fit p { color: #4f5658; font-size: 15px; margin: 0 0 1.5rem; }
 .fit ul { list-style: none; margin: 0 0 2rem; padding: 0; }
 .fit li { border-top: 1px solid var(--line); color: #3f4649; font-size: 14px; padding: 1rem 0 1rem 1.6rem; position: relative; }
-.fit li::before { color: #557889; content: "—"; left: 0; position: absolute; }
+.fit li::before { color: #557889; content: ","; left: 0; position: absolute; }
 .fit a,.nextSteps > a { border-bottom: 1px solid #c0392b; color: #c0392b; display: inline-block; font-size: 10px; letter-spacing: .17em; padding-bottom: .25rem; text-transform: uppercase; }
 .itinerary { padding: clamp(5rem,9vw,9rem) clamp(1.5rem,8vw,9rem); }
 .itinerary > header { margin-bottom: 5rem; }

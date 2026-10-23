@@ -4,7 +4,7 @@ import { caseStudies } from "./caseStudies";
 
 export const metadata = buildMetadata({
   title: "Luxury Travel Case Studies",
-  description: "Read real Ryravel case studies of bespoke solo, family and team journeys across Africa, the Middle East and the Indian Ocean—and what changed after each traveller returned.",
+  description: "Read real Ryravel case studies of bespoke solo, family and team journeys across Africa, the Middle East and the Indian Ocean, and what changed after each traveller returned.",
   path: "/case-studies",
   image: "/journeys/ex9/exhausted-zanzibar-coast.webp",
 });
@@ -83,7 +83,7 @@ export default function CaseStudiesPage() {
       <section className="cs-method">
         <div><span className="cs-kicker">What these stories hold</span><h2>A journey, documented from the inside.</h2></div>
         <div className="cs-method-grid">
-          <article><span>01</span><h3>Before</h3><p>The honest condition the traveller was in—not the destination they thought they should choose.</p></article>
+          <article><span>01</span><h3>Before</h3><p>The honest condition the traveller was in, not the destination they thought they should choose.</p></article>
           <article><span>02</span><h3>The design</h3><p>The pace, place and protected space chosen to serve that specific emotional need.</p></article>
           <article><span>03</span><h3>The Return</h3><p>The observable change that made the journey matter after the suitcase was unpacked.</p></article>
         </div>

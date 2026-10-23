@@ -17,7 +17,7 @@ export default function OfficialInstagramPage() {
           <div className="account-notice-intro">
             <span className="kicker">Official account update</span>
             <h1 id="account-notice-title">A new handle.<br /><em>The same Ryravel.</em></h1>
-            <p>Our former Instagram account is no longer an active Ryravel channel. Here is where to find us now—and how to know a message is genuinely from our team.</p>
+            <p>Our former Instagram account is no longer an active Ryravel channel. Here is where to find us now, and how to know a message is genuinely from our team.</p>
             <div className="account-notice-date"><span>Public notice</span><time dateTime="2026-09-25">25 September 2026</time></div>
           </div>
           <div className="account-notice-profile" aria-label="Ryravel's current official Instagram account">

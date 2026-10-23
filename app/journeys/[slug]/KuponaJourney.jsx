@@ -74,7 +74,7 @@ export default function KuponaJourney({ journey }) {
 
       <section className={styles.fit} aria-labelledby="kupona-fit">
         <div><span className={styles.sectionLabel}>Is Kupona for you?</span><h2 id="kupona-fit">You are still carrying everyone.<br />You can feel the reserve thinning.</h2></div>
-        <div><p>Kupona is designed for the traveller who remains capable, dependable and deeply depleted—and who needs the journey to ask less before the body can answer honestly.</p><ul><li>You want one riverfront reserve, not a moving itinerary.</li><li>You want meals, mornings and movement to follow your body rather than a clock.</li><li>You want restoration to continue after the flight home.</li></ul><Link href={requestHref}>Ask a curator about Kupona →</Link></div>
+        <div><p>Kupona is designed for the traveller who remains capable, dependable and deeply depleted, and who needs the journey to ask less before the body can answer honestly.</p><ul><li>You want one riverfront reserve, not a moving itinerary.</li><li>You want meals, mornings and movement to follow your body rather than a clock.</li><li>You want restoration to continue after the flight home.</li></ul><Link href={requestHref}>Ask a curator about Kupona →</Link></div>
       </section>
 
       <section className={styles.itinerary} aria-labelledby="kupona-itinerary">

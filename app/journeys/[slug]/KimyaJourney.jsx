@@ -118,7 +118,7 @@ export default function KimyaJourney({ journey }) {
         </div>
       </section>
 
-      <JourneyAvailability journey={journey} title="When would you choose quiet?" copy="Choose a preferred date and who will travel. We will check the camp, internal flight and island transfer together, then return with a considered route—not a disconnected list of bookings." openMonths={journey.availableMonths} closedNote="Rubondo Island Camp closes in April and May for the long rains." />
+      <JourneyAvailability journey={journey} title="When would you choose quiet?" copy="Choose a preferred date and who will travel. We will check the camp, internal flight and island transfer together, then return with a considered route, not a disconnected list of bookings." openMonths={journey.availableMonths} closedNote="Rubondo Island Camp closes in April and May for the long rains." />
 
       <section className={styles.investment}>
         <div><span className={styles.sectionLabel}>Investment</span><h2>Four nights.<br />A silence you don&apos;t<br /><em>have to manufacture.</em></h2></div>

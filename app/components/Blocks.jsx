@@ -34,7 +34,7 @@ export function JourneyCard({ journey }) {
   );
 }
 
-export function CTA({ title = "How do you want to feel?", copy = "Tell us—and we will build the rest. One honest conversation is all it takes to begin.", requestHref = "/request" }) {
+export function CTA({ title = "How do you want to feel?", copy = "Tell us, and we will build the rest. One honest conversation is all it takes to begin.", requestHref = "/request" }) {
   const callHref = `${requestHref}${requestHref.includes("?") ? "&" : "?"}conversation=private-call`;
   return (
     <section className="global-cta">
