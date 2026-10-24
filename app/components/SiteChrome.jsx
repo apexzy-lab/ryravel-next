@@ -33,6 +33,9 @@ export default function SiteChrome({ children }) {
   const [marketingConsent, setMarketingConsent] = useState(undefined);
   const [analyticsConsent, setAnalyticsConsent] = useState(undefined);
   const [cookieSettingsOpen, setCookieSettingsOpen] = useState(false);
+  const [cookieCustomizeOpen, setCookieCustomizeOpen] = useState(false);
+  const [customAnalytics, setCustomAnalytics] = useState(false);
+  const [customMarketing, setCustomMarketing] = useState(false);
   const linkedInLoaded = useRef(false);
   const lastTrackedPath = useRef("");
   const menuButton = useRef(null);
@@ -64,7 +67,13 @@ export default function SiteChrome({ children }) {
       setMarketingConsent(null);
       setAnalyticsConsent(null);
     }
-    const openSettings = () => setCookieSettingsOpen(true);
+    const openSettings = () => {
+      const choice = readTrackingChoice();
+      setCustomAnalytics(choice === "analytics" || choice === "all");
+      setCustomMarketing(choice === "marketing" || choice === "all");
+      setCookieCustomizeOpen(false);
+      setCookieSettingsOpen(true);
+    };
     window.addEventListener("ryravel:cookie-settings", openSettings);
     return () => window.removeEventListener("ryravel:cookie-settings", openSettings);
   }, []);
@@ -122,6 +131,7 @@ export default function SiteChrome({ children }) {
     saveTrackingChoice(choice);
     updateGoogleAdsConsent(choice);
     setCookieSettingsOpen(false);
+    setCookieCustomizeOpen(false);
     if (!["all", "analytics"].includes(choice)) { clearAnalyticsSession(); lastTrackedPath.current = ""; }
     const clarityWasRunning = !["all", "analytics"].includes(choice) && stopClarity();
     if (clarityWasRunning || (!["all", "marketing"].includes(choice) && linkedInLoaded.current)) {
@@ -172,9 +182,32 @@ export default function SiteChrome({ children }) {
           <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/case-studies">Case studies</Link><Link href="/sustainability">Sustainability</Link><b className="footer-subheading">Connect</b><a href="https://www.instagram.com/journeybyry/" target="_blank" rel="noopener noreferrer">Instagram · @journeybyry</a><Link href="/official-instagram">Official account update</Link></div>
           <div><b>Begin</b><Link href="/request">Start the conversation</Link><Link href="/request?conversation=private-call">Request a private call</Link><a href="mailto:hello@ryravel.com">Contact the team</a><a href="tel:+17605140361">+1 760 514 0361</a><b className="footer-subheading">Booking & care</b><Link href="/policies">Policy overview</Link><Link href="/terms">Booking terms</Link><Link href="/cancellations">Cancellations & refunds</Link><Link href="/travel-information">Before you travel</Link></div>
         </div>
-        <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => setCookieSettingsOpen(true)}>Cookie settings</button></span></div>
+        <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => window.dispatchEvent(new Event("ryravel:cookie-settings"))}>Cookie settings</button></span></div>
       </footer>
-      {!isCuratorPage && cookieSettingsOpen && <div className="cookie-choice" role="region" aria-label="Cookie choices"><div><strong>Your privacy, your choice.</strong><p>Essential site functions always work. With analytics permission, we measure journey and form interactions using first-party events, Google Analytics and Microsoft Clarity masked session replays. Marketing permission lets LinkedIn measure visits and Google Ads use ad-click and completed-request data to measure our ads; personalized ads remain off. Change your choice at any time.</p><Link href="/cookies">Read the cookie notice</Link></div><div className="cookie-choice-actions"><button type="button" onClick={() => chooseTracking("reject")}>Reject optional</button><button type="button" onClick={() => chooseTracking("analytics")}>Analytics only</button><button type="button" onClick={() => chooseTracking("marketing")}>Marketing only</button><button type="button" onClick={() => chooseTracking("all")}>Allow both</button><button type="button" onClick={() => setCookieSettingsOpen(false)}>Close</button></div></div>}
+      {!isCuratorPage && (marketingConsent === null || cookieSettingsOpen) &&
+        <section className="cookie-choice" aria-label="Privacy choices">
+          <div className="cookie-choice-main">
+            <div className="cookie-choice-copy">
+              <h2>A more thoughtful way to understand visits.</h2>
+              <p>May we use analytics and ad measurement to improve Ryravel? Analytics includes Google Analytics and masked Clarity replays. Marketing measures ads with Google and LinkedIn. Your answer will not affect your access.</p>
+            </div>
+            <div className="cookie-choice-actions">
+              <button type="button" className="cookie-accept" onClick={() => chooseTracking("all")}>Allow both</button>
+              <button type="button" onClick={() => chooseTracking("reject")}>Reject optional</button>
+            </div>
+          </div>
+          <div className="cookie-choice-foot">
+            <button type="button" className="cookie-customise" aria-expanded={cookieCustomizeOpen} aria-controls="cookie-customise-panel" onClick={() => setCookieCustomizeOpen(!cookieCustomizeOpen)}>Customise choices</button>
+            <Link href="/cookies">Read the cookie notice</Link>
+            <span>Change your choice anytime in the footer.</span>
+            {cookieSettingsOpen && marketingConsent !== null && <button type="button" className="cookie-close" onClick={() => { setCookieSettingsOpen(false); setCookieCustomizeOpen(false); }}>Close</button>}
+          </div>
+          {cookieCustomizeOpen && <div id="cookie-customise-panel" className="cookie-customise-panel">
+            <label><input type="checkbox" checked={customAnalytics} onChange={(event) => setCustomAnalytics(event.target.checked)} /><span><strong>Analytics</strong>Journey and form interactions, Google Analytics and masked Clarity replays.</span></label>
+            <label><input type="checkbox" checked={customMarketing} onChange={(event) => setCustomMarketing(event.target.checked)} /><span><strong>Marketing measurement</strong>Google Ads and LinkedIn attribution. Personalised ads remain off.</span></label>
+            <button type="button" onClick={() => chooseTracking(customAnalytics ? customMarketing ? "all" : "analytics" : customMarketing ? "marketing" : "reject")}>Save my choices</button>
+          </div>}
+        </section>}
     </>
   );
 }

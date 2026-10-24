@@ -352,15 +352,24 @@ html:has(.request-page) .site-footer { display: none; }
 .footer-bottom a, .footer-bottom button { color: rgba(255,255,255,.65); font: inherit; }
 .footer-bottom button { background: none; border: 0; cursor: pointer; padding: 0; }
 .footer-bottom a:hover, .footer-bottom button:hover { color: #fff; }
-.cookie-choice { align-items: center; background: #f9f7f3; border: 1px solid #d5cfc5; bottom: 18px; box-shadow: 0 12px 45px rgba(0,0,0,.25); color: #211e19; display: flex; gap: 28px; justify-content: space-between; left: 50%; max-width: 1000px; padding: 20px 24px; position: fixed; transform: translateX(-50%); width: calc(100% - 36px); z-index: 200; }
-.cookie-choice strong { font-family: var(--font-serif); font-size: 21px; font-weight: 400; }
-.cookie-choice p { color: #59554f; font-size: 13px; line-height: 1.6; margin: 5px 0; max-width: 650px; }
-.cookie-choice a { color: #a12e28; font-size: 12px; text-decoration: underline; }
-.cookie-choice-actions { display: flex; flex: 0 0 auto; flex-wrap: wrap; gap: 8px; }
-.cookie-choice-actions button { background: transparent; border: 1px solid #33302c; color: #211e19; cursor: pointer; font-size: 11px; font-weight: 700; min-height: 42px; padding: 0 15px; }
-.cookie-choice-actions button:nth-child(2) { background: #b63831; border-color: #b63831; color: #fff; }
+.cookie-choice { background: #f9f7f3; border-top: 3px solid #b63831; bottom: 0; box-shadow: 0 -12px 45px rgba(0,0,0,.22); color: #211e19; left: 0; max-height: calc(100dvh - 12px); overflow-y: auto; padding: 22px clamp(20px,4vw,58px) 18px; position: fixed; right: 0; z-index: 200; }
+.cookie-choice-main { align-items: center; display: grid; gap: 28px; grid-template-columns: minmax(0,1fr) auto; }
+.cookie-choice-copy h2 { font-family: var(--font-serif); font-size: clamp(22px,2.4vw,28px); font-weight: 400; line-height: 1.15; margin: 0 0 8px; }
+.cookie-choice-copy p { color: #59554f; font-size: 13px; line-height: 1.6; margin: 0; max-width: 670px; }
+.cookie-choice-actions { display: flex; flex-wrap: wrap; gap: 9px; }
+.cookie-choice-actions button, .cookie-customise-panel > button { background: transparent; border: 1px solid #514b45; color: #211e19; cursor: pointer; font-size: 12px; font-weight: 700; min-height: 46px; min-width: 138px; padding: 10px 17px; }
+.cookie-choice-actions .cookie-accept, .cookie-customise-panel > button { background: #b63831; border-color: #b63831; color: #fff; }
+.cookie-choice-foot { align-items: center; display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+.cookie-choice-foot a, .cookie-choice-foot button { background: none; border: 0; color: #6c5d51; cursor: pointer; font: inherit; font-size: 12px; padding: 0; text-decoration: underline; }
+.cookie-choice-foot span { color: #776d63; font-size: 11px; margin-left: auto; }
+.cookie-choice-foot .cookie-close { margin-left: 6px; }
+.cookie-customise-panel { border-top: 1px solid #d9d0c5; display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; padding-top: 18px; }
+.cookie-customise-panel label { align-items: flex-start; display: flex; flex: 1 1 240px; font-size: 12px; gap: 9px; line-height: 1.4; }
+.cookie-customise-panel label input { accent-color: #b63831; flex: 0 0 auto; height: 18px; margin-top: 2px; width: 18px; }
+.cookie-customise-panel label strong { display: block; font-size: 13px; margin-bottom: 3px; }
+.cookie-customise-panel > button { flex: 0 0 auto; }
 .cookie-choice button:focus-visible, .cookie-choice a:focus-visible, .footer-bottom button:focus-visible { outline: 2px solid #e44940; outline-offset: 3px; }
-@media (max-width: 700px) { .cookie-choice { align-items: stretch; bottom: 10px; flex-direction: column; gap: 14px; padding: 18px; width: calc(100% - 20px); } .cookie-choice-actions button { flex: 1; } }
+@media (max-width: 700px) { .cookie-choice { padding: 18px 18px 16px; } .cookie-choice-main { display: block; } .cookie-choice-actions { margin-top: 16px; } .cookie-choice-actions button { flex: 1 1 140px; } .cookie-choice-foot { gap: 11px; } .cookie-choice-foot span { margin-left: 0; } }
 
 @media (max-width: 1050px) {
   .desktop-nav, .phone { display: none; }
