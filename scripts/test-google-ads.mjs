@@ -112,6 +112,10 @@ assert.equal(scripts.length, 0, "GA4 is excluded from the private curator desk")
 
 const request = readFileSync(new URL("../app/request/page.jsx", import.meta.url), "utf8");
 assert.match(request, /if \(!response\.ok\)[\s\S]*?recordGoogleAdsLead\(result\.reference\)/, "Conversion is queued only after a successful server response");
+const chrome = readFileSync(new URL("../app/components/SiteChrome.jsx", import.meta.url), "utf8");
+assert.match(chrome, /!isCuratorPage && cookieSettingsOpen && <div className="cookie-choice"/, "Cookie choices are shown only when visitors open settings");
+assert.doesNotMatch(chrome, /marketingConsent === null \|\| cookieSettingsOpen/, "Missing consent does not trigger an automatic popup");
+assert.match(chrome, /onClick=\{\(\) => setCookieSettingsOpen\(true\)\}>Cookie settings/, "Visitors can still open tracking choices from the footer");
 const video = readFileSync(new URL("../app/components/HeroVideo.jsx", import.meta.url), "utf8");
 assert.match(video, /src="\/video\/ryravel-hero-approved-720p\.mp4"/, "Hero uses the optimized approved Ryravel video");
 assert.match(video, /https:\/\/media\.ryravel\.com\/ryravel-hero\.mp4\?v=20260831/, "Hero records the source of the approved footage");
