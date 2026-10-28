@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { buildMetadata } from "../../seo";
-import PassageCookieSettings from "../PassageCookieSettings";
 import frame from "../passage.module.css";
 import styles from "./article.module.css";
 
@@ -39,11 +38,10 @@ export default function PassageArticle() {
 
   return <div className={frame.page}>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
-    <header className={frame.header}>
+    <div className={frame.header}>
       <Link className={frame.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link>
-      <nav className={frame.nav} aria-label="Passage navigation"><Link href="/passage">Latest</Link><Link href="/passage#issue-01">Issue 01</Link><Link href="/passage#about-passage">About</Link></nav>
-      <Link className={frame.headerCta} href="/journeys">Plan a journey</Link>
-    </header>
+      <nav className={frame.nav} aria-label="Passage sections"><Link href="/passage">Latest</Link><Link href="/passage#issue-01">Issue 01</Link><Link href="/passage#about-passage">About</Link></nav>
+    </div>
     <main>
       <header className={styles.articleHeader}>
         <span className={frame.eyebrow}>The Category</span>
@@ -119,6 +117,5 @@ export default function PassageArticle() {
 
       <section className={styles.related} aria-labelledby="related-title"><span className={frame.eyebrow}>More from Passage</span><h2 id="related-title">Stories on the way</h2><div className={styles.relatedGrid}><article><span>Coming soon</span><h3>The Unleashing</h3></article><article><span>Coming soon</span><h3>The Restoration</h3></article><article><span>Coming soon</span><h3>The Return</h3></article></div><Link className={styles.backLink} href="/passage">Explore Passage <span aria-hidden="true">→</span></Link></section>
     </main>
-    <footer className={frame.footer}><div className={frame.footerTop}><Link className={frame.logo} href="/passage">Passage <span>A Ryravel Publication</span></Link><Link href="/">Back to Ryravel <span aria-hidden="true">→</span></Link></div><div className={frame.footerBottom}><span>© 2026 Passage. A Ryravel publication.</span><div><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/cookies">Cookies</Link><PassageCookieSettings /></div></div></footer>
   </div>;
 }

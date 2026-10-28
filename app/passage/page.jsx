@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { FeelingQuiz } from "../components/HomepageExperience";
 import { buildMetadata } from "../seo";
-import PassageCookieSettings from "./PassageCookieSettings";
 import styles from "./passage.module.css";
 
 export const metadata = buildMetadata({
@@ -32,15 +31,14 @@ const upcoming = [
 export default function PassagePage() {
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
+      <div className={styles.header}>
         <Link className={styles.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link>
-        <nav className={styles.nav} aria-label="Passage navigation">
+        <nav className={styles.nav} aria-label="Passage sections">
           <Link href="/passage" aria-current="page">Latest</Link>
           <a href="#issue-01">Issue 01</a>
           <a href="#about-passage">About</a>
         </nav>
-        <Link className={styles.headerCta} href="/journeys">Plan a journey</Link>
-      </header>
+      </div>
 
       <main>
         <section className={styles.hero} aria-labelledby="passage-title">
@@ -87,10 +85,6 @@ export default function PassagePage() {
         </section>
       </main>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerTop}><Link className={styles.logo} href="/passage">Passage <span>A Ryravel Publication</span></Link><Link href="/">Back to Ryravel <span aria-hidden="true">→</span></Link></div>
-        <div className={styles.footerBottom}><span>© 2026 Passage. A Ryravel publication.</span><div><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/cookies">Cookies</Link><PassageCookieSettings /></div></div>
-      </footer>
     </div>
   );
 }

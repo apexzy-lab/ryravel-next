@@ -1,4 +1,4 @@
-.articleHeader { max-width: 850px; margin: 0 auto; padding: 8rem 2rem 3.5rem; text-align: center; }
+.articleHeader { max-width: 850px; margin: 0 auto; padding: 5rem 2rem 3.5rem; text-align: center; }
 .articleHeader h1 { font-size: clamp(36px, 4.5vw, 58px); line-height: 1.12; margin: 1.5rem 0; }
 .dek { color: var(--dim); font-size: clamp(17px, 1.5vw, 20px); line-height: 1.7; max-width: 660px; margin: 0 auto 2.25rem; }
 .meta { align-items: center; color: var(--muted); display: flex; flex-wrap: wrap; font-size: 12px; gap: .7rem; justify-content: center; }
@@ -49,7 +49,7 @@
 .relatedGrid h3 { font-size: 21px; }
 .backLink { border-bottom: 1px solid var(--red-soft); color: var(--red-soft) !important; display: inline-block; font-size: 11px; letter-spacing: .12em; margin-top: 2.5rem; padding-bottom: .4rem; text-transform: uppercase; }
 @media (max-width: 768px) {
-  .articleHeader { padding: 5rem 1.5rem 2.5rem; }
+  .articleHeader { padding: 3rem 1.5rem 2.5rem; }
   .heroFigure { margin-bottom: 3rem; padding: 0 1.5rem; }
   .heroFigure img { height: 320px; }
   .body { padding: 0 1.5rem 4rem; }

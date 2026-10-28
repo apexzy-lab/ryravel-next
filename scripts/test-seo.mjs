@@ -250,7 +250,7 @@ check(read("app/passage/page.jsx").includes('href="/passage/transformational-tra
 check(existsSync(join(root, "public", "images", "passage-transformational-wellness.jpg")) && passageArticle.includes('alt="Aerial view of a textured forest canopy"'), "Passage essay uses supplied image with descriptive alt text");
 check(passageArticle.includes('"@type": "Article"') && passageArticle.includes('datePublished: "2026-10-25"') && passageArticle.includes('dateModified: "2026-10-28"'), "Passage essay publishes dated Article schema");
 check(passageArticle.includes("2025 meta-analysis of 32 studies") && passageArticle.includes("separately quoted add-ons") && !passageArticle.includes("12 min read"), "Passage essay corrects research and service claims");
-check(read("app/components/SiteChrome.jsx").includes('/^\\/passage(?:\\/|$)/'), "Passage article retains publication chrome without duplicating the site navigation");
+check(!read("app/components/SiteChrome.jsx").includes("isPassagePage") && read("app/passage/page.jsx").includes('aria-label="Passage sections"') && passageArticle.includes('aria-label="Passage sections"'), "Passage pages retain the shared Ryravel header and footer with publication branding inside");
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);
 if (failures.length) process.exit(1);
