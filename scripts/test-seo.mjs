@@ -75,6 +75,9 @@ check(read("app/journeys/page.jsx").includes("Private Luxury Journeys Across Afr
 check(read("app/private-bespoke/page.jsx").includes('name: "Worldwide"') && read("app/private-bespoke/page.jsx").includes("If your destination is elsewhere"), "Private bespoke service accepts worldwide requests without promising every arrangement");
 check(read("app/commercialServices.js").includes("Our published collections currently focus on Africa") && read("app/commercialServices.js").includes("Qatar, Dubai, the United States, Vietnam, Thailand, the United Kingdom, Iceland, Bali, Costa Rica and Brazil"), "Worldwide planning distinguishes current tours from supported past destinations");
 check(read("app/about/page.jsx").includes('<h2 id="maryangel">Maryangel<br />Ajuzieogu</h2>') && read("app/seo.js").includes('name: "Maryangel Ajuzieogu"'), "Confirmed founder name is consistent on-page and in organization data");
+const passagePage = read("app/passage/page.jsx");
+check(passagePage.includes('path: "/passage"') && read("app/sitemap.js").includes('"/passage"') && read("app/components/SiteChrome.jsx").includes('<Link href="/passage">Passage, our publication</Link>'), "Passage is canonical, discoverable and internally linked");
+check(passagePage.includes("<FeelingQuiz />") && passagePage.includes("Coming soon") && !passagePage.includes("passage.ryravel.com"), "Passage uses the live arc quiz without publishing unavailable article links");
 check(!requestPage.includes('defaultValue="+234"'), "Request page does not assume a Nigerian calling code");
 check(requestPage.includes("progressive-summary") && requestPage.includes("journeyContext") && requestPage.includes("preferredCallTime"), "Request page preserves journey and private-call context");
 check(requestPage.includes("What happens now") && requestPage.includes("Maryangel reviews the feeling") && requestPage.includes("initial investment direction"), "Request page explains the personal post-enquiry process");

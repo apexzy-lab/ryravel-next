@@ -28,6 +28,7 @@ export default function SiteChrome({ children }) {
   const pathname = usePathname();
   const isCuratorPage = /^\/(curator-desk|partners)(?:\/|$)/.test(pathname || "");
   const isPartnerPortal = /^\/partners\/portal(?:\/|$)/.test(pathname || "");
+  const isPassagePage = pathname === "/passage";
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(undefined);
@@ -153,6 +154,7 @@ export default function SiteChrome({ children }) {
 
   return (
     <>
+      {!isPassagePage && <>
       <header className="site-header">
         <Link href="/" aria-label="Ryravel home"><Logo /></Link>
         <nav className="desktop-nav" aria-label="Primary navigation">
@@ -174,16 +176,18 @@ export default function SiteChrome({ children }) {
         {nav.map(([label, href]) => <Link href={href} key={`${label}-${href}`} onClick={() => setMenuOpen(false)}>{label}</Link>)}
         <Link className="button button-red" href="/request" onClick={() => setMenuOpen(false)}>Plan my journey</Link>
       </nav>
+      </>}
       {children}
+      {!isPassagePage &&
       <footer className="site-footer">
         <div className="footer-grid">
           <div><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p></div>
           <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/travel-styles">By travel style</Link><Link href="/transformational-travel">Emotion-led journeys</Link><Link href="/luxury-travel-planning">Worldwide private travel</Link><Link href="/luxury-family-travel">Family travel</Link><Link href="/luxury-honeymoons">Honeymoons</Link><Link href="/luxury-wellness-retreats">Wellness retreats</Link><Link href="/luxury-corporate-retreats">Corporate retreats</Link><Link href="/journeys/stillness">Stillness Collection</Link></div>
-          <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/case-studies">Case studies</Link><Link href="/sustainability">Sustainability</Link><b className="footer-subheading">Connect</b><a href="https://www.instagram.com/journeybyry/" target="_blank" rel="noopener noreferrer">Instagram · @journeybyry</a><Link href="/official-instagram">Official account update</Link></div>
+          <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/passage">Passage, our publication</Link><Link href="/case-studies">Case studies</Link><Link href="/sustainability">Sustainability</Link><b className="footer-subheading">Connect</b><a href="https://www.instagram.com/journeybyry/" target="_blank" rel="noopener noreferrer">Instagram · @journeybyry</a><Link href="/official-instagram">Official account update</Link></div>
           <div><b>Begin</b><Link href="/request">Start the conversation</Link><Link href="/request?conversation=private-call">Request a private call</Link><a href="mailto:hello@ryravel.com">Contact the team</a><a href="tel:+17605140361">+1 760 514 0361</a><b className="footer-subheading">Booking & care</b><Link href="/policies">Policy overview</Link><Link href="/terms">Booking terms</Link><Link href="/cancellations">Cancellations & refunds</Link><Link href="/travel-information">Before you travel</Link></div>
         </div>
         <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => window.dispatchEvent(new Event("ryravel:cookie-settings"))}>Cookie settings</button></span></div>
-      </footer>
+      </footer>}
       {!isCuratorPage && (marketingConsent === null || cookieSettingsOpen) &&
         <section className="cookie-choice" aria-label="Privacy choices">
           <div className="cookie-choice-main">
