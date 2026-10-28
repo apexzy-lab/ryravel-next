@@ -46,6 +46,8 @@
 .featuredCard { border-bottom: 1px solid var(--line); border-top: 1px solid var(--line); display: grid; grid-template-columns: 1.2fr 1fr; }
 .featuredVisual { aspect-ratio: 4/3; background: linear-gradient(135deg,#1a1512 0%,#2a2018 50%,#1a1512 100%); min-width: 0; position: relative; }
 .featuredVisual::after { background: linear-gradient(to top,rgba(10,9,8,.6),transparent 50%); content: ""; inset: 0; position: absolute; }
+.featuredPhoto { background: url('/images/passage-transformational-wellness.jpg') center 46% / cover no-repeat; }
+.readArticle { align-self: flex-start; border-bottom: 1px solid var(--red-soft); color: var(--red-soft) !important; font-size: 11px; letter-spacing: .14em; margin-top: 2rem; padding-bottom: .4rem; text-transform: uppercase; }
 .featuredContent { display: flex; flex-direction: column; justify-content: center; padding: clamp(2rem,4vw,4rem); }
 .featuredContent .tag { margin-bottom: 1.25rem; }
 .featuredContent h2 { font-size: clamp(27px,3vw,37px); line-height: 1.17; margin-bottom: 1.25rem; }

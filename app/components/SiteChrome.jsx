@@ -28,7 +28,7 @@ export default function SiteChrome({ children }) {
   const pathname = usePathname();
   const isCuratorPage = /^\/(curator-desk|partners)(?:\/|$)/.test(pathname || "");
   const isPartnerPortal = /^\/partners\/portal(?:\/|$)/.test(pathname || "");
-  const isPassagePage = pathname === "/passage";
+  const isPassagePage = /^\/passage(?:\/|$)/.test(pathname || "");
   const [light, setLight] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [marketingConsent, setMarketingConsent] = useState(undefined);

@@ -245,6 +245,12 @@ check(requestPage.includes('if (step < 3) { continueRequest(); return; }'), "Ent
 check(requestPage.includes('event?.preventDefault();') && requestPage.includes('key="continue"') && requestPage.includes('key="submit"'), "Continue cannot turn its own click into a final-stage submission");
 check(requestPage.includes('image: selectedJourney?.image || ""'), "Request image comes from the published catalogue, not an arbitrary query URL");
 check(read("app/components/SiteChrome.jsx").includes('inert={!menuOpen}') && read("app/components/SiteChrome.jsx").includes('aria-expanded={menuOpen}'), "Closed mobile navigation is not keyboard focusable and exposes its expanded state");
+const passageArticle = read("app/passage/transformational-travel-vs-wellness-retreat/page.jsx");
+check(read("app/passage/page.jsx").includes('href="/passage/transformational-travel-vs-wellness-retreat"') && read("app/sitemap.js").includes('"/passage/transformational-travel-vs-wellness-retreat"'), "Published Passage essay is linked and in the sitemap");
+check(existsSync(join(root, "public", "images", "passage-transformational-wellness.jpg")) && passageArticle.includes('alt="Aerial view of a textured forest canopy"'), "Passage essay uses supplied image with descriptive alt text");
+check(passageArticle.includes('"@type": "Article"') && passageArticle.includes('datePublished: "2026-10-25"') && passageArticle.includes('dateModified: "2026-10-28"'), "Passage essay publishes dated Article schema");
+check(passageArticle.includes("2025 meta-analysis of 32 studies") && passageArticle.includes("separately quoted add-ons") && !passageArticle.includes("12 min read"), "Passage essay corrects research and service claims");
+check(read("app/components/SiteChrome.jsx").includes('/^\\/passage(?:\\/|$)/'), "Passage article retains publication chrome without duplicating the site navigation");
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);
 if (failures.length) process.exit(1);

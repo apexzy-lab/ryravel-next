@@ -6,7 +6,7 @@ import styles from "./passage.module.css";
 
 export const metadata = buildMetadata({
   title: "Passage | A Ryravel Publication",
-  description: "Passage is Ryravel's forthcoming publication on emotion-led travel, the arcs that shape a journey, and what travellers carry home.",
+  description: "Passage is Ryravel's publication on emotion-led travel, the arcs that shape a journey, and what travellers carry home. Read our first essay.",
   path: "/passage",
   absoluteTitle: true,
 });
@@ -46,24 +46,25 @@ export default function PassagePage() {
         <section className={styles.hero} aria-labelledby="passage-title">
           <span className={styles.eyebrow}>A Ryravel Publication</span>
           <h1 id="passage-title">Writing about travel<br />that changes <em>who you are.</em></h1>
-          <p>Passage is where we will share what we have learned about emotional travel: the arcs, the returns, and the moments where a journey becomes something you carry.</p>
+          <p>Passage is where we share what we have learned about emotional travel: the arcs, the returns, and the moments where a journey becomes something you carry.</p>
           <a className={styles.heroQuizLink} href="#feeling-quiz">Find your arc <span aria-hidden="true">→</span></a>
         </section>
 
         <section className={styles.featured} aria-labelledby="featured-title">
           <article className={styles.featuredCard}>
-            <div className={styles.featuredVisual} aria-hidden="true" />
+            <div className={`${styles.featuredVisual} ${styles.featuredPhoto}`} aria-hidden="true" />
             <div className={styles.featuredContent}>
-              <span className={styles.tag}>Issue 01 · The Arcs · Coming soon</span>
-              <h2 id="featured-title">The Unleashing:<br /><em>What Restlessness Is Really Asking For</em></h2>
-              <p className={styles.featuredDek}>The person with energy that has nowhere worthy to go does not need a harder workout. They need a summit that does not care about their pace, followed by a plain that does not care about their output. The restlessness is not the problem. The absence of a worthy container is.</p>
-              <p className={styles.meta}>By Maryangel Ajuzieogu · Essay in preparation</p>
+              <span className={styles.tag}>Issue 01 · The Category · Published</span>
+              <h2 id="featured-title">Transformational Travel vs. a Wellness Retreat:<br /><em>What Is the Difference?</em></h2>
+              <p className={styles.featuredDek}>Rest and change can both matter. The question is which kind of journey meets you where you are, and what will help its benefits last after you return.</p>
+              <p className={styles.meta}>By Maryangel Ajuzieogu · October 25, 2026</p>
+              <Link className={styles.readArticle} href="/passage/transformational-travel-vs-wellness-retreat">Read the essay <span aria-hidden="true">→</span></Link>
             </div>
           </article>
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">
-          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Essays in preparation</span></div>
+          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>One essay published, more in preparation</span></div>
           <div className={styles.articleRow}>
             {upcoming.map((article) => <article className={styles.articleCard} key={article.title}>
               <div className={`${styles.articleVisual} ${styles[article.tone]}`} aria-hidden="true" />
@@ -79,7 +80,7 @@ export default function PassagePage() {
         <section className={styles.about} id="about-passage" aria-labelledby="passage-about-title">
           <div><span className={styles.eyebrow}>About Passage</span><h2 id="passage-about-title">Not travel writing.<br /><em>Travel that writes you back.</em></h2></div>
           <div className={styles.aboutBody}>
-            <p>Passage is the editorial arm of Ryravel. We are preparing long-form writing about the emotional territory of travel: the conditions that make a journey transformative, the arcs that match them, and the returns that prove they worked.</p>
+            <p>Passage is the editorial arm of Ryravel. We publish long-form writing about the emotional territory of travel: the conditions that can make a journey meaningful, the arcs that match them, and what happens after the return.</p>
             <p>We do not write destination guides. We do not rank hotels. We write about what happens when a journey is built around a feeling, not a place, and what it costs to come back unchanged.</p>
             <p>New issues will arrive when they are ready. Not on a schedule. Not for the algorithm. For the person who needs them.</p>
           </div>
