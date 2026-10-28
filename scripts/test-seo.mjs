@@ -83,7 +83,7 @@ check(!requestPage.includes("email-confirmation") && !requestPage.includes("Conf
 check(requestPage.includes("if (step !== 3) return undefined") && requestPage.includes("turnstileMount"), "Turnstile initializes only on the final request stage");
 check((requestPage.match(/A Note From The CEO/g) || []).length === 3 && requestPage.includes("Maryangel Ajuzieogu") && requestPage.includes("CEO &amp; Journey Curator") && requestPage.includes("founderNoteRef.current?.showModal()"), "Request flow identifies the CEO and makes her complete note available without lengthening the fixed form");
 const globalCss = read("app/globals.css");
-check(globalCss.includes("body:has(.request-page:not(.request-page-complete)) { height: 100%; overflow: hidden; }") && globalCss.includes(".request-page:not(.request-page-complete) { height: calc(100dvh - 64px); overflow: hidden; }"), "Desktop request flow is locked to one viewport without page scrolling");
+check(globalCss.includes(".request-page:not(.request-page-complete) { min-height: calc(100dvh - 64px); }"), "Desktop request flow can scroll when its content needs more room");
 check(requestPage.includes('request-page-complete') && globalCss.includes(".request-page-complete { min-height: calc(100dvh - 64px); overflow: visible; }"), "Completed enquiry screen is never clipped by the fixed form viewport");
 check(globalCss.includes("html:has(.request-page) .site-footer { display: none; }"), "Focused request flow removes the below-fold site footer");
 check(globalCss.includes(".progressive-request { grid-template-columns: minmax(0,1fr)") && globalCss.includes(".progressive-workspace > * { min-width: 0; width: 100%; }") && globalCss.includes("grid-template-columns: minmax(0,1fr) clamp(250px,22vw,320px)"), "Every progressive stage uses one invariant form and summary grid");
@@ -99,17 +99,17 @@ check(existsSync(join(root, "public", "images", "stillness-collection-forest.jpg
 check(read("app/journeys/[slug]/page.jsx").includes("/images/stillness-collection-forest.jpg"), "Stillness Collection uses the supplied forest image");
 const returnPage = read("app/the-return/page.jsx");
 for (const passage of [
-  "The Return is not a feeling you get on the trip.",
-  "You know the version of yourself that exists at the end of the second day.",
-  "Most trips are designed around what you will see.",
-  "Stillness is not",
-  "What landscape does, when it is vast enough",
-  "The person who came back and slept.",
-  "The person who had been circling a decision for eight months.",
-  "The couple who came back having chosen each other again.",
-  "The person who came back smaller",
-  "That is the only promise we make.",
-  "Every journey is designed directly by the founder.",
+  "Most travel companies sell the departure.",
+  "You travel to return to it.",
+  "They arrived one way.",
+  "The Departure",
+  "Written Integration",
+  "The Silent",
+  "The Return Score",
+  "48 hours before",
+  "Aggregated results will be published here",
+  "No scores are estimated, interpolated, or cherry-picked.",
+  "Your return starts",
 ]) check(returnPage.includes(passage), `The Return retains supplied copy: ${passage}`);
 const redirectConfig = read("next.config.mjs");
 for (const [source, destination] of [
