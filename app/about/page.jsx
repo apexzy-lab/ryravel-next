@@ -1,74 +1,117 @@
-import { CTA, PageHero } from "../components/Blocks";
+import Link from "next/link";
 import { buildMetadata } from "../seo";
+import styles from "./about.module.css";
 
-export const metadata = buildMetadata({ title: "About Ryravel", description: "The story behind Ryravel and our emotion-led approach to designing private, bespoke luxury journeys worldwide.", path: "/about" });
+export const metadata = buildMetadata({
+  title: "About Ryravel: Our Story and Approach",
+  description: "Why Ryravel begins with a feeling, not a destination. Meet founder Maryangel Ajuzieogu and discover how every journey is designed backwards from The Return.",
+  path: "/about",
+});
+
+const method = [
+  {
+    number: "01",
+    first: "Begin with a",
+    emphasis: "feeling",
+    description: "Before dates or destinations, we ask what needs to change. Not where you want to go. Who you are right now, and what you need to come back to.",
+  },
+  {
+    number: "02",
+    first: "Design the",
+    emphasis: "emotional arc",
+    description: "Arrival, opening, transformation and return each receive their own pace. The rest on day three is not a gap. It is preparation for what happens on day five.",
+  },
+  {
+    number: "03",
+    first: "Place only",
+    emphasis: "what matters",
+    description: "A meaningful experience earns its place. Empty time is protected. The destination is chosen to serve the feeling, not the other way around.",
+  },
+  {
+    number: "04",
+    first: "Carry it",
+    emphasis: "home",
+    description: "Every journey closes with a deliberate bridge back into ordinary life. The Departure Box. The check-ins. The Silent Documentary. The Return is not the flight home.",
+  },
+];
 
 export default function AboutPage() {
   return (
-    <main>
-      <PageHero
-        kicker="Our story"
-        title="Ryravel began"
-        emphasis="with the trip that did not work"
-        copy="A beautiful destination is not enough. Anywhere in the world, a journey has to understand who you are when you leave, and what you need to return to."
-      />
+    <main className={styles.page}>
+      <header className={styles.hero}>
+        <span className={styles.eyebrow}>Our approach</span>
+        <h1>Ryravel began<br /><em>with the trip that did not work.</em></h1>
+        <p>A beautiful destination is not enough. Anywhere in the world, a journey has to understand who you are when you leave, and what you need to return to.</p>
+      </header>
 
-      <article className="founder-story paper-section">
-        <header>
-          <span className="kicker">Maryangel’s story</span>
-          <h2>The Trip That Didn’t Work</h2>
-        </header>
+      <div className={styles.content}>
+        <section className={styles.mistake} aria-labelledby="about-mistake">
+          <div className={styles.mistakeInner}>
+            <div><span className={styles.label}>The trip that did not work</span><h2 id="about-mistake">I needed to disappear.<br />Not on vacation.<br /><em>Disappear.</em></h2></div>
+            <div className={styles.mistakeBody}>
+              <p>Quiet. Solitude. Whatever was left of myself, I needed to sit with it.</p>
+              <p>So I booked Zanzibar. Seven nights. A resort with a pool and a schedule and a lobby full of people. I picked the destination and let the destination pick everything else.</p>
+              <p>I came home exactly as I left. Not relaxed. Not renewed. Just unchanged, and now also tired from travelling. I remember sitting in my own living room a few days later, trying to figure out what had gone wrong, and realising the trip had never had a chance. I had not planned a journey for what I needed. I had planned the opposite of it, crowds instead of quiet, noise instead of stillness, and called it a getaway because it had a beach.</p>
+              <p className={styles.mistakePull}>That was the beginning of Ryravel. Not the beach. The mistake.</p>
+            </div>
+          </div>
+        </section>
 
-        <div className="founder-story-body">
-          <section>
-            <p className="lead">I needed to disappear. Not on vacation, disappear. Quiet. Solitude. Whatever was left of myself, I needed to sit with it.</p>
-            <p>So I booked Zanzibar. Seven nights. A resort with a pool and a schedule and a lobby full of people. I picked the destination and let the destination pick everything else.</p>
-            <p className="founder-pullquote">I came home exactly as I left.</p>
-            <p>Not relaxed. Not renewed. Just unchanged, and now also tired from travelling. I remember sitting in my own living room a few days later, trying to figure out what had gone wrong, and realizing the trip had never had a chance. I hadn’t planned a journey for what I needed. I’d planned the opposite of it, crowds instead of quiet, noise instead of stillness, and called it a getaway because it had a beach.</p>
-            <p><strong>That was the beginning of Ryravel. Not the beach. The mistake.</strong></p>
-          </section>
+        <section className={styles.method} aria-labelledby="about-method">
+          <span className={styles.label}>The Ryravel method</span>
+          <h2 id="about-method">Travel designed backwards<br />from <em>The Return.</em></h2>
+          <div className={styles.methodGrid}>{method.map((item) => (
+            <article className={styles.methodCard} key={item.number}>
+              <span className={styles.methodNumber}>{item.number}</span>
+              <h3>{item.first}<br /><em>{item.emphasis}</em></h3>
+              <p>{item.description}</p>
+            </article>
+          ))}</div>
+        </section>
 
-          <section>
-            <span className="story-number">01</span>
-            <h3>What I got wrong</h3>
-            <p>Most trips are built around a place. Where you’re going, what you’ll see, what’s on the itinerary. The feeling you’re chasing, the reason you booked it in the first place, is treated as a side effect, something the destination will supposedly hand you if the destination is nice enough.</p>
-            <p>It doesn’t work that way. I’m proof.</p>
-            <p>A place doesn’t know what you need. A resort doesn’t know you’re depleted. A packed itinerary doesn’t know you came looking for silence. Without someone designing <em>around</em> the actual condition you’re in, you can travel thousands of miles and still come home having missed yourself entirely.</p>
-          </section>
+        <section className={styles.founder} id="curators" aria-labelledby="maryangel">
+          <div className={styles.founderInner}>
+            <figure className={styles.founderVisual}>
+              <img src="/people/maryangel-ajuzieogu.webp" alt="Maryangel Ajuzieogu, Ryravel founder and lead curator" width="1400" height="1750" loading="lazy" />
+              <figcaption>Maryangel Ajuzieogu</figcaption>
+            </figure>
+            <div>
+              <span className={styles.label}>Founder &amp; lead curator</span>
+              <h2 id="maryangel">Maryangel<br />Ajuzieogu</h2>
+              <p className={styles.founderRole}>Every journey is designed directly by the founder.</p>
+              <div className={styles.founderBody}>
+                <p>Ryravel was founded on the belief that the right journey can revise a life. I am not building this for people chasing a nicer photo. I am building it for people who have already had that trip, the well-reviewed, well-located, perfectly nice trip, and come home no different, the way I did.</p>
+                <p>You can travel and stay exactly who you were. Or the trip can be built with enough intention that you do not. I have done both. I know which one I am building now.</p>
+                <p className={styles.founderPull}>Not thread count. Intention.</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          <section>
-            <span className="story-number">02</span>
-            <h3>What changed</h3>
-            <p>After Zanzibar, I stopped researching destinations and started researching <em>why trips fail people who need them to work.</em> What separates a trip that changes something from one that’s just relocation with better weather.</p>
-            <p>What I found: it’s rarely the place. It’s whether the trip was ever built around a feeling in the first place, or just around a place that photographs well.</p>
-            <p>That’s the difference Ryravel is built on. Every journey starts with a question most travellers never ask: not <em>where do you want to go</em>, but <em>who are you right now, and what do you need to come back to</em>. The destination comes second. It’s chosen to serve the feeling, not the other way around.</p>
-          </section>
+        <section className={styles.proof} aria-labelledby="about-proof">
+          <span className={styles.label}>Proof</span>
+          <h2 id="about-proof">They arrived one way.<br /><em>They returned another.</em></h2>
+          <div className={styles.proofCard}>
+            <div className={styles.proofBefore}>
+              <span className={styles.proofTag}>They arrived</span>
+              <p className={styles.proofText}>Running on empty. Could not remember the last time she felt present. Her body had been saying no for months while her mind kept saying yes.</p>
+              <p className={styles.proofMeta}>Exhausted arc · Full Tanzania Restoration</p>
+            </div>
+            <div className={styles.proofAfter}>
+              <span className={styles.proofTag}>They returned</span>
+              <p className={styles.proofText}>She slept. Really slept. For the first time in two years. She stopped checking her phone before she got out of bed. The first hour of the day now belongs to her.</p>
+              <p className={styles.proofMeta}>Day 30 · Return Score: 8 to 3</p>
+            </div>
+          </div>
+        </section>
+      </div>
 
-          <section>
-            <span className="story-number">03</span>
-            <h3>Why this matters to me</h3>
-            <p>I’m not building this for people chasing a nicer photo. I’m building it for people who’ve already had that trip, the well-reviewed, well-located, perfectly nice trip, and come home no different, the way I did.</p>
-            <p>You can travel and stay exactly who you were. Or the trip can be built with enough intention that you don’t. I’ve done both. I know which one I’m building now.</p>
-            <footer><strong>Maryangel Ajuzieogu</strong><span>Founder, Ryravel</span></footer>
-          </section>
-        </div>
-      </article>
-
-      <section className="editorial paper-section">
-        <span className="kicker">Not thread count. Intention.</span>
-        <h2>Travel designed backwards from <em>The Return.</em></h2>
-        <p className="lead">Most travel begins with a map. Ours begins with a person. Our published journeys focus on Africa, and we consider bespoke requests further afield. In either case, the destination, rhythm, people and pauses follow what your life has been asking of you.</p>
-        <div className="principle-grid">{[
-          ["Begin with a feeling", "Before dates or destinations, we ask what needs to change."],
-          ["Design the emotional arc", "Arrival, opening, transformation and return each receive their own pace."],
-          ["Place only what matters", "A meaningful experience earns its place. Empty time is protected."],
-          ["Carry it home", "Every journey closes with a deliberate bridge back into ordinary life."],
-        ].map(([title, copy], index) => <article key={title}><span>0{index + 1},</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
+      <section className={styles.bottomCta} aria-labelledby="about-begin">
+        <span className={styles.label}>Begin</span>
+        <h2 id="about-begin">Your return starts<br />before you leave.</h2>
+        <p>Every journey is designed for who you become. Tell us where you are, and we will design the return.</p>
+        <div className={styles.ctaActions}><Link className={styles.primaryButton} href="/request">Begin the conversation</Link><Link className={styles.secondaryButton} href="/journeys">Explore the journeys</Link></div>
       </section>
-
-      <section className="dark-editorial"><span className="kicker">The Ryravel method</span><h2>Human-curated. Emotion-led. <em>Never templated.</em></h2><p>You work with one curator who listens deeply, challenges assumptions and remains present from the first conversation until after you arrive home.</p></section>
-      <section className="curators paper-section" id="curators"><div><span className="kicker">The curators</span><h2>Real people who know when to add, and when to leave space.</h2></div><div className="curator-card" id="maryangel"><span>Founder & lead curator</span><h3>Maryangel Ajuzieogu</h3><p>Ryravel was founded on the belief that the right journey can revise a life. Maryangel brings emotional intelligence, destination fluency and an obsessive care for timing to every itinerary.</p></div></section>
-      <CTA />
     </main>
   );
 }

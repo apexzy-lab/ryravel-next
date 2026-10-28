@@ -1,0 +1,96 @@
+.page {
+  --cream: #f5f2ee;
+  --cream-dim: rgba(245,242,238,.55);
+  --cream-ghost: rgba(245,242,238,.08);
+  --red-soft: #e8574a;
+  --dark: #0a0908;
+  --gold: #b8956a;
+  --sage: #5a7a6a;
+  background: var(--dark);
+  color: var(--cream);
+  font-weight: 300;
+}
+.page em { color: var(--red-soft); font-style: italic; }
+.page h1, .page h2, .page h3 { font-family: var(--font-serif); font-weight: 400; }
+.page h2 { font-size: clamp(28px,3.5vw,42px); line-height: 1.1; }
+.label, .eyebrow { color: var(--gold); display: block; font-size: 10px; letter-spacing: .24em; text-transform: uppercase; }
+.label { margin-bottom: 1.5rem; }
+.hero {
+  border-bottom: 1px solid var(--cream-ghost);
+  margin: 0 auto;
+  max-width: 1400px;
+  padding: clamp(7rem,11vw,12rem) 3.5rem 6rem;
+}
+.eyebrow { margin-bottom: 2rem; }
+.hero h1 { font-size: clamp(42px,6vw,80px); line-height: 1.02; max-width: 900px; }
+.hero p { color: var(--cream-dim); font-size: 17px; line-height: 1.9; margin-top: 2rem; max-width: 560px; }
+.content { margin: 0 auto; max-width: 1400px; padding: 0 3.5rem; }
+.mistake, .method, .founder, .proof { border-bottom: 1px solid var(--cream-ghost); padding: 7rem 0; }
+.mistakeInner { align-items: start; display: grid; gap: 6rem; grid-template-columns: 1fr 1.3fr; }
+.mistakeBody { color: var(--cream-dim); font-size: 15px; line-height: 1.95; }
+.mistakeBody p + p { margin-top: 1.5rem; }
+.mistakeBody .mistakePull {
+  border-top: 1px solid var(--cream-ghost);
+  color: var(--cream);
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.5;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+}
+.method h2 { margin-bottom: 4rem; }
+.methodGrid { background: var(--cream-ghost); display: grid; gap: 1px; grid-template-columns: repeat(4,1fr); }
+.methodCard { background: var(--dark); min-width: 0; padding: 3rem; transition: background .3s ease; }
+.methodCard:hover { background: #111009; }
+.methodNumber { color: rgba(245,242,238,.12); display: block; font-family: var(--font-serif); font-size: 42px; line-height: 1; margin-bottom: 1.5rem; }
+.methodCard h3 { font-size: 20px; line-height: 1.2; margin-bottom: 1rem; }
+.methodCard p { color: var(--cream-dim); font-size: 13.5px; line-height: 1.8; }
+.founder { scroll-margin-top: 90px; }
+.founderInner { align-items: start; display: grid; gap: 6rem; grid-template-columns: 1fr 1.3fr; }
+.founderVisual { aspect-ratio: 3/4; background: #1a1512; min-width: 0; overflow: hidden; position: relative; }
+.founderVisual img { display: block; height: 100%; object-fit: cover; object-position: center 32%; width: 100%; }
+.founderVisual::after { background: linear-gradient(0deg,rgba(0,0,0,.5),transparent 35%); content: ""; inset: 0; pointer-events: none; position: absolute; }
+.founderVisual figcaption { bottom: 1.5rem; color: var(--cream); font-size: 10px; letter-spacing: .12em; left: 1.5rem; position: absolute; text-shadow: 0 1px 8px #000; text-transform: uppercase; z-index: 1; }
+.founder h2 { margin-bottom: .5rem; }
+.founderRole { color: rgba(245,242,238,.42); font-size: 12px; letter-spacing: .1em; line-height: 1.6; margin-bottom: 2rem; text-transform: uppercase; }
+.founderBody { color: var(--cream-dim); font-size: 15px; line-height: 1.95; }
+.founderBody p + p { margin-top: 1.5rem; }
+.founderBody .founderPull { border-top: 1px solid var(--cream-ghost); color: var(--cream); font-family: var(--font-serif); font-size: 20px; font-style: italic; line-height: 1.5; margin-top: 2rem; padding-top: 2rem; }
+.proof h2 { margin-bottom: 4rem; }
+.proofCard { border-bottom: 1px solid var(--cream-ghost); border-top: 1px solid var(--cream-ghost); display: grid; grid-template-columns: 1fr 1fr; }
+.proofBefore, .proofAfter { display: flex; flex-direction: column; min-height: 275px; padding: 3.5rem; }
+.proofBefore { border-right: 1px solid var(--cream-ghost); }
+.proofAfter { background: #0d0c0b; }
+.proofTag { color: rgba(245,242,238,.3); display: block; font-size: 10px; letter-spacing: .2em; margin-bottom: 1.5rem; text-transform: uppercase; }
+.proofAfter .proofTag { color: var(--sage); }
+.proofText { color: rgba(245,242,238,.4); font-family: var(--font-serif); font-size: clamp(18px,2vw,22px); font-style: italic; line-height: 1.5; }
+.proofAfter .proofText { color: var(--cream-dim); font-style: normal; }
+.proofMeta { color: rgba(245,242,238,.35); font-size: 11px; letter-spacing: .1em; line-height: 1.6; margin-top: auto; padding-top: 2rem; text-transform: uppercase; }
+.bottomCta { margin: 0 auto; max-width: 650px; padding: 8rem 1.5rem; text-align: center; }
+.bottomCta h2 { font-size: clamp(32px,4vw,48px); line-height: 1.12; margin-bottom: 1.25rem; }
+.bottomCta > p { color: var(--cream-dim); font-size: 15px; line-height: 1.85; margin-bottom: 2.5rem; }
+.ctaActions { display: flex; gap: 1rem; justify-content: center; }
+.primaryButton, .secondaryButton { display: inline-block; font-size: 11px; letter-spacing: .18em; padding: 14px 32px; text-transform: uppercase; transition: background .2s,border-color .2s; }
+.primaryButton { background: #c0392b; color: var(--cream); }
+.primaryButton:hover { background: #a93226; }
+.secondaryButton { border: 1px solid rgba(245,242,238,.25); color: var(--cream); }
+.secondaryButton:hover { border-color: var(--cream); }
+@media (max-width: 1024px) {
+  .mistakeInner, .founderInner { gap: 2rem; grid-template-columns: 1fr; }
+  .methodGrid { grid-template-columns: repeat(2,1fr); }
+  .proofCard { grid-template-columns: 1fr; }
+  .proofBefore { border-bottom: 1px solid var(--cream-ghost); border-right: 0; }
+  .proofBefore, .proofAfter { min-height: 0; }
+  .founderVisual { max-width: 560px; }
+}
+@media (max-width: 768px) {
+  .hero { padding: 8rem 1.5rem 5rem; }
+  .content { padding: 0 1.5rem; }
+  .mistake, .method, .founder, .proof { padding: 5rem 0; }
+  .methodGrid { grid-template-columns: 1fr; }
+  .methodCard, .proofBefore, .proofAfter { padding: 2rem; }
+  .bottomCta { padding-block: 5rem; }
+  .ctaActions { align-items: stretch; flex-direction: column; }
+}
+@media (prefers-reduced-motion: reduce) { .methodCard, .primaryButton, .secondaryButton { transition: none; } }
