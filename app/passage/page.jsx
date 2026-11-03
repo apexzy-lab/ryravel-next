@@ -5,7 +5,7 @@ import styles from "./passage.module.css";
 
 export const metadata = buildMetadata({
   title: "Passage | A Ryravel Publication",
-  description: "Passage is Ryravel's publication on emotion-led travel, the arcs that shape a journey, and what travellers carry home. Read our first essay.",
+  description: "Passage is Ryravel's publication on emotion-led travel, the arcs that shape a journey, and what travellers carry home. Read the latest essays.",
   path: "/passage",
   absoluteTitle: true,
 });
@@ -62,8 +62,19 @@ export default function PassagePage() {
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">
-          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>One essay published, more in preparation</span></div>
+          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Two essays published, more in preparation</span></div>
           <div className={styles.articleRow}>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/why-your-last-vacation-did-not-help-you-feel-rested">
+                <div className={`${styles.articleVisual} ${styles.vacationPhoto}`} role="img" aria-label="A pale frog resting on a lily pad" />
+                <div className={styles.articleCardContent}>
+                  <span className={styles.tag}>Essay 02 · Published</span>
+                  <h3>Why Your Last Vacation Did Not Help You Feel <em>Rested</em></h3>
+                  <p>You changed the view, but the tiredness kept its seat. What the research says about coming home.</p>
+                  <span className={styles.articleRead}>Read the essay →</span>
+                </div>
+              </Link>
+            </article>
             {upcoming.map((article) => <article className={styles.articleCard} key={article.title}>
               <div className={`${styles.articleVisual} ${styles[article.tone]}`} aria-hidden="true" />
               <span className={styles.tag}>Coming soon</span>

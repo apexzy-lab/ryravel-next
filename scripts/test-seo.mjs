@@ -251,6 +251,11 @@ check(existsSync(join(root, "public", "images", "passage-transformational-wellne
 check(passageArticle.includes('"@type": "Article"') && passageArticle.includes('datePublished: "2026-10-25"') && passageArticle.includes('dateModified: "2026-10-28"'), "Passage essay publishes dated Article schema");
 check(passageArticle.includes("2025 meta-analysis of 32 studies") && passageArticle.includes("separately quoted add-ons") && !passageArticle.includes("12 min read"), "Passage essay corrects research and service claims");
 check(!read("app/components/SiteChrome.jsx").includes("isPassagePage") && read("app/passage/page.jsx").includes('aria-label="Passage sections"') && passageArticle.includes('aria-label="Passage sections"'), "Passage pages retain the shared Ryravel header and footer with publication branding inside");
+const vacationArticle = read("app/passage/why-your-last-vacation-did-not-help-you-feel-rested/page.jsx");
+check(read("app/passage/page.jsx").includes('href="/passage/why-your-last-vacation-did-not-help-you-feel-rested"') && read("app/sitemap.js").includes('"/passage/why-your-last-vacation-did-not-help-you-feel-rested"'), "Second Passage essay is linked and in the sitemap");
+check(existsSync(join(root, "public", "images", "passage-vacation-rested.jpg")) && vacationArticle.includes('alt="A pale frog resting on a green lily pad over dark water"'), "Second Passage essay uses its supplied image with descriptive alt text");
+check(vacationArticle.includes('"@type": "Article"') && vacationArticle.includes('datePublished: "2026-11-03"') && vacationArticle.includes('aria-label="Passage sections"'), "Second Passage essay has dated Article schema and the established publication header");
+check(vacationArticle.includes("91 and 99 people") && vacationArticle.includes("occupational phenomenon") && vacationArticle.includes("Journeys start at $5,000 USD"), "Second Passage essay corrects research interpretation and retains journey pricing");
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);
 if (failures.length) process.exit(1);

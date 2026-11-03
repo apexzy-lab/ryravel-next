@@ -59,6 +59,15 @@
 .articleVisual.warm { background: linear-gradient(135deg,#1a1512,#2a2018 50%,#1a1512); }
 .articleVisual.blue { background: linear-gradient(135deg,#0e1218,#161e28 50%,#0e1218); }
 .articleVisual.green { background: linear-gradient(135deg,#0a120e,#152018 50%,#0a120e); }
+.articleVisual.vacationPhoto { background: url('/images/passage-vacation-rested.jpg') center 60% / cover no-repeat; }
+.articleCardFeatured { grid-column: 1 / -1; padding: 0; }
+.articleCardLink { align-items: center; display: grid; gap: clamp(2rem,5vw,5rem); grid-template-columns: minmax(0,42%) minmax(0,1fr); height: 100%; }
+.articleCardLink .articleVisual { aspect-ratio: auto; height: 100%; margin: 0; min-height: 300px; }
+.articleCardContent { padding: 2rem 3rem 2rem 0; }
+.articleCard .articleCardContent h3 { font-size: clamp(25px,3vw,36px); max-width: 560px; }
+.articleCardContent p { max-width: 440px; }
+.articleCardLink:hover .articleRead { border-bottom-color: var(--red-soft); }
+.articleRead { border-bottom: 1px solid rgba(232,87,74,.45); color: var(--red-soft); display: inline-block; font-size: 11px; letter-spacing: .12em; margin-top: 1.35rem; padding-bottom: .35rem; text-transform: uppercase; }
 .articleCard .tag { margin-bottom: .75rem; }
 .articleCard h3 { font-size: 21px; line-height: 1.2; margin-bottom: .75rem; }
 .articleCard p { color: var(--dim); font-size: 13px; line-height: 1.7; }
@@ -88,6 +97,9 @@
   .featuredContent { padding: 2rem; }
   .articleRow { grid-template-columns: 1fr; }
   .articleCard { padding: 2rem; }
+  .articleCardLink { gap: 0; grid-template-columns: 1fr; }
+  .articleCardLink .articleVisual { aspect-ratio: 16 / 10; height: auto; min-height: 0; }
+  .articleCardContent { padding: 2rem; }
   .quizWrap { margin-top: 4rem; }
   .about { padding-block: 4rem; }
 }
