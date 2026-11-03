@@ -256,6 +256,11 @@ check(read("app/passage/page.jsx").includes('href="/passage/why-your-last-vacati
 check(existsSync(join(root, "public", "images", "passage-vacation-rested.jpg")) && vacationArticle.includes('alt="A pale frog resting on a green lily pad over dark water"'), "Second Passage essay uses its supplied image with descriptive alt text");
 check(vacationArticle.includes('"@type": "Article"') && vacationArticle.includes('datePublished: "2026-11-03"') && vacationArticle.includes('aria-label="Passage sections"'), "Second Passage essay has dated Article schema and the established publication header");
 check(vacationArticle.includes("91 and 99 people") && vacationArticle.includes("occupational phenomenon") && vacationArticle.includes("Journeys start at $5,000 USD"), "Second Passage essay corrects research interpretation and retains journey pricing");
+const serviceArticle = read("app/passage/how-to-choose-a-transformational-travel-service-in-2027/page.jsx");
+check(read("app/passage/page.jsx").includes('href="/passage/how-to-choose-a-transformational-travel-service-in-2027"') && read("app/sitemap.js").includes('"/passage/how-to-choose-a-transformational-travel-service-in-2027"'), "Third Passage essay is linked and in the sitemap");
+check(existsSync(join(root, "public", "images", "passage-choose-service-2027.jpg")) && serviceArticle.includes('alt="Two people paddling a canoe through a dark waterway bordered by green vegetation"'), "Third Passage essay uses its supplied image with descriptive alt text");
+check(serviceArticle.includes('"@type": "Article"') && serviceArticle.includes('datePublished: "2026-11-03"') && serviceArticle.includes('aria-label="Passage sections"'), "Third Passage essay has dated Article schema and the established publication header");
+check(serviceArticle.includes("ICEERS review of media-reported deaths") && serviceArticle.includes("national implementation still to follow") && serviceArticle.includes('href="/passage#feeling-quiz"'), "Third Passage essay qualifies safety and legal claims and links to the actual quiz");
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);
 if (failures.length) process.exit(1);

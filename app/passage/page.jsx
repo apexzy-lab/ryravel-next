@@ -62,8 +62,19 @@ export default function PassagePage() {
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">
-          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Two essays published, more in preparation</span></div>
+          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Three essays published, more in preparation</span></div>
           <div className={styles.articleRow}>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/how-to-choose-a-transformational-travel-service-in-2027">
+                <div className={`${styles.articleVisual} ${styles.servicePhoto}`} role="img" aria-label="Two people paddling a canoe through a waterway bordered by green vegetation" />
+                <div className={styles.articleCardContent}>
+                  <span className={styles.tag}>Essay 03 · Published</span>
+                  <h3>How Do I Choose a Transformational Travel Service in <em>2027?</em></h3>
+                  <p>The trip is only the door. The change lives in the second month.</p>
+                  <span className={styles.articleRead}>Read the essay →</span>
+                </div>
+              </Link>
+            </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/why-your-last-vacation-did-not-help-you-feel-rested">
                 <div className={`${styles.articleVisual} ${styles.vacationPhoto}`} role="img" aria-label="A pale frog resting on a lily pad" />
