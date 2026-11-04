@@ -4,7 +4,7 @@ import { caseStudies } from "./case-studies/caseStudies";
 
 const staticRoutes = [
   "/", "/journeys", "/destinations/tanzania", "/destinations/zanzibar",
-  "/about", "/official-instagram", "/the-return", "/passage", "/passage/transformational-travel-vs-wellness-retreat", "/passage/why-your-last-vacation-did-not-help-you-feel-rested", "/passage/how-to-choose-a-transformational-travel-service-in-2027", "/passage/how-long-does-burnout-recovery-take", "/passage/what-are-the-signs-of-burnout", "/passage/burnout-recovery-retreat-for-executives", "/case-studies",
+  "/about", "/official-instagram", "/the-return", "/passage", "/passage/transformational-travel-vs-wellness-retreat", "/passage/why-your-last-vacation-did-not-help-you-feel-rested", "/passage/how-to-choose-a-transformational-travel-service-in-2027", "/passage/how-long-does-burnout-recovery-take", "/passage/what-are-the-signs-of-burnout", "/passage/when-a-senior-leader-burns-out", "/passage/burnout-recovery-retreat-for-executives", "/case-studies",
   "/private-bespoke", "/gifting", "/sustainability", "/reviews",
   "/request", "/policies", "/terms", "/cancellations",
   "/travel-information", "/privacy", "/cookies", "/travel-styles",

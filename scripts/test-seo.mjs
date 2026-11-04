@@ -268,6 +268,7 @@ check(burnoutArticle.includes('"@type": "Article"') && burnoutArticle.includes('
 check(burnoutArticle.includes("a journey is not treatment") && burnoutArticle.includes("neither result predicts") && burnoutArticle.includes("World Health Organization"), "Fourth Passage essay separates holiday relief from clinical recovery and does not sell treatment");
 for (const [number, slug, asset] of [
   ["Fifth", "what-are-the-signs-of-burnout", "passage-signs-of-burnout.webp"],
+  ["Sixth", "when-a-senior-leader-burns-out", "passage-senior-leader-burnout.jpg"],
   ["Eighth", "burnout-recovery-retreat-for-executives", "passage-executive-retreat.jpg"],
 ]) {
   const article = read(`app/passage/${slug}/page.jsx`);

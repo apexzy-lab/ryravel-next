@@ -62,12 +62,18 @@ export default function PassagePage() {
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">
-          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Six essays published, more in preparation</span></div>
+          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Seven essays published, more in preparation</span></div>
           <div className={styles.articleRow}>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/burnout-recovery-retreat-for-executives">
                 <div className={`${styles.articleVisual} ${styles.executivePhoto}`} role="img" aria-label="An aerial view of forest and drifting clouds" />
                 <div className={styles.articleCardContent}><span className={styles.tag}>Essay 08 · Published</span><h3>What Does a Burnout Recovery Retreat for Executives Actually <em>Involve?</em></h3><p>What to look for, what to ask, and what the evidence can and cannot promise.</p><span className={styles.articleRead}>Read the essay →</span></div>
+              </Link>
+            </article>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/when-a-senior-leader-burns-out">
+                <div className={`${styles.articleVisual} ${styles.leaderPhoto}`} role="img" aria-label="A young gorilla resting close to its family" />
+                <div className={styles.articleCardContent}><span className={styles.tag}>Essay 06 · Published</span><h3>What Should a Company Do When a Senior Leader <em>Burns Out?</em></h3><p>The first week matters, and so does the work they return to.</p><span className={styles.articleRead}>Read the essay →</span></div>
               </Link>
             </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
