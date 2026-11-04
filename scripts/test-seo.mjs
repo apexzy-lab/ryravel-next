@@ -261,6 +261,20 @@ check(read("app/passage/page.jsx").includes('href="/passage/how-to-choose-a-tran
 check(existsSync(join(root, "public", "images", "passage-choose-service-2027.jpg")) && serviceArticle.includes('alt="Two people paddling a canoe through a dark waterway bordered by green vegetation"'), "Third Passage essay uses its supplied image with descriptive alt text");
 check(serviceArticle.includes('"@type": "Article"') && serviceArticle.includes('datePublished: "2026-11-03"') && serviceArticle.includes('aria-label="Passage sections"'), "Third Passage essay has dated Article schema and the established publication header");
 check(serviceArticle.includes("ICEERS review of media-reported deaths") && serviceArticle.includes("national implementation still to follow") && serviceArticle.includes('href="/passage#feeling-quiz"'), "Third Passage essay qualifies safety and legal claims and links to the actual quiz");
+const burnoutArticle = read("app/passage/how-long-does-burnout-recovery-take/page.jsx");
+check(read("app/passage/page.jsx").includes('href="/passage/how-long-does-burnout-recovery-take"') && read("app/sitemap.js").includes('"/passage/how-long-does-burnout-recovery-take"'), "Fourth Passage essay is linked and in the sitemap");
+check(existsSync(join(root, "public", "images", "passage-burnout-recovery.jpg")) && burnoutArticle.includes('alt="People in a canoe crossing sunlit wetlands at dusk"'), "Fourth Passage essay uses supplied image with descriptive alt text");
+check(burnoutArticle.includes('"@type": "Article"') && burnoutArticle.includes('datePublished: "2026-11-04"') && burnoutArticle.includes('aria-label="Passage sections"'), "Fourth Passage essay has dated Article schema and the established publication header");
+check(burnoutArticle.includes("a journey is not treatment") && burnoutArticle.includes("neither result predicts") && burnoutArticle.includes("World Health Organization"), "Fourth Passage essay separates holiday relief from clinical recovery and does not sell treatment");
+for (const [number, slug, asset] of [
+  ["Fifth", "what-are-the-signs-of-burnout", "passage-signs-of-burnout.webp"],
+  ["Eighth", "burnout-recovery-retreat-for-executives", "passage-executive-retreat.jpg"],
+]) {
+  const article = read(`app/passage/${slug}/page.jsx`);
+  check(read("app/passage/page.jsx").includes(`href="/passage/${slug}"`) && read("app/sitemap.js").includes(`"/passage/${slug}"`), `${number} Passage essay is linked and in the sitemap`);
+  check(existsSync(join(root, "public", "images", asset)) && article.includes('aria-label="Passage sections"') && article.includes('datePublished: "2026-11-04"'), `${number} Passage essay uses the supplied image, Article schema and established publication header`);
+  check(article.includes("not treatment") || article.includes("not a diagnosis"), `${number} Passage essay distinguishes travel from medical treatment`);
+}
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);
 if (failures.length) process.exit(1);

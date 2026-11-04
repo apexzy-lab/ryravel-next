@@ -62,8 +62,31 @@ export default function PassagePage() {
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">
-          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Three essays published, more in preparation</span></div>
+          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Six essays published, more in preparation</span></div>
           <div className={styles.articleRow}>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/burnout-recovery-retreat-for-executives">
+                <div className={`${styles.articleVisual} ${styles.executivePhoto}`} role="img" aria-label="An aerial view of forest and drifting clouds" />
+                <div className={styles.articleCardContent}><span className={styles.tag}>Essay 08 · Published</span><h3>What Does a Burnout Recovery Retreat for Executives Actually <em>Involve?</em></h3><p>What to look for, what to ask, and what the evidence can and cannot promise.</p><span className={styles.articleRead}>Read the essay →</span></div>
+              </Link>
+            </article>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/what-are-the-signs-of-burnout">
+                <div className={`${styles.articleVisual} ${styles.signsPhoto}`} role="img" aria-label="A river and forest landscape in warm evening light" />
+                <div className={styles.articleCardContent}><span className={styles.tag}>Essay 05 · Published</span><h3>What Are the Signs of Burnout, and Is It Different From Being <em>Tired?</em></h3><p>Tired asks for sleep. Burnout asks for more than that.</p><span className={styles.articleRead}>Read the essay →</span></div>
+              </Link>
+            </article>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/how-long-does-burnout-recovery-take">
+                <div className={`${styles.articleVisual} ${styles.burnoutPhoto}`} role="img" aria-label="People in a canoe crossing sunlit wetlands at dusk" />
+                <div className={styles.articleCardContent}>
+                  <span className={styles.tag}>Essay 04 · Published</span>
+                  <h3>How Long Does Burnout Recovery Actually <em>Take?</em></h3>
+                  <p>Why a week away fades, and what a real return looks like.</p>
+                  <span className={styles.articleRead}>Read the essay →</span>
+                </div>
+              </Link>
+            </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/how-to-choose-a-transformational-travel-service-in-2027">
                 <div className={`${styles.articleVisual} ${styles.servicePhoto}`} role="img" aria-label="Two people paddling a canoe through a waterway bordered by green vegetation" />
