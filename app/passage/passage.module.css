@@ -23,7 +23,9 @@
   gap: 2rem;
   grid-template-columns: minmax(0,1fr) auto;
   padding: 1.35rem 3.5rem;
-  position: relative;
+  position: sticky;
+  top: 76px;
+  z-index: 99;
 }
 .logo { font-family: var(--font-serif); font-size: 23px; letter-spacing: .04em; white-space: nowrap; }
 .logo span { color: var(--muted); font-family: var(--font-sans); font-size: 10px; font-weight: 300; letter-spacing: .14em; margin-left: .7rem; text-transform: uppercase; }
@@ -49,7 +51,7 @@
 .featuredContent h2 { font-size: clamp(27px,3vw,37px); line-height: 1.17; margin-bottom: 1.25rem; }
 .featuredDek { color: var(--dim); font-size: 14px; line-height: 1.8; margin-bottom: 2rem; }
 .meta { color: var(--muted); font-size: 11px; letter-spacing: .06em; }
-.issue { scroll-margin-top: 105px; }
+.issue { scroll-margin-top: 160px; }
 .issueHeader { align-items: baseline; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; padding-bottom: 2rem; }
 .issueHeader h2 { color: var(--gold); font-family: var(--font-sans); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
 .issueHeader span { color: var(--muted); font-size: 11px; }
@@ -78,9 +80,9 @@
 .articleCard h3 { font-size: 21px; line-height: 1.2; margin-bottom: .75rem; }
 .articleCard p { color: var(--dim); font-size: 13px; line-height: 1.7; }
 .quizWrap { background: #f4f1eb; margin-top: 6rem; }
-.quizWrap :global(.quiz-section) { scroll-margin-top: 110px; }
+.quizWrap :global(.quiz-section) { scroll-margin-top: 160px; }
 .quizWrap :global(.quiz-intro h2) { font-family: var(--font-serif); }
-.about { border-top: 1px solid var(--line); display: grid; gap: 5rem; grid-template-columns: 1fr 1.5fr; padding-block: 6rem; scroll-margin-top: 105px; }
+.about { border-top: 1px solid var(--line); display: grid; gap: 5rem; grid-template-columns: 1fr 1.5fr; padding-block: 6rem; scroll-margin-top: 160px; }
 .about .eyebrow { margin-bottom: 1.5rem; }
 .about h2 { font-size: clamp(25px,3vw,34px); line-height: 1.16; }
 .aboutBody { color: var(--dim); font-size: 15px; line-height: 1.9; }
@@ -93,7 +95,8 @@
   .about { gap: 2rem; grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .header { padding: 1rem 1.5rem; }
+  .header { padding: 1rem 1.5rem; top: 68px; }
+  .issue, .about, .quizWrap :global(.quiz-section) { scroll-margin-top: 190px; }
   .logo { font-size: 20px; }
   .logo span { display: block; font-size: 8px; margin: .2rem 0 0; }
   .nav { gap: 1.5rem; grid-column: 1 / -1; justify-content: center; }
