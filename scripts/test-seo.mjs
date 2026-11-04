@@ -37,6 +37,7 @@ check(read("app/seo.js").includes("private journeys across Africa") && read("app
 const accountNotice = read("app/newsroom/instagram-account-update/page.jsx");
 check(accountNotice.includes("@ryravels") && accountNotice.includes("@journeybyry") && accountNotice.includes("second quarter of 2026") && accountNotice.includes("also suspended"), "Newsroom Instagram notice identifies both suspended accounts without speculating on cause");
 check(accountNotice.includes("hello@ryravel.com") && accountNotice.includes("payment instruction"), "Official Instagram notice gives travellers a direct verification path");
+check(accountNotice.includes('<span className="account-notice-profile-mark" aria-hidden="true"><svg') && read("app/globals.css").includes(".account-notice-profile-mark svg"), "Newsroom account card uses the Instagram icon instead of a decorative at sign");
 check(accountNotice.includes("Meta&apos;s legal leadership") && accountNotice.includes("we have not received a response") && accountNotice.includes('dateTime="2026-11-04"') && !accountNotice.includes("current official Instagram"), "Official notice records the current appeal status and update date without claiming an active Instagram account");
 const chrome = read("app/components/SiteChrome.jsx");
 check(chrome.includes('href="/newsroom/instagram-account-update"') && chrome.includes('href="/newsroom"') && chrome.includes("Instagram @journeybyry is suspended") && read("app/sitemap.js").includes('"/newsroom/instagram-account-update"'), "Navigation leads to Newsroom and labels Instagram as suspended");
