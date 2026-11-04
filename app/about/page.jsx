@@ -36,8 +36,19 @@ const method = [
 ];
 
 export default function AboutPage() {
+  const aboutJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": "https://ryravel.com/about#about-page",
+    url: "https://ryravel.com/about",
+    name: "About Ryravel: Our Story and Approach",
+    isPartOf: { "@id": "https://ryravel.com/#website" },
+    about: { "@id": "https://ryravel.com/#organization" },
+    mentions: { "@type": "Person", "@id": "https://ryravel.com/about#maryangel", name: "Maryangel Ajuzieogu", url: "https://ryravel.com/about#maryangel", image: "https://ryravel.com/people/maryangel-ajuzieogu.webp", worksFor: { "@id": "https://ryravel.com/#organization" } },
+  };
   return (
     <main className={styles.page}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }} />
       <header className={styles.hero}>
         <span className={styles.eyebrow}>Our approach</span>
         <h1>Ryravel began<br /><em>with the trip that did not work.</em></h1>

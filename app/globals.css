@@ -349,6 +349,13 @@ html:has(.request-page) .site-footer { display: none; }
 .global-cta { background: #080706; color: #fff; padding: 100px 24px; text-align: center; }.global-cta h2 { font-size: clamp(36px,5vw,70px); }.global-cta p { color: rgba(255,255,255,.48); line-height: 1.8; margin: 20px auto 30px; max-width: 630px; }.global-cta > div { display: flex; gap: 12px; justify-content: center; }
 .site-footer { background: #090806; color: #f8f5ef; padding: 70px 48px 25px; }
 .site-footer .brand { width: 145px; }.footer-grid { display: grid; gap: 55px; grid-template-columns: 1.5fr 1fr 1fr 1fr; }.footer-grid > div { align-items: flex-start; display: flex; flex-direction: column; gap: 11px; }.footer-grid p, .footer-grid a { color: rgba(255,255,255,.38); font-size: 12px; line-height: 1.7; }.footer-grid b { color: var(--red); font-size: 9px; letter-spacing: .15em; text-transform: uppercase; }.footer-bottom { border-top: 1px solid rgba(255,255,255,.08); color: rgba(255,255,255,.2); display: flex; font-size: 9px; justify-content: space-between; margin-top: 60px; padding-top: 22px; }
+.footer-social-links { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
+.footer-grid .footer-social-links a { align-items: center; border: 1px solid rgba(255,255,255,.21); border-radius: 50%; color: #f8f5ef; display: inline-flex; height: 38px; justify-content: center; transition: background .2s ease, border-color .2s ease, transform .2s ease; width: 38px; }
+.footer-grid .footer-social-links a:hover { background: var(--red); border-color: var(--red); transform: translateY(-2px); }
+.footer-grid .footer-social-links a:focus-visible { outline: 2px solid #f8f5ef; outline-offset: 3px; }
+.footer-social-links svg { fill: currentColor; height: 17px; width: 17px; }
+.footer-grid .footer-social-status { color: rgba(255,255,255,.58); font-size: 11px; line-height: 1.5; max-width: 230px; }
+.footer-grid .footer-social-status a { color: #f8f5ef; font-size: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .footer-bottom a, .footer-bottom button { color: rgba(255,255,255,.65); font: inherit; }
 .footer-bottom button { background: none; border: 0; cursor: pointer; padding: 0; }
 .footer-bottom a:hover, .footer-bottom button:hover { color: #fff; }
