@@ -5,7 +5,7 @@ import { passageArticles } from "./passage/articles";
 
 const staticRoutes = [
   "/", "/journeys", "/destinations/tanzania", "/destinations/zanzibar",
-  "/about", "/official-instagram", "/the-return", "/passage", "/case-studies",
+  "/about", "/newsroom", "/newsroom/instagram-account-update", "/the-return", "/passage", "/case-studies",
   "/private-bespoke", "/gifting", "/sustainability", "/reviews",
   "/request", "/policies", "/terms", "/cancellations",
   "/travel-information", "/privacy", "/cookies", "/travel-styles",

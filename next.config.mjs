@@ -9,6 +9,7 @@ const nextConfig = {
       { source: "/forms", destination: "/request", permanent: true },
       { source: "/services", destination: "/journeys", permanent: true },
       { source: "/about-us", destination: "/about", permanent: true },
+      { source: "/official-instagram", destination: "/newsroom/instagram-account-update", permanent: true },
       { source: "/tours/stillness", destination: "/journeys/stillness", permanent: true },
       { source: "/journeys/renewed", destination: "/journeys/exhausted", permanent: true },
       { source: "/journeys/ex11", destination: "/journeys/ex6", permanent: true },

@@ -34,12 +34,14 @@ check(read("app/about/page.jsx").includes('"@type": "AboutPage"') && read("app/a
 check(read("app/page.jsx").includes('absoluteTitle: true'), "Homepage title begins with the Ryravel brand exactly");
 check(read("app/page.jsx").includes("Ryravel | Bespoke Travel Designed Around How You Feel"), "Homepage title uses the broad feeling-led Ryravel positioning");
 check(read("app/seo.js").includes("private journeys across Africa") && read("app/seo.js").includes("bespoke travel requests considered worldwide") && read("app/seo.js").includes('areaServed: ["Worldwide"'), "Global metadata distinguishes published African journeys from bespoke worldwide requests");
-const accountNotice = read("app/official-instagram/page.jsx");
-check(accountNotice.includes("@ryravels") && accountNotice.includes("@journeybyry") && accountNotice.includes("second quarter of 2026") && accountNotice.includes("also suspended"), "Official Instagram notice identifies both suspended accounts without speculating on cause");
+const accountNotice = read("app/newsroom/instagram-account-update/page.jsx");
+check(accountNotice.includes("@ryravels") && accountNotice.includes("@journeybyry") && accountNotice.includes("second quarter of 2026") && accountNotice.includes("also suspended"), "Newsroom Instagram notice identifies both suspended accounts without speculating on cause");
 check(accountNotice.includes("hello@ryravel.com") && accountNotice.includes("payment instruction"), "Official Instagram notice gives travellers a direct verification path");
 check(accountNotice.includes("Meta&apos;s legal leadership") && accountNotice.includes("we have not received a response") && accountNotice.includes('dateTime="2026-11-04"') && !accountNotice.includes("current official Instagram"), "Official notice records the current appeal status and update date without claiming an active Instagram account");
 const chrome = read("app/components/SiteChrome.jsx");
-check(chrome.includes('href="/official-instagram"') && chrome.includes("Instagram @journeybyry is suspended") && read("app/sitemap.js").includes('"/official-instagram"'), "Footer links to the notice and labels Instagram as suspended");
+check(chrome.includes('href="/newsroom/instagram-account-update"') && chrome.includes('href="/newsroom"') && chrome.includes("Instagram @journeybyry is suspended") && read("app/sitemap.js").includes('"/newsroom/instagram-account-update"'), "Navigation leads to Newsroom and labels Instagram as suspended");
+check(read("next.config.mjs").includes('{ source: "/official-instagram", destination: "/newsroom/instagram-account-update", permanent: true }') && !existsSync(join(root, "app", "official-instagram", "page.jsx")), "Old Instagram notice permanently redirects to its Newsroom release");
+check(read("app/newsroom/page.jsx").includes("newsroomUpdates.map") && accountNotice.includes('"@type": "Article"') && accountNotice.includes('"@type": "BreadcrumbList"'), "Newsroom index and release expose editorial structured data");
 for (const url of ["https://www.facebook.com/ryravelhq/", "https://www.instagram.com/journeybyry/", "https://linkedin.com/company/ryravel", "https://www.pinterest.com/ryravels/", "https://x.com/ryravelhq"]) check(chrome.includes(url), `Footer links to supplied social profile ${url}`);
 check(chrome.includes('className="footer-social-links"') && chrome.includes('aria-label={label}') && chrome.includes('target="_blank" rel="noopener noreferrer"'), "Footer social icons are accessible and open in a new tab");
 const organizationSchemaSource = read("app/seo.js");

@@ -13,6 +13,7 @@ const nav = [
   ["Our approach", "/about"],
   ["The Return", "/the-return"],
   ["Case studies", "/case-studies"],
+  ["Newsroom", "/newsroom"],
 ];
 
 // Brand icon paths from Bootstrap Icons; see THIRD_PARTY_NOTICES.md.
@@ -186,9 +187,9 @@ export default function SiteChrome({ children }) {
       {children}
       <footer className="site-footer">
         <div className="footer-grid">
-          <div className="footer-brand"><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p><div className="footer-social-links" aria-label="Ryravel social media">{socialLinks.map(({ label, href, path }) => <a key={href} href={href} aria-label={label} title={label} target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 16 16" focusable="false"><path d={path} /></svg></a>)}</div><p className="footer-social-status">Instagram @journeybyry is suspended. <Link href="/official-instagram">Read our account update</Link>.</p></div>
+          <div className="footer-brand"><Logo forceLight /><p>We travel not to escape life,<br />but for life not to escape us.</p><div className="footer-social-links" aria-label="Ryravel social media">{socialLinks.map(({ label, href, path }) => <a key={href} href={href} aria-label={label} title={label} target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" viewBox="0 0 16 16" focusable="false"><path d={path} /></svg></a>)}</div><p className="footer-social-status">Instagram @journeybyry is suspended. <Link href="/newsroom/instagram-account-update">Read our account update</Link>.</p></div>
           <div><b>Journeys</b><Link href="/journeys">By feeling</Link><Link href="/travel-styles">By travel style</Link><Link href="/transformational-travel">Emotion-led journeys</Link><Link href="/luxury-travel-planning">Worldwide private travel</Link><Link href="/luxury-family-travel">Family travel</Link><Link href="/luxury-honeymoons">Honeymoons</Link><Link href="/luxury-wellness-retreats">Wellness retreats</Link><Link href="/luxury-corporate-retreats">Corporate retreats</Link><Link href="/journeys/stillness">Stillness Collection</Link></div>
-          <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/passage">Passage, our publication</Link><Link href="/case-studies">Case studies</Link><Link href="/sustainability">Sustainability</Link><b className="footer-subheading">Connect</b><Link href="/official-instagram">Official Instagram update</Link></div>
+          <div><b>Company</b><Link href="/about">Our philosophy</Link><Link href="/about#curators">The curators</Link><Link href="/the-return">The Return</Link><Link href="/passage">Passage, our publication</Link><Link href="/newsroom">Newsroom</Link><Link href="/case-studies">Case studies</Link><Link href="/sustainability">Sustainability</Link><b className="footer-subheading">Connect</b><Link href="/newsroom/instagram-account-update">Official Instagram update</Link></div>
           <div><b>Begin</b><Link href="/request">Start the conversation</Link><Link href="/request?conversation=private-call">Request a private call</Link><a href="mailto:hello@ryravel.com">Contact the team</a><a href="tel:+17605140361">+1 760 514 0361</a><b className="footer-subheading">Booking & care</b><Link href="/policies">Policy overview</Link><Link href="/terms">Booking terms</Link><Link href="/cancellations">Cancellations & refunds</Link><Link href="/travel-information">Before you travel</Link></div>
         </div>
         <div className="footer-bottom"><span>© 2026 Ryravel. All rights reserved.</span><span><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link> · <Link href="/cookies">Cookies</Link> · <button type="button" onClick={() => window.dispatchEvent(new Event("ryravel:cookie-settings"))}>Cookie settings</button></span></div>
