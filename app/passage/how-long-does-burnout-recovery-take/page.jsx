@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { buildMetadata } from "../../seo";
+import { buildPassageSchema } from "../schema";
 import frame from "../passage.module.css";
 import styles from "../transformational-travel-vs-wellness-retreat/article.module.css";
 import local from "./burnout.module.css";
@@ -53,7 +54,7 @@ export default function BurnoutRecoveryArticle() {
   };
 
   return <div className={frame.page}>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPassageSchema(schema)).replace(/</g, "\\u003c") }} />
     <div className={frame.header}>
       <Link className={frame.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link>
       <nav className={frame.nav} aria-label="Passage sections"><Link href="/passage">Latest</Link><Link href="/passage#issue-01">Issue 01</Link><Link href="/passage#about-passage">About</Link></nav>

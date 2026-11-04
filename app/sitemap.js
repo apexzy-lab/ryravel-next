@@ -1,10 +1,11 @@
 import { arcs, journeys } from "./data";
 import { absoluteUrl } from "./seo";
 import { caseStudies } from "./case-studies/caseStudies";
+import { passageArticles } from "./passage/articles";
 
 const staticRoutes = [
   "/", "/journeys", "/destinations/tanzania", "/destinations/zanzibar",
-  "/about", "/official-instagram", "/the-return", "/passage", "/passage/transformational-travel-vs-wellness-retreat", "/passage/why-your-last-vacation-did-not-help-you-feel-rested", "/passage/how-to-choose-a-transformational-travel-service-in-2027", "/passage/how-long-does-burnout-recovery-take", "/passage/what-are-the-signs-of-burnout", "/passage/when-a-senior-leader-burns-out", "/passage/why-doesnt-a-vacation-fix-executive-burnout", "/passage/burnout-recovery-retreat-for-executives", "/case-studies",
+  "/about", "/official-instagram", "/the-return", "/passage", "/case-studies",
   "/private-bespoke", "/gifting", "/sustainability", "/reviews",
   "/request", "/policies", "/terms", "/cancellations",
   "/travel-information", "/privacy", "/cookies", "/travel-styles",
@@ -16,6 +17,11 @@ const staticRoutes = [
 export default function sitemap() {
   return [
     ...staticRoutes.map((path) => ({ url: absoluteUrl(path) })),
+    ...passageArticles.map((article) => ({
+      url: absoluteUrl(article.path),
+      lastModified: article.modified,
+      images: [absoluteUrl(article.image)],
+    })),
     ...arcs.filter((arc) => journeys.some((journey) => journey.arc === arc.id)).map((arc) => ({ url: absoluteUrl(`/journeys/${arc.id}`) })),
     ...journeys.map((journey) => ({
       url: absoluteUrl(`/journeys/${journey.slug}`),

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { buildMetadata } from "../../seo";
+import { buildPassageSchema } from "../schema";
 import frame from "../passage.module.css";
 import styles from "./article.module.css";
 
@@ -37,7 +38,7 @@ export default function PassageArticle() {
   };
 
   return <div className={frame.page}>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPassageSchema(schema)).replace(/</g, "\\u003c") }} />
     <div className={frame.header}>
       <Link className={frame.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link>
       <nav className={frame.nav} aria-label="Passage sections"><Link href="/passage">Latest</Link><Link href="/passage#issue-01">Issue 01</Link><Link href="/passage#about-passage">About</Link></nav>
@@ -47,7 +48,7 @@ export default function PassageArticle() {
         <span className={frame.eyebrow}>The Category</span>
         <h1>Transformational Travel vs. a Wellness Retreat:<br /><em>What Is the Difference?</em></h1>
         <p className={styles.dek}>Rest and change can both matter. The question is which kind of journey meets you where you are, and what helps its benefits last after you return.</p>
-        <p className={styles.meta}>By <Link href="/about">Maryangel Ajuzieogu</Link><span>·</span><time dateTime="2026-10-25">October 25, 2026</time><span>·</span>9 min read</p>
+        <p className={styles.meta}>By <Link href="/about">Maryangel Ajuzieogu</Link><span>·</span><time dateTime="2026-10-25">October 25, 2026</time><span>·</span>Updated <time dateTime="2026-10-28">October 28, 2026</time><span>·</span>9 min read</p>
       </header>
 
       <figure className={styles.heroFigure}>

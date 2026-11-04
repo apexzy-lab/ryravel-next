@@ -4,6 +4,8 @@ import legacyRedirects from "../legacy-redirects/worker.js";
 import { caseStudies } from "../app/case-studies/caseStudies.js";
 import { arcs, journeys } from "../app/data.js";
 import { commercialServiceOrder, commercialServices } from "../app/commercialServices.js";
+import { passageArticles } from "../app/passage/articles.js";
+import { buildPassageCollectionSchema, buildPassageSchema } from "../app/passage/schema.js";
 
 const root = process.cwd();
 const read = (path) => readFileSync(join(root, path), "utf8");
@@ -252,23 +254,24 @@ check(requestPage.includes('event?.preventDefault();') && requestPage.includes('
 check(requestPage.includes('image: selectedJourney?.image || ""'), "Request image comes from the published catalogue, not an arbitrary query URL");
 check(read("app/components/SiteChrome.jsx").includes('inert={!menuOpen}') && read("app/components/SiteChrome.jsx").includes('aria-expanded={menuOpen}'), "Closed mobile navigation is not keyboard focusable and exposes its expanded state");
 const passageArticle = read("app/passage/transformational-travel-vs-wellness-retreat/page.jsx");
-check(read("app/passage/page.jsx").includes('href="/passage/transformational-travel-vs-wellness-retreat"') && read("app/sitemap.js").includes('"/passage/transformational-travel-vs-wellness-retreat"'), "Published Passage essay is linked and in the sitemap");
+const passageInventory = read("app/passage/articles.js");
+check(read("app/passage/page.jsx").includes('href="/passage/transformational-travel-vs-wellness-retreat"') && passageInventory.includes('"/passage/transformational-travel-vs-wellness-retreat"'), "Published Passage essay is linked and in the sitemap");
 check(existsSync(join(root, "public", "images", "passage-transformational-wellness.jpg")) && passageArticle.includes('alt="Aerial view of a textured forest canopy"'), "Passage essay uses supplied image with descriptive alt text");
 check(passageArticle.includes('"@type": "Article"') && passageArticle.includes('datePublished: "2026-10-25"') && passageArticle.includes('dateModified: "2026-10-28"'), "Passage essay publishes dated Article schema");
 check(passageArticle.includes("2025 meta-analysis of 32 studies") && passageArticle.includes("separately quoted add-ons") && !passageArticle.includes("12 min read"), "Passage essay corrects research and service claims");
 check(!read("app/components/SiteChrome.jsx").includes("isPassagePage") && read("app/passage/page.jsx").includes('aria-label="Passage sections"') && passageArticle.includes('aria-label="Passage sections"'), "Passage pages retain the shared Ryravel header and footer with publication branding inside");
 const vacationArticle = read("app/passage/why-your-last-vacation-did-not-help-you-feel-rested/page.jsx");
-check(read("app/passage/page.jsx").includes('href="/passage/why-your-last-vacation-did-not-help-you-feel-rested"') && read("app/sitemap.js").includes('"/passage/why-your-last-vacation-did-not-help-you-feel-rested"'), "Second Passage essay is linked and in the sitemap");
+check(read("app/passage/page.jsx").includes('href="/passage/why-your-last-vacation-did-not-help-you-feel-rested"') && passageInventory.includes('"/passage/why-your-last-vacation-did-not-help-you-feel-rested"'), "Second Passage essay is linked and in the sitemap");
 check(existsSync(join(root, "public", "images", "passage-vacation-rested.jpg")) && vacationArticle.includes('alt="A pale frog resting on a green lily pad over dark water"'), "Second Passage essay uses its supplied image with descriptive alt text");
 check(vacationArticle.includes('"@type": "Article"') && vacationArticle.includes('datePublished: "2026-11-03"') && vacationArticle.includes('aria-label="Passage sections"'), "Second Passage essay has dated Article schema and the established publication header");
 check(vacationArticle.includes("91 and 99 people") && vacationArticle.includes("occupational phenomenon") && vacationArticle.includes("Journeys start at $5,000 USD"), "Second Passage essay corrects research interpretation and retains journey pricing");
 const serviceArticle = read("app/passage/how-to-choose-a-transformational-travel-service-in-2027/page.jsx");
-check(read("app/passage/page.jsx").includes('href="/passage/how-to-choose-a-transformational-travel-service-in-2027"') && read("app/sitemap.js").includes('"/passage/how-to-choose-a-transformational-travel-service-in-2027"'), "Third Passage essay is linked and in the sitemap");
+check(read("app/passage/page.jsx").includes('href="/passage/how-to-choose-a-transformational-travel-service-in-2027"') && passageInventory.includes('"/passage/how-to-choose-a-transformational-travel-service-in-2027"'), "Third Passage essay is linked and in the sitemap");
 check(existsSync(join(root, "public", "images", "passage-choose-service-2027.jpg")) && serviceArticle.includes('alt="Two people paddling a canoe through a dark waterway bordered by green vegetation"'), "Third Passage essay uses its supplied image with descriptive alt text");
 check(serviceArticle.includes('"@type": "Article"') && serviceArticle.includes('datePublished: "2026-11-03"') && serviceArticle.includes('aria-label="Passage sections"'), "Third Passage essay has dated Article schema and the established publication header");
 check(serviceArticle.includes("ICEERS review of media-reported deaths") && serviceArticle.includes("national implementation still to follow") && serviceArticle.includes('href="/passage#feeling-quiz"'), "Third Passage essay qualifies safety and legal claims and links to the actual quiz");
 const burnoutArticle = read("app/passage/how-long-does-burnout-recovery-take/page.jsx");
-check(read("app/passage/page.jsx").includes('href="/passage/how-long-does-burnout-recovery-take"') && read("app/sitemap.js").includes('"/passage/how-long-does-burnout-recovery-take"'), "Fourth Passage essay is linked and in the sitemap");
+check(read("app/passage/page.jsx").includes('href="/passage/how-long-does-burnout-recovery-take"') && passageInventory.includes('"/passage/how-long-does-burnout-recovery-take"'), "Fourth Passage essay is linked and in the sitemap");
 check(existsSync(join(root, "public", "images", "passage-burnout-recovery.jpg")) && burnoutArticle.includes('alt="People in a canoe crossing sunlit wetlands at dusk"'), "Fourth Passage essay uses supplied image with descriptive alt text");
 check(burnoutArticle.includes('"@type": "Article"') && burnoutArticle.includes('datePublished: "2026-11-04"') && burnoutArticle.includes('aria-label="Passage sections"'), "Fourth Passage essay has dated Article schema and the established publication header");
 check(burnoutArticle.includes("a journey is not treatment") && burnoutArticle.includes("neither result predicts") && burnoutArticle.includes("World Health Organization"), "Fourth Passage essay separates holiday relief from clinical recovery and does not sell treatment");
@@ -279,9 +282,22 @@ for (const [number, slug, asset] of [
   ["Eighth", "burnout-recovery-retreat-for-executives", "passage-executive-retreat.jpg"],
 ]) {
   const article = read(`app/passage/${slug}/page.jsx`);
-  check(read("app/passage/page.jsx").includes(`href="/passage/${slug}"`) && read("app/sitemap.js").includes(`"/passage/${slug}"`), `${number} Passage essay is linked and in the sitemap`);
+  check(read("app/passage/page.jsx").includes(`href="/passage/${slug}"`) && passageInventory.includes(`"/passage/${slug}"`), `${number} Passage essay is linked and in the sitemap`);
   check(existsSync(join(root, "public", "images", asset)) && article.includes('aria-label="Passage sections"') && article.includes('datePublished: "2026-11-04"'), `${number} Passage essay uses the supplied image, Article schema and established publication header`);
   check(article.includes("not treatment") || article.includes("not a diagnosis"), `${number} Passage essay distinguishes travel from medical treatment`);
+}
+check(read("app/sitemap.js").includes("passageArticles.map") && read("app/sitemap.js").includes("lastModified: article.modified") && read("app/sitemap.js").includes("images: [absoluteUrl(article.image)]"), "Passage sitemap entries expose article dates and images");
+check(read("app/passage/page.jsx").includes("buildPassageCollectionSchema") && read("app/passage/schema.js").includes('"@type": "BreadcrumbList"') && read("app/passage/schema.js").includes('"@type": "ItemList"'), "Passage pages expose connected publication and breadcrumb schema");
+check(read("app/llms.txt/route.js").includes("passageArticles.map"), "Optional AI reading guide lists the published Passage articles");
+check(passageArticles.length === 8 && new Set(passageArticles.map(({ path }) => path)).size === 8, "Passage inventory contains eight unique published articles");
+const collectionGraph = buildPassageCollectionSchema()["@graph"];
+check(collectionGraph.find((node) => node["@type"] === "ItemList")?.itemListElement.length === passageArticles.length, "Passage collection schema lists every published article");
+for (const article of passageArticles) {
+  const source = read(`app${article.path}/page.jsx`);
+  const url = `https://ryravel.com${article.path}`;
+  const graph = buildPassageSchema({ "@context": "https://schema.org", "@type": "Article", headline: article.title, description: "Test description", image: `https://ryravel.com${article.image}`, datePublished: article.modified, dateModified: article.modified, mainEntityOfPage: url })["@graph"];
+  check(source.includes(`const path = "${article.path}"`) && source.includes(`const hero = "${article.image}"`) && source.includes(`dateModified: "${article.modified}"`) && existsSync(join(root, "public", article.image.slice(1))), `Passage inventory matches source, image and date: ${article.path}`);
+  check(source.includes("buildPassageSchema(schema)") && graph.find((node) => node["@type"] === "Article")?.author["@id"] === "https://ryravel.com/about#maryangel" && graph.find((node) => node["@type"] === "BreadcrumbList")?.itemListElement.length === 3, `Passage article connects author, publication and breadcrumbs: ${article.path}`);
 }
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);

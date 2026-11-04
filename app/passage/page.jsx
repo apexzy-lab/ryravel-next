@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FeelingQuiz } from "../components/HomepageExperience";
 import { buildMetadata } from "../seo";
 import styles from "./passage.module.css";
+import { buildPassageCollectionSchema } from "./schema";
 
 export const metadata = buildMetadata({
   title: "Passage | A Ryravel Publication",
@@ -31,6 +32,7 @@ const upcoming = [
 export default function PassagePage() {
   return (
     <div className={styles.page}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPassageCollectionSchema()).replace(/</g, "\\u003c") }} />
       <div className={styles.header}>
         <Link className={styles.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link>
         <nav className={styles.nav} aria-label="Passage sections">

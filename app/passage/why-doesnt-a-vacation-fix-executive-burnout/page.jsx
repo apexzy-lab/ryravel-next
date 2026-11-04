@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { buildMetadata } from "../../seo";
+import { buildPassageSchema } from "../schema";
 import frame from "../passage.module.css";
 import styles from "../transformational-travel-vs-wellness-retreat/article.module.css";
 import local from "../how-long-does-burnout-recovery-take/burnout.module.css";
@@ -34,7 +35,7 @@ const sources = [
 export default function ExecutiveVacationArticle() {
   const schema = { "@context": "https://schema.org", "@type": "Article", headline: title, description, image: `https://ryravel.com${hero}`, datePublished: "2026-11-04", dateModified: "2026-11-04", author: { "@type": "Person", name: "Maryangel Ajuzieogu", url: "https://ryravel.com/about" }, publisher: { "@type": "Organization", name: "Ryravel", url: "https://ryravel.com" }, mainEntityOfPage: `https://ryravel.com${path}` };
   return <div className={frame.page}>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, "\\u003c") }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPassageSchema(schema)).replace(/</g, "\\u003c") }} />
     <div className={frame.header}><Link className={frame.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link><nav className={frame.nav} aria-label="Passage sections"><Link href="/passage">Latest</Link><Link href="/passage#issue-01">Issue 01</Link><Link href="/passage#about-passage">About</Link></nav></div>
     <main>
       <header className={styles.articleHeader}><span className={frame.eyebrow}>Passage · Essay 07</span><h1>Why Doesn&apos;t a Vacation Fix <em>Executive Burnout?</em></h1><p className={styles.dek}>A holiday may help, and some of that relief may fade. What matters is how fully you leave, and what you return to.</p><p className={styles.meta}>By <Link href="/about">Maryangel Ajuzieogu</Link><span>·</span><time dateTime="2026-11-04">November 4, 2026</time><span>·</span>7 min read</p></header>
