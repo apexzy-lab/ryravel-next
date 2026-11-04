@@ -65,6 +65,7 @@
 .articleVisual.signsPhoto { background: url('/images/passage-signs-of-burnout.webp') center / cover no-repeat; }
 .articleVisual.executivePhoto { background: url('/images/passage-executive-retreat.jpg') center 46% / cover no-repeat; }
 .articleVisual.leaderPhoto { background: url('/images/passage-senior-leader-burnout.jpg') center 44% / cover no-repeat; }
+.articleVisual.executiveVacationPhoto { background: url('/images/passage-executive-vacation.webp') center 54% / cover no-repeat; }
 .articleCardFeatured { grid-column: 1 / -1; padding: 0; }
 .articleCardLink { align-items: center; display: grid; gap: clamp(2rem,5vw,5rem); grid-template-columns: minmax(0,42%) minmax(0,1fr); height: 100%; }
 .articleCardLink .articleVisual { aspect-ratio: auto; height: 100%; margin: 0; min-height: 300px; }

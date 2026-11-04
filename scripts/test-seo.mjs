@@ -269,6 +269,7 @@ check(burnoutArticle.includes("a journey is not treatment") && burnoutArticle.in
 for (const [number, slug, asset] of [
   ["Fifth", "what-are-the-signs-of-burnout", "passage-signs-of-burnout.webp"],
   ["Sixth", "when-a-senior-leader-burns-out", "passage-senior-leader-burnout.jpg"],
+  ["Seventh", "why-doesnt-a-vacation-fix-executive-burnout", "passage-executive-vacation.webp"],
   ["Eighth", "burnout-recovery-retreat-for-executives", "passage-executive-retreat.jpg"],
 ]) {
   const article = read(`app/passage/${slug}/page.jsx`);
