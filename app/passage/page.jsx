@@ -64,43 +64,49 @@ export default function PassagePage() {
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">
-          <div className={styles.issueHeader}><h2 id="issue-title">Issue 01 · The Arcs</h2><span>Eight essays published, more in preparation</span></div>
+          <div className={styles.issueHeader}><h2 id="issue-title">The Restoration</h2><span>Essays 04 to 08</span></div>
           <div className={styles.articleRow}>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/burnout-recovery-retreat-for-executives">
                 <div className={`${styles.articleVisual} ${styles.executivePhoto}`} role="img" aria-label="An aerial view of forest and drifting clouds" />
-                <div className={styles.articleCardContent}><span className={styles.tag}>Essay 08 · Published</span><h3>What Does a Burnout Recovery Retreat for Executives Actually <em>Involve?</em></h3><p>What to look for, what to ask, and what the evidence can and cannot promise.</p><span className={styles.articleRead}>Read the essay →</span></div>
+                <div className={styles.articleCardContent}><span className={styles.tag}>The Restoration · Essay 08</span><h3>What Does a Burnout Recovery Retreat for Executives Actually <em>Involve?</em></h3><p>What to look for, what to ask, and what the evidence can and cannot promise.</p><span className={styles.articleRead}>Read the essay →</span></div>
               </Link>
             </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/why-doesnt-a-vacation-fix-executive-burnout">
                 <div className={`${styles.articleVisual} ${styles.executiveVacationPhoto}`} role="img" aria-label="Evening sunlight filtering through trees above an outdoor seating area" />
-                <div className={styles.articleCardContent}><span className={styles.tag}>Essay 07 · Published</span><h3>Why Doesn&apos;t a Vacation Fix <em>Executive Burnout?</em></h3><p>A holiday may help, and some of that relief may fade. What matters is how fully you leave, and what you return to.</p><span className={styles.articleRead}>Read the essay →</span></div>
+                <div className={styles.articleCardContent}><span className={styles.tag}>The Restoration · Essay 07</span><h3>Why Doesn&apos;t a Vacation Fix <em>Executive Burnout?</em></h3><p>A holiday may help, and some of that relief may fade. What matters is how fully you leave, and what you return to.</p><span className={styles.articleRead}>Read the essay →</span></div>
               </Link>
             </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/when-a-senior-leader-burns-out">
                 <div className={`${styles.articleVisual} ${styles.leaderPhoto}`} role="img" aria-label="A young gorilla resting close to its family" />
-                <div className={styles.articleCardContent}><span className={styles.tag}>Essay 06 · Published</span><h3>What Should a Company Do When a Senior Leader <em>Burns Out?</em></h3><p>The first week matters, and so does the work they return to.</p><span className={styles.articleRead}>Read the essay →</span></div>
+                <div className={styles.articleCardContent}><span className={styles.tag}>The Restoration · Essay 06</span><h3>What Should a Company Do When a Senior Leader <em>Burns Out?</em></h3><p>The first week matters, and so does the work they return to.</p><span className={styles.articleRead}>Read the essay →</span></div>
               </Link>
             </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/what-are-the-signs-of-burnout">
                 <div className={`${styles.articleVisual} ${styles.signsPhoto}`} role="img" aria-label="A river and forest landscape in warm evening light" />
-                <div className={styles.articleCardContent}><span className={styles.tag}>Essay 05 · Published</span><h3>What Are the Signs of Burnout, and Is It Different From Being <em>Tired?</em></h3><p>Tired asks for sleep. Burnout asks for more than that.</p><span className={styles.articleRead}>Read the essay →</span></div>
+                <div className={styles.articleCardContent}><span className={styles.tag}>The Restoration · Essay 05</span><h3>What Are the Signs of Burnout, and Is It Different From Being <em>Tired?</em></h3><p>Tired asks for sleep. Burnout asks for more than that.</p><span className={styles.articleRead}>Read the essay →</span></div>
               </Link>
             </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/how-long-does-burnout-recovery-take">
                 <div className={`${styles.articleVisual} ${styles.burnoutPhoto}`} role="img" aria-label="People in a canoe crossing sunlit wetlands at dusk" />
                 <div className={styles.articleCardContent}>
-                  <span className={styles.tag}>Essay 04 · Published</span>
+                  <span className={styles.tag}>The Restoration · Essay 04</span>
                   <h3>How Long Does Burnout Recovery Actually <em>Take?</em></h3>
                   <p>Why a week away fades, and what a real return looks like.</p>
                   <span className={styles.articleRead}>Read the essay →</span>
                 </div>
               </Link>
             </article>
+          </div>
+        </section>
+
+        <section className={styles.issue} aria-labelledby="earlier-essays-title">
+          <div className={styles.issueHeader}><h2 id="earlier-essays-title">More from Passage</h2><span>Essays 02 and 03</span></div>
+          <div className={styles.articleRow}>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/how-to-choose-a-transformational-travel-service-in-2027">
                 <div className={`${styles.articleVisual} ${styles.servicePhoto}`} role="img" aria-label="Two people paddling a canoe through a waterway bordered by green vegetation" />

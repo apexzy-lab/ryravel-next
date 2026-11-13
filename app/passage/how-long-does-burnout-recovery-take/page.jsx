@@ -61,7 +61,7 @@ export default function BurnoutRecoveryArticle() {
     </div>
     <main>
       <header className={styles.articleHeader}>
-        <span className={frame.eyebrow}>Passage · Essay 04</span>
+        <span className={frame.eyebrow}>The Restoration · Essay 04</span>
         <h1>How Long Does Burnout Recovery Actually <em>Take?</em></h1>
         <p className={styles.dek}>Why a week away fades, and what a real return looks like.</p>
         <p className={styles.meta}>By <Link href="/about">Maryangel Ajuzieogu</Link><span>·</span><time dateTime="2026-11-04">November 4, 2026</time><span>·</span>6 min read</p>
