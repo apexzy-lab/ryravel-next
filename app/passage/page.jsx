@@ -27,7 +27,7 @@ export default function PassagePage() {
         <Link className={styles.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link>
         <nav className={styles.nav} aria-label="Passage sections">
           <Link href="/passage" aria-current="page">Latest</Link>
-          <a href="#unleashing">The Unleashing</a>
+          <a href="#reawakening">The Reawakening</a>
           <a href="#about-passage">About</a>
         </nav>
       </div>
@@ -51,6 +51,18 @@ export default function PassagePage() {
               <Link className={styles.readArticle} href="/passage/transformational-travel-vs-wellness-retreat">Read the essay <span aria-hidden="true">→</span></Link>
             </div>
           </article>
+        </section>
+
+        <section className={styles.issue} id="reawakening" aria-labelledby="reawakening-title">
+          <div className={styles.issueHeader}><h2 id="reawakening-title">The Reawakening</h2><span>Story 11</span></div>
+          <div className={styles.articleRow}>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/does-your-relationship-need-a-couples-getaway">
+                <div className={`${styles.articleVisual} ${styles.reawakeningStoryPhoto}`} role="img" aria-label="Two people walking together beneath trees in warm evening light" />
+                <div className={styles.articleCardContent}><span className={styles.tag}>The Reawakening · Story 11</span><h3>Does Your Relationship Need a <em>Couples Getaway?</em></h3><p>A quiet Tuesday, two people who still love each other, and the space they have stopped making together.</p><span className={styles.articleRead}>Read the story →</span></div>
+              </Link>
+            </article>
+          </div>
         </section>
 
         <section className={styles.issue} id="unleashing" aria-labelledby="unleashing-title">

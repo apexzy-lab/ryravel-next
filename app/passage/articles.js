@@ -68,4 +68,11 @@ export const passageArticles = [
     modified: "2026-11-13",
     section: "The Unleashing",
   },
+  {
+    title: "Does Your Relationship Need a Couples Getaway?",
+    path: "/passage/does-your-relationship-need-a-couples-getaway",
+    image: "/images/passage-reawakening-story.jpg",
+    modified: "2026-11-13",
+    section: "The Reawakening",
+  },
 ];

@@ -299,10 +299,15 @@ check(read("app/passage/page.jsx").includes('href="/passage/signs-you-need-an-ad
 check(existsSync(join(root, "public/images/passage-unleashing-story.jpg")) && unleashingStory.includes('alt="A herd of buffalo moving through grassland in warm morning light"') && unleashingStory.includes('datePublished: "2026-11-13"'), "Tenth Passage story uses the supplied photograph and dated Article schema");
 check(unleashingStory.includes("The Unleashing · Story 10") && !unleashingStory.includes("Frequently asked questions") && !unleashingStory.includes("const faqs"), "Tenth Passage article is presented as an Unleashing story, not a guide or FAQ");
 check(unleashingStory.includes("not a reported guest itinerary") && unleashingStory.includes("travel is not treatment"), "Tenth Passage story distinguishes an illustrative scene and travel from treatment");
+const reawakeningStory = read("app/passage/does-your-relationship-need-a-couples-getaway/page.jsx");
+check(read("app/passage/page.jsx").includes('href="/passage/does-your-relationship-need-a-couples-getaway"') && passageInventory.includes('"/passage/does-your-relationship-need-a-couples-getaway"'), "Eleventh Passage story is linked and in the sitemap");
+check(existsSync(join(root, "public/images/passage-reawakening-story.jpg")) && reawakeningStory.includes('alt="Two people walking together beneath trees in warm evening light"') && reawakeningStory.includes('datePublished: "2026-11-13"'), "Eleventh Passage story uses the supplied photograph and dated Article schema");
+check(reawakeningStory.includes("The Reawakening · Story 11") && !reawakeningStory.includes("Frequently asked questions") && !reawakeningStory.includes("const faqs"), "Eleventh Passage article is a Reawakening story, not a guide or FAQ");
+check(reawakeningStory.includes("illustrative, not client accounts") && reawakeningStory.includes("not a couples therapist"), "Eleventh Passage story separates illustration and travel from clinical relationship support");
 check(read("app/sitemap.js").includes("passageArticles.map") && read("app/sitemap.js").includes("lastModified: article.modified") && read("app/sitemap.js").includes("images: [absoluteUrl(article.image)]"), "Passage sitemap entries expose article dates and images");
 check(read("app/passage/page.jsx").includes("buildPassageCollectionSchema") && read("app/passage/schema.js").includes('"@type": "BreadcrumbList"') && read("app/passage/schema.js").includes('"@type": "ItemList"'), "Passage pages expose connected publication and breadcrumb schema");
 check(read("app/llms.txt/route.js").includes("passageArticles.map"), "Optional AI reading guide lists the published Passage articles");
-check(passageArticles.length === 10 && new Set(passageArticles.map(({ path }) => path)).size === 10, "Passage inventory contains ten unique published articles");
+check(passageArticles.length === 11 && new Set(passageArticles.map(({ path }) => path)).size === 11, "Passage inventory contains eleven unique published articles");
 const collectionGraph = buildPassageCollectionSchema()["@graph"];
 check(collectionGraph.find((node) => node["@type"] === "ItemList")?.itemListElement.length === passageArticles.length, "Passage collection schema lists every published article");
 for (const article of passageArticles) {
