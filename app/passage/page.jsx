@@ -13,11 +13,6 @@ export const metadata = buildMetadata({
 
 const upcoming = [
   {
-    title: "The Unleashing",
-    description: "What restlessness is really asking for, and why the summit is only the beginning.",
-    tone: "warm",
-  },
-  {
     title: "The Return",
     description: "On disconnection, wilderness, and the self that waits on the other side of silence.",
     tone: "green",
@@ -32,7 +27,7 @@ export default function PassagePage() {
         <Link className={styles.logo} href="/passage" aria-label="Passage, a Ryravel publication home">Passage <span>A Ryravel Publication</span></Link>
         <nav className={styles.nav} aria-label="Passage sections">
           <Link href="/passage" aria-current="page">Latest</Link>
-          <a href="#issue-01">Issue 01</a>
+          <a href="#unleashing">The Unleashing</a>
           <a href="#about-passage">About</a>
         </nav>
       </div>
@@ -56,6 +51,18 @@ export default function PassagePage() {
               <Link className={styles.readArticle} href="/passage/transformational-travel-vs-wellness-retreat">Read the essay <span aria-hidden="true">→</span></Link>
             </div>
           </article>
+        </section>
+
+        <section className={styles.issue} id="unleashing" aria-labelledby="unleashing-title">
+          <div className={styles.issueHeader}><h2 id="unleashing-title">The Unleashing</h2><span>Story 10</span></div>
+          <div className={styles.articleRow}>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/signs-you-need-an-adventure">
+                <div className={`${styles.articleVisual} ${styles.unleashingStoryPhoto}`} role="img" aria-label="A herd of buffalo in warm morning light" />
+                <div className={styles.articleCardContent}><span className={styles.tag}>The Unleashing · Story 10</span><h3>Signs You Need an Adventure, <em>Not a Relaxing Vacation</em></h3><p>A quiet holiday can be beautiful and still leave you restless. A story about chosen challenge, movement and the freedom to rest afterward.</p><span className={styles.articleRead}>Read the story →</span></div>
+              </Link>
+            </article>
+          </div>
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">

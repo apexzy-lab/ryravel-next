@@ -294,10 +294,15 @@ check(read("app/passage/page.jsx").includes('href="/passage/signs-you-need-a-res
 check(existsSync(join(root, "public/images/passage-restoration-story.jpg")) && restorationStory.includes('alt="A small frog peeking through sunlit reeds"') && restorationStory.includes('datePublished: "2026-11-13"'), "Ninth Passage story uses the supplied photograph and dated Article schema");
 check(restorationStory.includes("The Restoration · Story 09") && !restorationStory.includes("Frequently asked questions") && !restorationStory.includes("const faqs"), "Ninth Passage article is presented as a story, not a guide or FAQ");
 check(restorationStory.includes("not independent evidence") && restorationStory.includes("travel should not replace assessment"), "Ninth Passage story distinguishes a traveller account from medical evidence");
+const unleashingStory = read("app/passage/signs-you-need-an-adventure/page.jsx");
+check(read("app/passage/page.jsx").includes('href="/passage/signs-you-need-an-adventure"') && passageInventory.includes('"/passage/signs-you-need-an-adventure"'), "Tenth Passage story is linked and in the sitemap");
+check(existsSync(join(root, "public/images/passage-unleashing-story.jpg")) && unleashingStory.includes('alt="A herd of buffalo moving through grassland in warm morning light"') && unleashingStory.includes('datePublished: "2026-11-13"'), "Tenth Passage story uses the supplied photograph and dated Article schema");
+check(unleashingStory.includes("The Unleashing · Story 10") && !unleashingStory.includes("Frequently asked questions") && !unleashingStory.includes("const faqs"), "Tenth Passage article is presented as an Unleashing story, not a guide or FAQ");
+check(unleashingStory.includes("not a reported guest itinerary") && unleashingStory.includes("travel is not treatment"), "Tenth Passage story distinguishes an illustrative scene and travel from treatment");
 check(read("app/sitemap.js").includes("passageArticles.map") && read("app/sitemap.js").includes("lastModified: article.modified") && read("app/sitemap.js").includes("images: [absoluteUrl(article.image)]"), "Passage sitemap entries expose article dates and images");
 check(read("app/passage/page.jsx").includes("buildPassageCollectionSchema") && read("app/passage/schema.js").includes('"@type": "BreadcrumbList"') && read("app/passage/schema.js").includes('"@type": "ItemList"'), "Passage pages expose connected publication and breadcrumb schema");
 check(read("app/llms.txt/route.js").includes("passageArticles.map"), "Optional AI reading guide lists the published Passage articles");
-check(passageArticles.length === 9 && new Set(passageArticles.map(({ path }) => path)).size === 9, "Passage inventory contains nine unique published articles");
+check(passageArticles.length === 10 && new Set(passageArticles.map(({ path }) => path)).size === 10, "Passage inventory contains ten unique published articles");
 const collectionGraph = buildPassageCollectionSchema()["@graph"];
 check(collectionGraph.find((node) => node["@type"] === "ItemList")?.itemListElement.length === passageArticles.length, "Passage collection schema lists every published article");
 for (const article of passageArticles) {
@@ -306,6 +311,7 @@ for (const article of passageArticles) {
   const graph = buildPassageSchema({ "@context": "https://schema.org", "@type": "Article", headline: article.title, description: "Test description", image: `https://ryravel.com${article.image}`, datePublished: article.modified, dateModified: article.modified, mainEntityOfPage: url })["@graph"];
   check(source.includes(`const path = "${article.path}"`) && source.includes(`const hero = "${article.image}"`) && source.includes(`dateModified: "${article.modified}"`) && existsSync(join(root, "public", article.image.slice(1))), `Passage inventory matches source, image and date: ${article.path}`);
   check(source.includes("buildPassageSchema(schema)") && graph.find((node) => node["@type"] === "Article")?.author["@id"] === "https://ryravel.com/about#maryangel" && graph.find((node) => node["@type"] === "BreadcrumbList")?.itemListElement.length === 3, `Passage article connects author, publication and breadcrumbs: ${article.path}`);
+  check(graph.find((node) => node["@type"] === "Article")?.articleSection === article.section, `Passage article section matches inventory: ${article.path}`);
 }
 const failures = assertions.filter(({ condition }) => !condition);
 for (const { condition, message } of assertions) console.log(`${condition ? "PASS" : "FAIL"} ${message}`);
