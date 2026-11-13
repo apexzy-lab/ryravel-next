@@ -2,10 +2,11 @@ import { arcs, journeys } from "./data";
 import { absoluteUrl } from "./seo";
 import { caseStudies } from "./case-studies/caseStudies";
 import { passageArticles } from "./passage/articles";
+import { canvasRebelFeature } from "./newsroom/updates";
 
 const staticRoutes = [
   "/", "/journeys", "/destinations/tanzania", "/destinations/zanzibar",
-  "/about", "/newsroom", "/newsroom/instagram-account-update", "/the-return", "/passage", "/case-studies",
+  "/about", "/newsroom", "/newsroom/instagram-account-update", "/newsroom/maryangel-ajuzieogu-canvasrebel-interview", "/the-return", "/passage", "/case-studies",
   "/private-bespoke", "/gifting", "/sustainability", "/reviews",
   "/request", "/policies", "/terms", "/cancellations",
   "/travel-information", "/privacy", "/cookies", "/travel-styles",
@@ -16,7 +17,7 @@ const staticRoutes = [
 
 export default function sitemap() {
   return [
-    ...staticRoutes.map((path) => ({ url: absoluteUrl(path) })),
+    ...staticRoutes.map((path) => ({ url: absoluteUrl(path), ...(path === canvasRebelFeature.path ? { lastModified: canvasRebelFeature.modified, images: [absoluteUrl(canvasRebelFeature.image)] } : {}) })),
     ...passageArticles.map((article) => ({
       url: absoluteUrl(article.path),
       lastModified: article.modified,

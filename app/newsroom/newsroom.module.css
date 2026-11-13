@@ -11,6 +11,10 @@
 .sectionHeading h2 { font-family:var(--font-serif); font-size:clamp(43px,5vw,70px); font-weight:400; letter-spacing:-.05em; margin-top:15px; }
 .sectionHeading > span { color:#83776b; font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
 .update { border-bottom:1px solid #d8d0c6; display:grid; gap:clamp(30px,5vw,90px); grid-template-columns:minmax(170px,.3fr) 1fr; padding:clamp(35px,4.5vw,65px) 0; }
+.updateMain { align-items:start; display:grid; gap:clamp(25px,3vw,48px); grid-template-columns:auto minmax(0,1fr); }
+.updateImage { display:block; width:clamp(135px,16vw,225px); overflow:hidden; }
+.updateImage img { display:block; width:100%; height:clamp(180px,21vw,295px); object-fit:cover; object-position:center 27%; transition:transform .4s ease; }
+.updateImage:hover img { transform:scale(1.04); }
 .date { display:flex; flex-direction:column; gap:13px; }
 .date span { color:#b83832; font-size:11px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; }
 .date time { color:#83776b; font-size:13px; }
@@ -27,4 +31,5 @@
 .articleBar a { color:#f8f5ef; font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
 .articleBar span { color:#aaa398; font-size:11px; letter-spacing:.08em; }
 @media (max-width:700px) { .sectionHeading { align-items:start; gap:20px; } .update { grid-template-columns:1fr; } .media { align-items:start; flex-direction:column; } }
+@media (max-width:700px) { .updateMain { grid-template-columns:1fr; } .updateImage { width:100%; max-width:300px; } .updateImage img { height:330px; } }
 @media (max-width:700px) { .articleBar { align-items:start; flex-direction:column; gap:7px; padding:16px 24px; } }

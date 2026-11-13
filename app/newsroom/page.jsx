@@ -5,7 +5,7 @@ import styles from "./newsroom.module.css";
 
 export const metadata = buildMetadata({
   title: "Newsroom | Official Ryravel Updates",
-  description: "Official statements and company updates from Ryravel. Find the latest verified account notices and media contact details.",
+  description: "Ryravel newsroom: founder interviews, company announcements, official statements and verified media contact details.",
   path: "/newsroom",
   absoluteTitle: true,
 });
@@ -29,11 +29,11 @@ export default function NewsroomPage() {
       </div>
     </section>
     <section className={styles.content} aria-labelledby="latest-updates">
-      <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>Company announcements</span><h2 id="latest-updates">Latest updates</h2></div><span>{newsroomUpdates.length.toString().padStart(2, "0")} release</span></div>
+      <div className={styles.sectionHeading}><div><span className={styles.eyebrow}>From the newsroom</span><h2 id="latest-updates">Latest updates</h2></div><span>{newsroomUpdates.length.toString().padStart(2, "0")} updates</span></div>
       <div className={styles.list}>
         {newsroomUpdates.map((update) => <article className={styles.update} key={update.path}>
-          <div className={styles.date}><span>Account notice</span><time dateTime={update.modified}>Updated 4 November 2026</time></div>
-          <div className={styles.updateBody}><h3><Link href={update.path}>{update.title}</Link></h3><p>{update.summary}</p><Link className={styles.read} href={update.path}>Read the official update <span aria-hidden="true">↗</span></Link></div>
+          <div className={styles.date}><span>{update.category}</span><time dateTime={update.modified}>{update.displayDate}</time></div>
+          <div className={styles.updateMain}>{update.image && <Link className={styles.updateImage} href={update.path}><img src={update.image} alt="Portrait of Ryravel founder Maryangel Ajuzieogu" width="1861" height="2560" loading="lazy" /></Link>}<div className={styles.updateBody}><h3><Link href={update.path}>{update.title}</Link></h3><p>{update.summary}</p><Link className={styles.read} href={update.path}>{update.action} <span aria-hidden="true">↗</span></Link></div></div>
         </article>)}
       </div>
       <div className={styles.media}><div><span className={styles.eyebrow}>Media contact</span><h2>Need to verify a statement?</h2><p>For press enquiries, interview requests or confirmation of an official notice, contact Ryravel directly.</p></div><a href="mailto:hello@ryravel.com">hello@ryravel.com <span aria-hidden="true">↗</span></a></div>
