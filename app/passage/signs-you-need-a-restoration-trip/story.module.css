@@ -1,0 +1,5 @@
+.heroImage{object-position:center 45% !important}
+.pullQuote{border-left:2px solid #e8574a;color:#f5f2ee;font-family:var(--font-serif);font-size:clamp(25px,3.4vw,38px);font-style:italic;line-height:1.4;margin:3rem 0;padding:1rem 0 1rem 2rem}
+.pullQuote cite{color:#b8956a;display:block;font-family:var(--font-sans);font-size:10px;font-style:normal;letter-spacing:.14em;margin-top:1.2rem;text-transform:uppercase}
+.sourceNote{font-size:13px !important}
+@media(max-width:768px){.pullQuote{font-size:25px;padding-left:1.3rem}}

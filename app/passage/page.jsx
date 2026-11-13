@@ -6,7 +6,7 @@ import { buildPassageCollectionSchema } from "./schema";
 
 export const metadata = buildMetadata({
   title: "Passage | A Ryravel Publication",
-  description: "Passage is Ryravel's publication on emotion-led travel, the arcs that shape a journey, and what travellers carry home. Read the latest essays.",
+  description: "Passage is Ryravel's publication on emotion-led travel, the arcs that shape a journey, and what travellers carry home. Read the latest stories and essays.",
   path: "/passage",
   absoluteTitle: true,
 });
@@ -16,11 +16,6 @@ const upcoming = [
     title: "The Unleashing",
     description: "What restlessness is really asking for, and why the summit is only the beginning.",
     tone: "warm",
-  },
-  {
-    title: "The Restoration",
-    description: "On permission, exhaustion, and the architecture of true rest.",
-    tone: "blue",
   },
   {
     title: "The Return",
@@ -64,8 +59,14 @@ export default function PassagePage() {
         </section>
 
         <section className={styles.issue} id="issue-01" aria-labelledby="issue-title">
-          <div className={styles.issueHeader}><h2 id="issue-title">The Restoration</h2><span>Essays 04 to 08</span></div>
+          <div className={styles.issueHeader}><h2 id="issue-title">The Restoration</h2><span>Story 09 and essays 04 to 08</span></div>
           <div className={styles.articleRow}>
+            <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
+              <Link className={styles.articleCardLink} href="/passage/signs-you-need-a-restoration-trip">
+                <div className={`${styles.articleVisual} ${styles.restorationStoryPhoto}`} role="img" aria-label="A small frog peeking through sunlit reeds" />
+                <div className={styles.articleCardContent}><span className={styles.tag}>The Restoration · Story 09</span><h3>Signs You Need a Restoration Trip, <em>Not Just a Vacation</em></h3><p>Emmanuel took one break a year for a decade. This is what changed when the break finally stayed.</p><span className={styles.articleRead}>Read the story →</span></div>
+              </Link>
+            </article>
             <article className={`${styles.articleCard} ${styles.articleCardFeatured}`}>
               <Link className={styles.articleCardLink} href="/passage/burnout-recovery-retreat-for-executives">
                 <div className={`${styles.articleVisual} ${styles.executivePhoto}`} role="img" aria-label="An aerial view of forest and drifting clouds" />

@@ -289,10 +289,15 @@ for (const [number, slug, asset] of [
   check(existsSync(join(root, "public", "images", asset)) && article.includes('aria-label="Passage sections"') && article.includes('datePublished: "2026-11-04"'), `${number} Passage essay uses the supplied image, Article schema and established publication header`);
   check(article.includes("not treatment") || article.includes("not a diagnosis"), `${number} Passage essay distinguishes travel from medical treatment`);
 }
+const restorationStory = read("app/passage/signs-you-need-a-restoration-trip/page.jsx");
+check(read("app/passage/page.jsx").includes('href="/passage/signs-you-need-a-restoration-trip"') && passageInventory.includes('"/passage/signs-you-need-a-restoration-trip"'), "Ninth Passage story is linked and in the sitemap");
+check(existsSync(join(root, "public/images/passage-restoration-story.jpg")) && restorationStory.includes('alt="A small frog peeking through sunlit reeds"') && restorationStory.includes('datePublished: "2026-11-13"'), "Ninth Passage story uses the supplied photograph and dated Article schema");
+check(restorationStory.includes("The Restoration · Story 09") && !restorationStory.includes("Frequently asked questions") && !restorationStory.includes("const faqs"), "Ninth Passage article is presented as a story, not a guide or FAQ");
+check(restorationStory.includes("not independent evidence") && restorationStory.includes("travel should not replace assessment"), "Ninth Passage story distinguishes a traveller account from medical evidence");
 check(read("app/sitemap.js").includes("passageArticles.map") && read("app/sitemap.js").includes("lastModified: article.modified") && read("app/sitemap.js").includes("images: [absoluteUrl(article.image)]"), "Passage sitemap entries expose article dates and images");
 check(read("app/passage/page.jsx").includes("buildPassageCollectionSchema") && read("app/passage/schema.js").includes('"@type": "BreadcrumbList"') && read("app/passage/schema.js").includes('"@type": "ItemList"'), "Passage pages expose connected publication and breadcrumb schema");
 check(read("app/llms.txt/route.js").includes("passageArticles.map"), "Optional AI reading guide lists the published Passage articles");
-check(passageArticles.length === 8 && new Set(passageArticles.map(({ path }) => path)).size === 8, "Passage inventory contains eight unique published articles");
+check(passageArticles.length === 9 && new Set(passageArticles.map(({ path }) => path)).size === 9, "Passage inventory contains nine unique published articles");
 const collectionGraph = buildPassageCollectionSchema()["@graph"];
 check(collectionGraph.find((node) => node["@type"] === "ItemList")?.itemListElement.length === passageArticles.length, "Passage collection schema lists every published article");
 for (const article of passageArticles) {

@@ -40,7 +40,7 @@ export function buildPassageSchema(article) {
   const breadcrumbId = `${url}#breadcrumb`;
   const imageUrl = details.image;
   const inventoryEntry = passageArticles.find((entry) => absoluteUrl(entry.path) === url);
-  const restorationEssay = inventoryEntry && passageArticles.indexOf(inventoryEntry) >= 3;
+  const restorationArticle = inventoryEntry && passageArticles.indexOf(inventoryEntry) >= 3;
 
   return {
     "@context": "https://schema.org",
@@ -64,7 +64,7 @@ export function buildPassageSchema(article) {
         image: { "@id": `${url}#primary-image` },
         inLanguage: "en",
         isAccessibleForFree: true,
-        ...(restorationEssay ? { articleSection: "The Restoration" } : {}),
+        ...(restorationArticle ? { articleSection: "The Restoration" } : {}),
         isPartOf: { "@id": `${SITE_URL}/passage#publication` },
         mainEntityOfPage: { "@id": url },
         author: {

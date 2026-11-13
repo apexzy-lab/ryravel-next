@@ -49,4 +49,10 @@ export const passageArticles = [
     image: "/images/passage-executive-retreat.jpg",
     modified: "2026-11-04",
   },
+  {
+    title: "Signs You Need a Restoration Trip, Not Just a Vacation",
+    path: "/passage/signs-you-need-a-restoration-trip",
+    image: "/images/passage-restoration-story.jpg",
+    modified: "2026-11-13",
+  },
 ];
